@@ -1,0 +1,8 @@
+public void teste(){
+    int soma;
+    int varA = 12;
+    int varB = 14;
+    soma = varA + varB;
+    return soma;
+}
+
