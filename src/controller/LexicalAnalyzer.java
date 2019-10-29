@@ -12,15 +12,22 @@ public class LexicalAnalyzer {
 	
 	public static final ArrayList<String> lista = new ArrayList<String>();
 	static String[] linha = null;
+	static Boolean value = null;
 	
 	@SuppressWarnings("unused")
 	public static void readArq() throws FileNotFoundException {
 	     try{
-	    	 BufferedReader arq = new BufferedReader(new FileReader("input\\entradaTeste.txt"));
+	    	 BufferedReader arq = new BufferedReader(new FileReader("input//entradaTeste.txt"));
 	         while(arq.ready()){
 	            linha = arq.readLine().split("[\\W]");
 	            for (int i = 0; i < linha.length; i++) {
-	            	if(!linha[i].equals("")) { // Espaço entre os parenteses, guardava espaços em branco.
+	            	try { // verifica se a String pode ser um valor Integer
+	            		Integer.parseInt(linha[i]);
+	            		value = true;
+	            	} catch (NumberFormatException nfex) {
+	            		value = false;
+	            	}
+					if(!linha[i].equals("") && value == false) { // Espaco entre os parenteses, guardava espaï¿½os em branco.
 	            		lista.add(linha[i]);
 	            	}
 	            }
