@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 
 public class ReservedWords {
-	public static final ArrayList<String> rWords = new ArrayList<String>() {{
+	@SuppressWarnings("serial")
+	public static final ArrayList<String> aRWords = new ArrayList<String>() {{
 	    add("var");
 	    add("const");
 	    add("typedef");
@@ -30,11 +31,9 @@ public class ReservedWords {
 	    add("local");
 	}};
 
-	public static Object rWords(int u) {
+	public static Object aRWords(int u) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
 	
 }

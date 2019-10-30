@@ -27,8 +27,8 @@ public class LexicalAnalyzer {
 		      }
 	         arq.close();
 	         for (int j = 0; j < lista.size(); j++) {
-	        	 for (int p = 0; p < ReservedWords.rWords.size(); p++) {
-	        		 if(!ReservedWords.rWords.contains(lista.get(j))) { // Modifiquei para contais() e funcionou
+	        	 for (int p = 0; p < ReservedWords.aRWords.size(); p++) {
+	        		 if(!ReservedWords.aRWords.contains(lista.get(j))) { // Modifiquei para contais() e funcionou
 	        			 System.out.println("Identificador: " + lista.get(j));
 	        			 break; // melhor um break ou um barramento?
 	        		 }
