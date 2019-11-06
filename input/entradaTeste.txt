@@ -1,5 +1,6 @@
 public void teste(){
     int soma;
+    string str;
     int varA = 12;
     int varB = 14;
     soma = varA + varB;

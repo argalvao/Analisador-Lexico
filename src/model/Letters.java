@@ -32,7 +32,7 @@ public class Letters {
 	    add("x");
 	    add("y");
 	    add("z");
-	    add("็");
+	    add("รง");
 	    add("A");
 	    add("B");
 	    add("C");
@@ -59,7 +59,7 @@ public class Letters {
 	    add("X");
 	    add("Y");
 	    add("Z");
-	    add("ว");
+	    add("ร");
 	}};
 
 	public static Object aLetters(int u) {

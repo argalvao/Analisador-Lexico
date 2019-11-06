@@ -1,5 +1,6 @@
 package controller;
 
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
@@ -32,23 +33,21 @@ public class LexicalAnalyzer {
 	            	try { // verifica se a String pode ser um valor Integer
 	            		Integer.parseInt(word[i]);
 	            		value = true;
-	            		gravarArq.println("Linha: " + line + " | " + word[i] + " | Digito");
+	            		gravarArq.println("Linha: " + (line+1) + " | " + word[i] + " | Numeral"); //Escreve o numeral
 	            	} catch (NumberFormatException nfex) {
 	            		value = false;
 	            	}
-					if(!word[i].equals("") && value == false) { // Espaco entre os parenteses, guardava espa�os em branco.
+					if(!word[i].equals("") && value == false) { // Espaco entre os parenteses, guardava espaços em branco.
 	            		wordList.add(word[i]);
-	            		if(!ReservedWords.aRWords.contains(word[i])) { // Modifiquei para contais() e funcionou	        			 
-	            			 gravarArq.println("Linha: " + line + " | " + word[i] + " | Identificador");
-		        			 //break; // melhor um break ou um barramento?
+	            		if(ReservedWords.aRWords.contains(word[i])) { // verifica é uma palavra reservada	        			 
+	            			 gravarArq.println("Linha: " + (line+1) + " | " + word[i] + " | Palavra Reservada"); // escreve a palavra reservada no arquivo
 		        		 }
 		        		 else {
-		        			 gravarArq.println("Linha: " + line + " | " + word[i] + " | Palavra Reservada");
-		        			 //break;
+		        			 gravarArq.println("Linha: " + line + " | " + word[i] + " | Identificador"); // escreve o identificador no arquivo
 		        		 }
 	            	}
 	            }
-	            line++;
+	            line++; // armazena as linhas para impressão no arquivo
 		      }
 	         inputArq.close();        
 	         outputArq.close();
@@ -58,3 +57,4 @@ public class LexicalAnalyzer {
 	}
 
 }
+// tratar comentarios, guardar lista de tokens, tratar erros.
