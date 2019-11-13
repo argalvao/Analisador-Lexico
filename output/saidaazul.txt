@@ -1,0 +1,20 @@
+LISTA DE TOKENS:
+
+Linha: 1 | int | Palavra Reservada
+Linha: 1 | ( | Delimitador
+Linha: 1 | . | Delimitador
+Linha: 1 | + | Operador Aritmético
+Linha: 1 | ++ | Operador Aritmético
+Linha: 1 | { | Delimitador
+Linha: 2 | if | Palavra Reservada
+Linha: 2 | ( | Delimitador
+Linha: 2 | ) | Delimitador
+Linha: 2 | [ | Delimitador
+Linha: 2 | ] | Delimitador
+Linha: 2 | { | Delimitador
+Linha: 2 | . | Delimitador
+Linha: 3 | ; | Delimitador
+Linha: 3 | [ | Delimitador
+Linha: 3 | ] | Delimitador
+Linha: 5 | } | Delimitador
+Linha: 6 | } | Delimitador

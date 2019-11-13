@@ -1,8 +1,9 @@
 public void teste(){
     int soma;
     string str;
-    int varA = 12;
-    int varB = 14;
-    soma = varA + varB;
+    string abel;
+    int azul = 12;
+    int amarelo = 14;
+    soma = azul + amarelo;
     return soma;
 }

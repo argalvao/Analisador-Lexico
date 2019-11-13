@@ -1,0 +1,19 @@
+LISTA DE TOKENS:
+
+Linha: 1 | ( | Delimitador
+Linha: 1 | ) | Delimitador
+Linha: 1 | { | Delimitador
+Linha: 2 | int | Palavra Reservada
+Linha: 2 | ; | Delimitador
+Linha: 3 | string | Palavra Reservada
+Linha: 3 | ; | Delimitador
+Linha: 4 | string | Palavra Reservada
+Linha: 4 | ; | Delimitador
+Linha: 5 | int | Palavra Reservada
+Linha: 5 | ; | Delimitador
+Linha: 6 | int | Palavra Reservada
+Linha: 6 | ; | Delimitador
+Linha: 7 | ; | Delimitador
+Linha: 8 | return | Palavra Reservada
+Linha: 8 | ; | Delimitador
+Linha: 9 | } | Delimitador

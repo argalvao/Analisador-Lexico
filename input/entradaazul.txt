@@ -1,0 +1,6 @@
+for (int j = afile.length; l < j; l++) {
+			 	if (afile[l].toString().contains("entrada")){
+					File arquivos = afile[l];
+					
+				}
+			 }
