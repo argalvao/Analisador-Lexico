@@ -1,20 +1,27 @@
 LISTA DE TOKENS:
 
-Linha: 1 | int | Palavra Reservada
-Linha: 1 | ( | Delimitador
-Linha: 1 | . | Delimitador
-Linha: 1 | + | Operador Aritmético
-Linha: 1 | ++ | Operador Aritmético
-Linha: 1 | { | Delimitador
-Linha: 2 | if | Palavra Reservada
-Linha: 2 | ( | Delimitador
-Linha: 2 | ) | Delimitador
-Linha: 2 | [ | Delimitador
-Linha: 2 | ] | Delimitador
-Linha: 2 | { | Delimitador
-Linha: 2 | . | Delimitador
-Linha: 3 | ; | Delimitador
-Linha: 3 | [ | Delimitador
-Linha: 3 | ] | Delimitador
-Linha: 5 | } | Delimitador
-Linha: 6 | } | Delimitador
+Linha:	1	|	+		| Operador Lógico
+Linha:	1	|	++		| Operador Lógico
+Linha:	1	|	;		|	Delimitador
+Linha:	1	|	(		|	Delimitador
+Linha:	1	|	)		|	Delimitador
+Linha:	1	|	{		|	Delimitador
+Linha:	1	|	.		|	Delimitador
+Linha:	1	|	<		|	Operador Relacional
+Linha:	1	|	int	|	Palavra Reservada
+Linha:	2	|	0		|	Número Inteiro
+Linha:	2	|	(		|	Delimitador
+Linha:	2	|	)		|	Delimitador
+Linha:	2	|	[		|	Delimitador
+Linha:	2	|	]		|	Delimitador
+Linha:	2	|	{		|	Delimitador
+Linha:	2	|	.		|	Delimitador
+Linha:	2	|	!		|	Operador Lógico
+Linha:	2	|	&&		|	Operador Lógico
+Linha:	2	|	>		|	Operador Relacional
+Linha:	2	|	if	|	Palavra Reservada
+Linha:	3	|	;		|	Delimitador
+Linha:	3	|	[		|	Delimitador
+Linha:	3	|	]		|	Delimitador
+Linha:	5	|	}		|	Delimitador
+Linha:	6	|	}		|	Delimitador

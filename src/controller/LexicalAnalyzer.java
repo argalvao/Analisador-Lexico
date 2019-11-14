@@ -10,23 +10,18 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.io.File;
+import model.*;
 
-import model.ArithmeticOperators;
-import model.Delimiters;
-import model.LogicalOperators;
-import model.ReservedWords;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static model.ReservedWords.*;
 
 
 public class LexicalAnalyzer {
 	
 	public static final ArrayList wordList = new ArrayList();
 	public static final ArrayList reservedList = new ArrayList();
-	static String[] word = null;
 	static int line = 0;
-	static Boolean value = null;
-	
+	public static String[] word = null;
+
 	@SuppressWarnings("unused")
 	public static void readArq() throws FileNotFoundException {
 	     try{
@@ -41,35 +36,54 @@ public class LexicalAnalyzer {
 						if (name[h].toString().contains(".txt")) { // Verifica se o arquivo possui a extensão .txt
 							BufferedReader inputArq = new BufferedReader(new FileReader(afile[l])); // // Passa o caminho e o nome do arquivo
 							BufferedWriter outputArq = new BufferedWriter(new FileWriter("output//saida" + name[h])); // Concatena a String "saida" com o restante do nome do arquivo de entrada
-							PrintWriter gravarArq = new PrintWriter(outputArq); 
+							PrintWriter gravarArq = new PrintWriter(outputArq);
 							gravarArq.printf("LISTA DE TOKENS:\n\n");
 							while (inputArq.ready()){
-								word = inputArq.readLine().split("[\\W][ ]");
-								for (int i = 0; i < word.length; i++) {
-									if(!word[i].equals("")) {
-										wordList.add(word[i]);
-										for (int k = 0; k < ReservedWords.aRWords.size(); k++){
-											if (word[i].toString().contains(ReservedWords.aRWords.get(k).toString())){
-												gravarArq.println("Linha: " + (line+1) + " | " + ReservedWords.aRWords.get(k).toString() + " | Palavra Reservada");
-											}
-										}
-										for (int k = 0; k < Delimiters.aDelimiters.size(); k++){
-											if(word[i].toString().contains(Delimiters.aDelimiters.get(k).toString())){
-												gravarArq.println("Linha: " + (line+1) + " | " + Delimiters.aDelimiters.get(k).toString() + " | Delimitador");
-											}
-										}
-										for (int k = 0; k < LogicalOperators.aLOperators.size(); k++){
-											if(word[i].toString().contains(LogicalOperators.aLOperators.get(k).toString())){
-												gravarArq.println("Linha: " + (line+1) + " | " + LogicalOperators.aLOperators.get(k).toString() + " | Operador Lógico");
-											}
-										}
-										for (int k = 0; k < ArithmeticOperators.aAOperators.size(); k++){
-											if(word[i].toString().contains(ArithmeticOperators.aAOperators.get(k).toString())){
-												gravarArq.println("Linha: " + (line+1) + " | " + ArithmeticOperators.aAOperators.get(k).toString() + " | Operador Aritmético");
+								wordList.add(inputArq.readLine());
+								for (int i = 0; i < wordList.size(); i++) {
+									word = wordList.get(i).toString().split("[\\W]");
+									for (int g = 0; g < word.length; g++){
+										if(!word[g].equals("")) {
+											try { // verifica se a String pode ser um valor Integer
+												Integer.parseInt(word[g]);
+												gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + word[g]+ "\t\t" + "|\tNúmero Inteiro");
+											} catch (NumberFormatException nfex) {
 											}
 										}
 									}
+									word = null;
+									for (int g = 0; g < ArithmeticOperators.aAOperators.size(); g++){
+										if(wordList.get(i).toString().contains(ArithmeticOperators.aAOperators.get(g).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + ArithmeticOperators.aAOperators.get(g).toString() + "\t" + "\t| Operador Lógico");
+										}
+									}
+									for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){
+										if(wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t" + "|\tDelimitador de Comentário");
+										}
+									}
+									for (int k = 0; k < Delimiters.aDelimiters.size(); k++){
+										if(wordList.get(i).toString().contains(Delimiters.aDelimiters.get(k).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + Delimiters.aDelimiters.get(k).toString() + "\t\t" + "|\tDelimitador");
+										}
+									}
+									for (int k = 0; k < LogicalOperators.aLOperators.size(); k++){
+										if(wordList.get(i).toString().contains(LogicalOperators.aLOperators.get(k).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + LogicalOperators.aLOperators.get(k).toString()+ "\t\t" + "|\tOperador Lógico");
+										}
+									}
+									for (int k = 0; k < RelationalOperators.aROperators.size(); k++){
+										if (wordList.get(i).toString().contains(RelationalOperators.aROperators.get(k).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + RelationalOperators.aROperators.get(k).toString() + "\t\t" + "|\tOperador Relacional");
+										}
+									}
+									for (int k = 0; k < aRWords.size(); k++){
+										if (wordList.get(i).toString().contains(aRWords.get(k).toString())){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + aRWords.get(k).toString() + "\t" + "|\tPalavra Reservada");
+										}
+									}
 								}
+								wordList.clear();
 								line++;
 							}
 							inputArq.close();

@@ -1,19 +1,42 @@
 LISTA DE TOKENS:
 
-Linha: 1 | ( | Delimitador
-Linha: 1 | ) | Delimitador
-Linha: 1 | { | Delimitador
-Linha: 2 | int | Palavra Reservada
-Linha: 2 | ; | Delimitador
-Linha: 3 | string | Palavra Reservada
-Linha: 3 | ; | Delimitador
-Linha: 4 | string | Palavra Reservada
-Linha: 4 | ; | Delimitador
-Linha: 5 | int | Palavra Reservada
-Linha: 5 | ; | Delimitador
-Linha: 6 | int | Palavra Reservada
-Linha: 6 | ; | Delimitador
-Linha: 7 | ; | Delimitador
-Linha: 8 | return | Palavra Reservada
-Linha: 8 | ; | Delimitador
-Linha: 9 | } | Delimitador
+Linha:	1	|	(		|	Delimitador
+Linha:	1	|	)		|	Delimitador
+Linha:	1	|	{		|	Delimitador
+Linha:	2	|	;		|	Delimitador
+Linha:	2	|	int	|	Palavra Reservada
+Linha:	3	|	;		|	Delimitador
+Linha:	3	|	string	|	Palavra Reservada
+Linha:	4	|	;		|	Delimitador
+Linha:	4	|	string	|	Palavra Reservada
+Linha:	5	|	12		|	Número Inteiro
+Linha:	5	|	;		|	Delimitador
+Linha:	5	|	int	|	Palavra Reservada
+Linha:	6	|	14		|	Número Inteiro
+Linha:	6	|	;		|	Delimitador
+Linha:	6	|	int	|	Palavra Reservada
+Linha:	7	|	+		| Operador Lógico
+Linha:	7	|	;		|	Delimitador
+Linha:	8	|	;		|	Delimitador
+Linha:	8	|	return	|	Palavra Reservada
+Linha:	9	|	10		|	Número Inteiro
+Linha:	9	|	20		|	Número Inteiro
+Linha:	9	|	2		|	Número Inteiro
+Linha:	9	|	/		| Operador Lógico
+Linha:	9	|	,		|	Delimitador
+Linha:	9	|	(		|	Delimitador
+Linha:	9	|	)		|	Delimitador
+Linha:	9	|	{		|	Delimitador
+Linha:	9	|	!		|	Operador Lógico
+Linha:	9	|	&&		|	Operador Lógico
+Linha:	9	|	==		|	Operador Relacional
+Linha:	9	|	>		|	Operador Relacional
+Linha:	9	|	if	|	Palavra Reservada
+Linha:	10	|	*		| Operador Lógico
+Linha:	10	|	/		| Operador Lógico
+Linha:	10	|	/*		|	Delimitador de Comentário
+Linha:	12	|	*		| Operador Lógico
+Linha:	12	|	/		| Operador Lógico
+Linha:	12	|	*/		|	Delimitador de Comentário
+Linha:	13	|	}		|	Delimitador
+Linha:	14	|	}		|	Delimitador
