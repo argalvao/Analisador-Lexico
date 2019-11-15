@@ -1,4 +1,4 @@
-public void teste(){
+public void teste() $ {
     int soma;
     string str;
     string abel;
@@ -6,9 +6,9 @@ public void teste(){
     int amarelo = 14;
     soma = azul + amarelo;
     return soma;
-    if (!azul > amarelo && amarelo == 10/20,2){
+    if (!azul > amarelo & amarelo == 10/20,2){
         /*
         comentário
-        */
+
     }
 }

@@ -18,10 +18,10 @@ import static model.ReservedWords.*;
 public class LexicalAnalyzer {
 	
 	public static final ArrayList wordList = new ArrayList();
-	public static final ArrayList reservedList = new ArrayList();
+	public static final ArrayList errorList = new ArrayList();
 	static int line = 0;
 	public static String[] word = null;
-
+	public static boolean exist = false;
 	@SuppressWarnings("unused")
 	public static void readArq() throws FileNotFoundException {
 	     try{
@@ -46,40 +46,61 @@ public class LexicalAnalyzer {
 										if(!word[g].equals("")) {
 											try { // verifica se a String pode ser um valor Integer
 												Integer.parseInt(word[g]);
-												gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + word[g]+ "\t\t" + "|\tNúmero Inteiro");
+												gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[g]+ "\t\t\t" + "|\tNúmero Inteiro");
 											} catch (NumberFormatException nfex) {
 											}
 										}
 									}
 									word = null;
+									word = wordList.get(i).toString().split(""); // Identificação dos erros
+									for (int z = 0; z < word.length; z++){
+										for (int g = 0; g < Symbol.aSymbol.size(); g++){
+											if (!word[z].equals(" ") && !word[z].equals("&")){
+												if (!Symbol.aSymbol.contains(word[z])){ // Intentifica simbolos que não pertencem a linguagem
+													errorList.add("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[z] + "\t\t\t" + "|\tSímbolo não pertencente a linguagem");
+													break;
+												}
+											}
+										}
+										if(word[z].equals("&") && word[z+1].equals("&")){ // Identifica o operador lágico && mal formado
+											exist = true;
+											break;
+										}else if (word[z].equals("&") && !word[z+1].equals("&")){
+											errorList.add("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[z] + "\t\t\t" + "|\tOperador Lógico mal formado");
+											z++;
+											exist = false;
+										}
+
+									}
+									word = null;
 									for (int g = 0; g < ArithmeticOperators.aAOperators.size(); g++){
 										if(wordList.get(i).toString().contains(ArithmeticOperators.aAOperators.get(g).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + ArithmeticOperators.aAOperators.get(g).toString() + "\t" + "\t| Operador Lógico");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + ArithmeticOperators.aAOperators.get(g).toString() + "\t\t\t" + "|\tOperador Aritmético");
 										}
 									}
 									for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){
 										if(wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t" + "|\tDelimitador de Comentário");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentário");
 										}
 									}
 									for (int k = 0; k < Delimiters.aDelimiters.size(); k++){
 										if(wordList.get(i).toString().contains(Delimiters.aDelimiters.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + Delimiters.aDelimiters.get(k).toString() + "\t\t" + "|\tDelimitador");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + Delimiters.aDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador");
 										}
 									}
 									for (int k = 0; k < LogicalOperators.aLOperators.size(); k++){
 										if(wordList.get(i).toString().contains(LogicalOperators.aLOperators.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + LogicalOperators.aLOperators.get(k).toString()+ "\t\t" + "|\tOperador Lógico");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + LogicalOperators.aLOperators.get(k).toString()+ "\t\t\t" + "|\tOperador Lógico");
 										}
 									}
 									for (int k = 0; k < RelationalOperators.aROperators.size(); k++){
 										if (wordList.get(i).toString().contains(RelationalOperators.aROperators.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + RelationalOperators.aROperators.get(k).toString() + "\t\t" + "|\tOperador Relacional");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + RelationalOperators.aROperators.get(k).toString() + "\t\t\t" + "|\tOperador Relacional");
 										}
 									}
 									for (int k = 0; k < aRWords.size(); k++){
 										if (wordList.get(i).toString().contains(aRWords.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "|\t" + aRWords.get(k).toString() + "\t" + "|\tPalavra Reservada");
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + aRWords.get(k).toString() + "\t\t\t" + "|\tPalavra Reservada");
 										}
 									}
 								}
@@ -87,6 +108,10 @@ public class LexicalAnalyzer {
 								line++;
 							}
 							inputArq.close();
+							gravarArq.printf("\n\nLISTA DE ERROS:\n\n");
+							for (int e = 0; e < errorList.size(); e++){
+								gravarArq.println(errorList.get(e));
+							}
 							outputArq.close();
 							line = 0;
 						}

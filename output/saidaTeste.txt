@@ -1,42 +1,46 @@
 LISTA DE TOKENS:
 
-Linha:	1	|	(		|	Delimitador
-Linha:	1	|	)		|	Delimitador
-Linha:	1	|	{		|	Delimitador
-Linha:	2	|	;		|	Delimitador
-Linha:	2	|	int	|	Palavra Reservada
-Linha:	3	|	;		|	Delimitador
-Linha:	3	|	string	|	Palavra Reservada
-Linha:	4	|	;		|	Delimitador
-Linha:	4	|	string	|	Palavra Reservada
-Linha:	5	|	12		|	Número Inteiro
-Linha:	5	|	;		|	Delimitador
-Linha:	5	|	int	|	Palavra Reservada
-Linha:	6	|	14		|	Número Inteiro
-Linha:	6	|	;		|	Delimitador
-Linha:	6	|	int	|	Palavra Reservada
-Linha:	7	|	+		| Operador Lógico
-Linha:	7	|	;		|	Delimitador
-Linha:	8	|	;		|	Delimitador
-Linha:	8	|	return	|	Palavra Reservada
-Linha:	9	|	10		|	Número Inteiro
-Linha:	9	|	20		|	Número Inteiro
-Linha:	9	|	2		|	Número Inteiro
-Linha:	9	|	/		| Operador Lógico
-Linha:	9	|	,		|	Delimitador
-Linha:	9	|	(		|	Delimitador
-Linha:	9	|	)		|	Delimitador
-Linha:	9	|	{		|	Delimitador
-Linha:	9	|	!		|	Operador Lógico
-Linha:	9	|	&&		|	Operador Lógico
-Linha:	9	|	==		|	Operador Relacional
-Linha:	9	|	>		|	Operador Relacional
-Linha:	9	|	if	|	Palavra Reservada
-Linha:	10	|	*		| Operador Lógico
-Linha:	10	|	/		| Operador Lógico
-Linha:	10	|	/*		|	Delimitador de Comentário
-Linha:	12	|	*		| Operador Lógico
-Linha:	12	|	/		| Operador Lógico
-Linha:	12	|	*/		|	Delimitador de Comentário
-Linha:	13	|	}		|	Delimitador
-Linha:	14	|	}		|	Delimitador
+Linha:	1	| Lexema:	(			|	Delimitador
+Linha:	1	| Lexema:	)			|	Delimitador
+Linha:	1	| Lexema:	{			|	Delimitador
+Linha:	2	| Lexema:	;			|	Delimitador
+Linha:	2	| Lexema:	int			|	Palavra Reservada
+Linha:	3	| Lexema:	;			|	Delimitador
+Linha:	3	| Lexema:	string			|	Palavra Reservada
+Linha:	4	| Lexema:	;			|	Delimitador
+Linha:	4	| Lexema:	string			|	Palavra Reservada
+Linha:	5	| Lexema:	12			|	Número Inteiro
+Linha:	5	| Lexema:	;			|	Delimitador
+Linha:	5	| Lexema:	int			|	Palavra Reservada
+Linha:	6	| Lexema:	14			|	Número Inteiro
+Linha:	6	| Lexema:	;			|	Delimitador
+Linha:	6	| Lexema:	int			|	Palavra Reservada
+Linha:	7	| Lexema:	+			|	Operador Aritmético
+Linha:	7	| Lexema:	;			|	Delimitador
+Linha:	8	| Lexema:	;			|	Delimitador
+Linha:	8	| Lexema:	return			|	Palavra Reservada
+Linha:	9	| Lexema:	10			|	Número Inteiro
+Linha:	9	| Lexema:	20			|	Número Inteiro
+Linha:	9	| Lexema:	2			|	Número Inteiro
+Linha:	9	| Lexema:	/			|	Operador Aritmético
+Linha:	9	| Lexema:	,			|	Delimitador
+Linha:	9	| Lexema:	(			|	Delimitador
+Linha:	9	| Lexema:	)			|	Delimitador
+Linha:	9	| Lexema:	{			|	Delimitador
+Linha:	9	| Lexema:	!			|	Operador Lógico
+Linha:	9	| Lexema:	==			|	Operador Relacional
+Linha:	9	| Lexema:	>			|	Operador Relacional
+Linha:	9	| Lexema:	if			|	Palavra Reservada
+Linha:	10	| Lexema:	*			|	Operador Aritmético
+Linha:	10	| Lexema:	/			|	Operador Aritmético
+Linha:	10	| Lexema:	/*			|	Delimitador de Comentário
+Linha:	13	| Lexema:	}			|	Delimitador
+Linha:	14	| Lexema:	}			|	Delimitador
+
+
+LISTA DE ERROS:
+
+Linha:	1	| Lexema:	$			|	Símbolo não pertencente a linguagem
+Linha:	9	| Lexema:	&			|	Operador Lógico mal formado
+Linha:	11	| Lexema:	á			|	Símbolo não pertencente a linguagem
+Linha:	12	| Lexema:				|	Símbolo não pertencente a linguagem
