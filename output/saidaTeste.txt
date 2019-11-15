@@ -34,8 +34,11 @@ Linha:	9	| Lexema:	if			|	Palavra Reservada
 Linha:	10	| Lexema:	*			|	Operador Aritmético
 Linha:	10	| Lexema:	/			|	Operador Aritmético
 Linha:	10	| Lexema:	/*			|	Delimitador de Comentário
-Linha:	13	| Lexema:	}			|	Delimitador
+Linha:	12	| Lexema:	*			|	Operador Aritmético
+Linha:	12	| Lexema:	/			|	Operador Aritmético
+Linha:	12	| Lexema:	*/			|	Delimitador de Comentário
 Linha:	14	| Lexema:	}			|	Delimitador
+Linha:	15	| Lexema:	}			|	Delimitador
 
 
 LISTA DE ERROS:
@@ -43,4 +46,3 @@ LISTA DE ERROS:
 Linha:	1	| Lexema:	$			|	Símbolo não pertencente a linguagem
 Linha:	9	| Lexema:	&			|	Operador Lógico mal formado
 Linha:	11	| Lexema:	á			|	Símbolo não pertencente a linguagem
-Linha:	12	| Lexema:				|	Símbolo não pertencente a linguagem

@@ -16,7 +16,7 @@ import static model.ReservedWords.*;
 
 
 public class LexicalAnalyzer {
-	
+
 	public static final ArrayList wordList = new ArrayList();
 	public static final ArrayList errorList = new ArrayList();
 	static int line = 0;
@@ -24,12 +24,12 @@ public class LexicalAnalyzer {
 	public static boolean exist = false;
 	@SuppressWarnings("unused")
 	public static void readArq() throws FileNotFoundException {
-	     try{
-			 File file = new File("input"); // Identifica o diretório de entrada de arquivos
-			 File afile[] = file.listFiles(); // Lista todos os arquivos do diretório e armazena em um array
-			 int l = 0;
-			 for (int j = afile.length; l < j; l++) {
-			 	if (afile[l].toString().contains("entrada")){ // Verifica de o arquivo inicia com o nome "entrada"
+		try{
+			File file = new File("input"); // Identifica o diretório de entrada de arquivos
+			File afile[] = file.listFiles(); // Lista todos os arquivos do diretório e armazena em um array
+			int l = 0;
+			for (int j = afile.length; l < j; l++) {
+				if (afile[l].toString().contains("entrada")){ // Verifica de o arquivo inicia com o nome "entrada"
 					File arquivos = afile[l]; // Armazena os nomes dos arquivos já verificados
 					String name[] = afile[l].toString().split("entrada"); // Separa o restante do nome do arquivo
 					for (int h = 0; h < name.length; h++){
@@ -117,10 +117,10 @@ public class LexicalAnalyzer {
 						}
 					}
 				}
-			 }
-	      }catch(IOException ioe){
-	         ioe.printStackTrace();
-	      }
+			}
+		}catch(IOException ioe){
+			ioe.printStackTrace();
+		}
 	}
 
 }

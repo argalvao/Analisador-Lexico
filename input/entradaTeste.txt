@@ -9,6 +9,7 @@ public void teste() $ {
     if (!azul > amarelo & amarelo == 10/20,2){
         /*
         comentário
-
+        */
+        
     }
 }
