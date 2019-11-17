@@ -28,6 +28,9 @@ public class LexicalAnalyzer {
 			File file = new File("input"); // Identifica o diretório de entrada de arquivos
 			File afile[] = file.listFiles(); // Lista todos os arquivos do diretório e armazena em um array
 			int l = 0;
+			boolean dComentario = false;
+			boolean mesma_linha = false;
+			boolean identificou = false;
 			for (int j = afile.length; l < j; l++) {
 				if (afile[l].toString().contains("entrada")){ // Verifica de o arquivo inicia com o nome "entrada"
 					File arquivos = afile[l]; // Armazena os nomes dos arquivos já verificados
@@ -50,7 +53,14 @@ public class LexicalAnalyzer {
 											} catch (NumberFormatException nfex) {
 											}
 										}
+										for (int k = 0; k < Structs_Lexical.aSLexical.size(); k++){
+											if (!word[g].equals(Structs_Lexical.aSLexical.get(k).toString()) && !word[g].equals("")){
+												gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[g] + "\t\t\t" + "|\tIdentificadores");
+												break;
+											}
+										}
 									}
+									//System.out.print(wordList.get(i).toString().split("[\\W]"));
 									word = null;
 									word = wordList.get(i).toString().split(""); // Identificação dos erros
 									for (int z = 0; z < word.length; z++){
@@ -72,15 +82,20 @@ public class LexicalAnalyzer {
 										}
 
 									}
-									word = null;
-									for (int g = 0; g < ArithmeticOperators.aAOperators.size(); g++){
-										if(wordList.get(i).toString().contains(ArithmeticOperators.aAOperators.get(g).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + ArithmeticOperators.aAOperators.get(g).toString() + "\t\t\t" + "|\tOperador Aritmético");
+									word = null;	
+									for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){										
+										if(wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString()) && !dComentario){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentário");
+											dComentario = true;
+										} else if (wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString()) && dComentario){
+											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentário");
+											dComentario = false; 
+											mesma_linha= true;
 										}
 									}
-									for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){
-										if(wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString())){
-											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentário");
+									for (int g = 0; g < ArithmeticOperators.aAOperators.size(); g++){									
+										if(wordList.get(i).toString().contains(ArithmeticOperators.aAOperators.get(g).toString()) && !dComentario && !mesma_linha){
+												gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + ArithmeticOperators.aAOperators.get(g).toString() + "\t\t\t" + "|\tOperador Aritmético");
 										}
 									}
 									for (int k = 0; k < Delimiters.aDelimiters.size(); k++){
