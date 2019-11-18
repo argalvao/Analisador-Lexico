@@ -49,7 +49,7 @@ public class LexicalAnalyzer {
 								for (int i = 0; i < wordList.size(); i++) {
 									word = wordList.get(i).toString().split("[\\W]");
 									for (int k = 0; k < aRWords.size(); k++){
-										if (wordList.get(i).toString().contains(aRWords.get(k).toString())){
+										if (wordList.get(i).toString().contains(aRWords.get(k).toString()) && !dComentario){
 											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + aRWords.get(k).toString() + "\t\t\t" + "|\tPalavra Reservada");
 											break;
 										}
@@ -75,10 +75,9 @@ public class LexicalAnalyzer {
 											if (word[g].equals(Structs_Lexical.aSLexical.get(k))){
 												System.out.print(word[g]+" "+Structs_Lexical.aSLexical.get(k)+"\n");
 												identificou = true;
-												break;
 											}
 										}
-										if(!identificou && !word[g].equals("")){
+										if(!identificou && !word[g].equals("") | dComentario && !word[g].equals("")){
 											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[g] + "\t\t\t" + "|\tIdentificadores");
 										}
 										identificou = false;
@@ -108,10 +107,12 @@ public class LexicalAnalyzer {
 										if(wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString()) && !dComentario){
 											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentario");
 											dComentario = true;
+											break;
 										} else if (wordList.get(i).toString().contains(CommentDelimiters.aCDelimiters.get(k).toString()) && dComentario){
 											gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + CommentDelimiters.aCDelimiters.get(k).toString() + "\t\t\t" + "|\tDelimitador de Comentario");
 											dComentario = false; 
-											mesma_linha= true;
+											mesma_linha = true;
+											break;
 										}
 									}
 									for (int g = 0; g < ArithmeticOperators.aAOperators.size(); g++){									

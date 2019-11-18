@@ -52,9 +52,14 @@ Linha:	9	| Lexema:	!			|	Operador Logico
 Linha:	9	| Lexema:	==			|	Operador Relacional
 Linha:	9	| Lexema:	>			|	Operador Relacional
 Linha:	10	| Lexema:	/*			|	Delimitador de Comentario
-Linha:	11	| Lexema:	*/			|	Delimitador de Comentario
-Linha:	13	| Lexema:	}			|	Delimitador
+Linha:	11	| Lexema:	ksdfksdk			|	Identificadores
+Linha:	11	| Lexema:	ksdfg			|	Identificadores
+Linha:	11	| Lexema:	sd			|	Identificadores
+Linha:	11	| Lexema:	fkgk			|	Identificadores
+Linha:	11	| Lexema:	public			|	Identificadores
+Linha:	12	| Lexema:	*/			|	Delimitador de Comentario
 Linha:	14	| Lexema:	}			|	Delimitador
+Linha:	15	| Lexema:	}			|	Delimitador
 
 
 LISTA DE ERROS:
