@@ -60,9 +60,11 @@ Linha:	10	| Lexema:	=			|	Operador Relacional
 Linha:	10	| Lexema:	if			|	Palavra Reservada
 Linha:	11	| Lexema:	/*			|	Delimitador de Comentário
 Linha:	12	| Lexema:	comentario			|	Identificador
+Linha:	12	| Lexema:	int			|	Identificador
 Linha:	13	| Lexema:	*/			|	Delimitador de Comentário
-Linha:	14	| Lexema:	}			|	Delimitador
-Linha:	15	| Lexema:	}			|	Delimitador
+Linha:	15	| Lexema:	//			|	Delimitador de Comentário
+Linha:	16	| Lexema:	}			|	Delimitador
+Linha:	17	| Lexema:	}			|	Delimitador
 
 
 LISTA DE ERROS:
@@ -70,6 +72,7 @@ LISTA DE ERROS:
 Linha:	1	| Lexema:	$			|	Símbolo não pertencente a linguagem
 Linha:	5	| Lexema:	i.8			|	Identificador mal formado
 Linha:	7	| Lexema:	rosa*			|	Identificador mal formado
+Linha:	10	| Lexema:	azul#			|	Identificador mal formado
 Linha:	10	| Lexema:	70.j		|	Número mal formado
 Linha:	10	| Lexema:	&			|	Operador Lógico mal formado
 Linha:	10	| Lexema:	|			|	Operador Lógico mal formado
