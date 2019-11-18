@@ -7,9 +7,17 @@ public void teste() $ {
     int rosa* = -8.6;
     soma = azul + amarelo;
     return soma;
+<<<<<<< HEAD
     if (!azul > amarelo & amarelo ==9.8 && #azul == 70.j | rosa > 9){
         /*
         comentario
         */
+=======
+    if (!azul > amarelo & amarelo == 10/20,2){
+        /* 
+        ksdfksdk ksdfg sd fkgk public
+        */ 
+        
+>>>>>>> 43e43cb88833da84d01034a13fd6138969d01bea
     }
 }

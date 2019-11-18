@@ -6,6 +6,7 @@ Linha:	1	| Lexema:	teste			|	Identificador
 Linha:	1	| Lexema:	(			|	Delimitador
 Linha:	1	| Lexema:	)			|	Delimitador
 Linha:	1	| Lexema:	{			|	Delimitador
+<<<<<<< HEAD
 Linha:	2	| Lexema:	soma			|	Identificador
 Linha:	2	| Lexema:	;			|	Delimitador
 Linha:	2	| Lexema:	int			|	Palavra Reservada
@@ -61,15 +62,74 @@ Linha:	10	| Lexema:	if			|	Palavra Reservada
 Linha:	11	| Lexema:	/*			|	Delimitador de Comentário
 Linha:	12	| Lexema:	comentario			|	Identificador
 Linha:	13	| Lexema:	*/			|	Delimitador de Comentário
+=======
+Linha:	2	| Lexema:	int			|	Palavra Reservada
+Linha:	2	| Lexema:	soma			|	Identificadores
+Linha:	2	| Lexema:	;			|	Delimitador
+Linha:	3	| Lexema:	string			|	Palavra Reservada
+Linha:	3	| Lexema:	str			|	Identificadores
+Linha:	3	| Lexema:	;			|	Delimitador
+Linha:	4	| Lexema:	string			|	Palavra Reservada
+Linha:	4	| Lexema:	abel			|	Identificadores
+Linha:	4	| Lexema:	;			|	Delimitador
+Linha:	5	| Lexema:	int			|	Palavra Reservada
+Linha:	5	| Lexema:	azul			|	Identificadores
+Linha:	5	| Lexema:	12			|	Numero Inteiro
+Linha:	5	| Lexema:	12			|	Numero Float
+Linha:	5	| Lexema:	;			|	Delimitador
+Linha:	6	| Lexema:	int			|	Palavra Reservada
+Linha:	6	| Lexema:	amarelo			|	Identificadores
+Linha:	6	| Lexema:	14			|	Numero Inteiro
+Linha:	6	| Lexema:	14			|	Numero Float
+Linha:	6	| Lexema:	;			|	Delimitador
+Linha:	7	| Lexema:	soma			|	Identificadores
+Linha:	7	| Lexema:	azul			|	Identificadores
+Linha:	7	| Lexema:	amarelo			|	Identificadores
+Linha:	7	| Lexema:	+			|	Operador Aritmetico
+Linha:	7	| Lexema:	;			|	Delimitador
+Linha:	8	| Lexema:	return			|	Palavra Reservada
+Linha:	8	| Lexema:	soma			|	Identificadores
+Linha:	8	| Lexema:	;			|	Delimitador
+Linha:	9	| Lexema:	if			|	Palavra Reservada
+Linha:	9	| Lexema:	azul			|	Identificadores
+Linha:	9	| Lexema:	amarelo			|	Identificadores
+Linha:	9	| Lexema:	amarelo			|	Identificadores
+Linha:	9	| Lexema:	10			|	Numero Inteiro
+Linha:	9	| Lexema:	10			|	Numero Float
+Linha:	9	| Lexema:	20			|	Numero Inteiro
+Linha:	9	| Lexema:	20			|	Numero Float
+Linha:	9	| Lexema:	2			|	Numero Inteiro
+Linha:	9	| Lexema:	2			|	Numero Float
+Linha:	9	| Lexema:	/			|	Operador Aritmetico
+Linha:	9	| Lexema:	,			|	Delimitador
+Linha:	9	| Lexema:	(			|	Delimitador
+Linha:	9	| Lexema:	)			|	Delimitador
+Linha:	9	| Lexema:	{			|	Delimitador
+Linha:	9	| Lexema:	!			|	Operador Logico
+Linha:	9	| Lexema:	==			|	Operador Relacional
+Linha:	9	| Lexema:	>			|	Operador Relacional
+Linha:	10	| Lexema:	/*			|	Delimitador de Comentario
+Linha:	11	| Lexema:	ksdfksdk			|	Identificadores
+Linha:	11	| Lexema:	ksdfg			|	Identificadores
+Linha:	11	| Lexema:	sd			|	Identificadores
+Linha:	11	| Lexema:	fkgk			|	Identificadores
+Linha:	11	| Lexema:	public			|	Identificadores
+Linha:	12	| Lexema:	*/			|	Delimitador de Comentario
+>>>>>>> 43e43cb88833da84d01034a13fd6138969d01bea
 Linha:	14	| Lexema:	}			|	Delimitador
 Linha:	15	| Lexema:	}			|	Delimitador
 
 
 LISTA DE ERROS:
 
+<<<<<<< HEAD
 Linha:	1	| Lexema:	$			|	Símbolo não pertencente a linguagem
 Linha:	5	| Lexema:	i.8			|	Identificador mal formado
 Linha:	7	| Lexema:	rosa*			|	Identificador mal formado
 Linha:	10	| Lexema:	70.j		|	Número mal formado
 Linha:	10	| Lexema:	&			|	Operador Lógico mal formado
 Linha:	10	| Lexema:	|			|	Operador Lógico mal formado
+=======
+Linha:	1	| Lexema:	$			|	Simbolo nao pertencente a linguagem
+Linha:	9	| Lexema:	&			|	Operador Logico mal formado
+>>>>>>> 43e43cb88833da84d01034a13fd6138969d01bea
