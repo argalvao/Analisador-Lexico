@@ -1,66 +1,66 @@
 LISTA DE TOKENS:
 
-Linha:	1	| Lexema:	public			|	Identificadores
-Linha:	1	| Lexema:	void			|	Identificadores
-Linha:	1	| Lexema:	teste			|	Identificadores
+Linha:	1	| Lexema:	public			|	Identificador
+Linha:	1	| Lexema:	void			|	Identificador
+Linha:	1	| Lexema:	teste			|	Identificador
 Linha:	1	| Lexema:	(			|	Delimitador
 Linha:	1	| Lexema:	)			|	Delimitador
 Linha:	1	| Lexema:	{			|	Delimitador
-Linha:	2	| Lexema:	int			|	Identificadores
-Linha:	2	| Lexema:	soma			|	Identificadores
+Linha:	2	| Lexema:	soma			|	Identificador
 Linha:	2	| Lexema:	;			|	Delimitador
 Linha:	2	| Lexema:	int			|	Palavra Reservada
-Linha:	3	| Lexema:	string			|	Identificadores
-Linha:	3	| Lexema:	str			|	Identificadores
 Linha:	3	| Lexema:	;			|	Delimitador
 Linha:	3	| Lexema:	string			|	Palavra Reservada
-Linha:	4	| Lexema:	string			|	Identificadores
-Linha:	4	| Lexema:	abel			|	Identificadores
+Linha:	4	| Lexema:	abel			|	Identificador
 Linha:	4	| Lexema:	;			|	Delimitador
 Linha:	4	| Lexema:	string			|	Palavra Reservada
-Linha:	5	| Lexema:	int			|	Identificadores
-Linha:	5	| Lexema:	azul			|	Identificadores
-Linha:	5	| Lexema:	12			|	Número Inteiro
-Linha:	5	| Lexema:	12			|	Identificadores
+Linha:	5	| Lexema:	azul			|	Identificador
 Linha:	5	| Lexema:	;			|	Delimitador
+Linha:	5	| Lexema:	.			|	Delimitador
+Linha:	5	| Lexema:	=			|	Operador Relacional
 Linha:	5	| Lexema:	int			|	Palavra Reservada
-Linha:	6	| Lexema:	int			|	Identificadores
-Linha:	6	| Lexema:	amarelo			|	Identificadores
-Linha:	6	| Lexema:	14			|	Número Inteiro
-Linha:	6	| Lexema:	14			|	Identificadores
+Linha:	6	| Lexema:	14			|	Numeral
+Linha:	6	| Lexema:	amarelo			|	Identificador
 Linha:	6	| Lexema:	;			|	Delimitador
+Linha:	6	| Lexema:	=			|	Operador Relacional
 Linha:	6	| Lexema:	int			|	Palavra Reservada
-Linha:	7	| Lexema:	soma			|	Identificadores
-Linha:	7	| Lexema:	azul			|	Identificadores
-Linha:	7	| Lexema:	amarelo			|	Identificadores
-Linha:	7	| Lexema:	+			|	Operador Aritmético
+Linha:	7	| Lexema:	-8.6			|	Numeral
+Linha:	7	| Lexema:	rosa			|	Identificador
+Linha:	7	| Lexema:	-			|	Operador Aritmético
+Linha:	7	| Lexema:	*			|	Operador Aritmético
 Linha:	7	| Lexema:	;			|	Delimitador
-Linha:	8	| Lexema:	return			|	Identificadores
-Linha:	8	| Lexema:	soma			|	Identificadores
+Linha:	7	| Lexema:	.			|	Delimitador
+Linha:	7	| Lexema:	=			|	Operador Relacional
+Linha:	7	| Lexema:	int			|	Palavra Reservada
+Linha:	8	| Lexema:	soma			|	Identificador
+Linha:	8	| Lexema:	azul			|	Identificador
+Linha:	8	| Lexema:	amarelo			|	Identificador
+Linha:	8	| Lexema:	+			|	Operador Aritmético
 Linha:	8	| Lexema:	;			|	Delimitador
-Linha:	8	| Lexema:	return			|	Palavra Reservada
-Linha:	9	| Lexema:	if			|	Identificadores
-Linha:	9	| Lexema:	azul			|	Identificadores
-Linha:	9	| Lexema:	amarelo			|	Identificadores
-Linha:	9	| Lexema:	amarelo			|	Identificadores
-Linha:	9	| Lexema:	10			|	Número Inteiro
-Linha:	9	| Lexema:	10			|	Identificadores
-Linha:	9	| Lexema:	20			|	Número Inteiro
-Linha:	9	| Lexema:	20			|	Identificadores
-Linha:	9	| Lexema:	2			|	Número Inteiro
-Linha:	9	| Lexema:	2			|	Identificadores
-Linha:	9	| Lexema:	/			|	Operador Aritmético
-Linha:	9	| Lexema:	,			|	Delimitador
-Linha:	9	| Lexema:	(			|	Delimitador
-Linha:	9	| Lexema:	)			|	Delimitador
-Linha:	9	| Lexema:	{			|	Delimitador
-Linha:	9	| Lexema:	!			|	Operador Lógico
-Linha:	9	| Lexema:	==			|	Operador Relacional
-Linha:	9	| Lexema:	>			|	Operador Relacional
-Linha:	9	| Lexema:	if			|	Palavra Reservada
-Linha:	10	| Lexema:	/*			|	Delimitador de Comentário
-Linha:	11	| Lexema:	comentario			|	Identificadores
-Linha:	12	| Lexema:	*/			|	Delimitador de Comentário
+Linha:	8	| Lexema:	=			|	Operador Relacional
+Linha:	9	| Lexema:	soma			|	Identificador
+Linha:	9	| Lexema:	;			|	Delimitador
+Linha:	9	| Lexema:	return			|	Palavra Reservada
+Linha:	10	| Lexema:	9.8			|	Numeral
+Linha:	10	| Lexema:	9			|	Numeral
+Linha:	10	| Lexema:	azul			|	Identificador
+Linha:	10	| Lexema:	amarelo			|	Identificador
+Linha:	10	| Lexema:	amarelo			|	Identificador
+Linha:	10	| Lexema:	azul			|	Identificador
+Linha:	10	| Lexema:	rosa			|	Identificador
+Linha:	10	| Lexema:	(			|	Delimitador
+Linha:	10	| Lexema:	)			|	Delimitador
+Linha:	10	| Lexema:	{			|	Delimitador
+Linha:	10	| Lexema:	.			|	Delimitador
+Linha:	10	| Lexema:	!			|	Operador Lógico
+Linha:	10	| Lexema:	&&			|	Operador Lógico
+Linha:	10	| Lexema:	==			|	Operador Relacional
+Linha:	10	| Lexema:	>			|	Operador Relacional
+Linha:	10	| Lexema:	=			|	Operador Relacional
+Linha:	10	| Lexema:	if			|	Palavra Reservada
+Linha:	11	| Lexema:	/*			|	Delimitador de Comentário
+Linha:	12	| Lexema:	comentario			|	Identificador
+Linha:	13	| Lexema:	*/			|	Delimitador de Comentário
 Linha:	14	| Lexema:	}			|	Delimitador
 Linha:	15	| Lexema:	}			|	Delimitador
 
@@ -68,4 +68,8 @@ Linha:	15	| Lexema:	}			|	Delimitador
 LISTA DE ERROS:
 
 Linha:	1	| Lexema:	$			|	Símbolo não pertencente a linguagem
-Linha:	9	| Lexema:	&			|	Operador Lógico mal formado
+Linha:	5	| Lexema:	i.8			|	Identificador mal formado
+Linha:	7	| Lexema:	rosa*			|	Identificador mal formado
+Linha:	10	| Lexema:	70.j		|	Número mal formado
+Linha:	10	| Lexema:	&			|	Operador Lógico mal formado
+Linha:	10	| Lexema:	|			|	Operador Lógico mal formado

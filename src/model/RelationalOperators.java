@@ -11,7 +11,7 @@ public class RelationalOperators {
 	    add("<=");
 	    add(">");
 	    add(">=");
-	    add("=ss");
+	    add("=");
 	}};
 
 	public static Object aROperators(int u) {
