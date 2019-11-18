@@ -7,8 +7,7 @@ public void teste() $ {
     soma = azul + amarelo;
     return soma;
     if (!azul > amarelo & amarelo == 10/20,2){
-        /*
-        comentario
+        /* *
         */ 
         
     }
