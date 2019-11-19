@@ -41,6 +41,7 @@ public class LexicalAnalyzer {
             int o = 0;
             boolean dComentario = false;
             boolean dComentarioL = false;
+            boolean dString = false;
             boolean mesma_linha = false;
             boolean identificou = false;
             for (int j = afile.length; l < j; l++) {
@@ -73,12 +74,15 @@ public class LexicalAnalyzer {
                                             break;
                                         }
                                     }
-                                    
                                     word = wordList.get(i).toString().split("([\\;]|([ ])|[(])|[)]|[|]|[&]|[=]|[{]|[}]"); // Pega todos os conjutos de caracteres usando esses simbolos para separar cada um
                                     for (int t = 0; t < word.length; t++){
                                         if(!word[t].equals("") && word[t].matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?") && !dComentarioL && !dComentario){ // Pega todos os numerais, inteiros e reais
                                             gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[t] + "\t\t\t" + "|\tNumeral");
-                                        }else if(!word[t].equals("") && word[t].matches("(-)?\\s*[0-9]([0-9]*\\.?[a-z]+)?")) { // Identifica numeros mal formados
+                                        }else if(!word[t].equals("") && word[t].matches("\"[a-zA-Z]([[ -~&&[^\"]]\\\"])*\"") && !dComentarioL && !dComentario) { // Identifica string
+                                        	gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[t] + "\t\t\t" + "|\tString"); 
+                                        	dString = true;
+                                        }
+                                        else if(!word[t].equals("") && word[t].matches("(-)?\\s*[0-9]([0-9]*\\.?[a-z]+)?")) { // Identifica numeros mal formados
                                             errorList.add("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[t] + "\t\t" + "|\tNumero mal formado");
                                         }
                                         else if(!word[t].equals("") && word[t].matches("(-)?\\s*[a-z]([a-z]*\\.?[0-9]+)?")) { // Pega identificadores mal formados (Numero)
@@ -92,7 +96,7 @@ public class LexicalAnalyzer {
                                     word = wordList.get(i).toString().split("[\\W]");
                                     for (int g = 0; g < word.length; g++){
                                         for (int k = 0; k < LexicalStructures.aSLexical.size(); k++){ // Identifica tokens, identificadores
-                                            if (!word[g].equals("") && !LexicalStructures.aSLexical.toString().contains(word[g]) && !word[g].matches("[0-9]+") && word[g].matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*") || dComentario && !word[g].equals("") ||!word[g].equals("") && dComentarioL) {
+                                            if (!word[g].equals("") && !LexicalStructures.aSLexical.toString().contains(word[g]) && !word[g].matches("[0-9]+") && word[g].matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*") && !dString|| dComentario && !word[g].equals("") && !dString||!word[g].equals("") && dComentarioL && !dString) {
                                                 gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[g] + "\t\t\t" + "|\tIdentificador");
                                                 break;
                                             }
@@ -157,6 +161,7 @@ public class LexicalAnalyzer {
                                             break;
                                         }
                                     }
+                                    dString = false;
                                     dComentarioL = false;
                                 }
                                 wordList.clear();

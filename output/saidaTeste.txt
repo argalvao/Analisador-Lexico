@@ -11,8 +11,7 @@ Linha:	2	| Lexema:	;			|	Delimitador
 Linha:	2	| Lexema:	int			|	Palavra Reservada
 Linha:	3	| Lexema:	;			|	Delimitador
 Linha:	3	| Lexema:	string			|	Palavra Reservada
-Linha:	4	| Lexema:	abel			|	Identificador
-Linha:	4	| Lexema:	Abel			|	Identificador
+Linha:	4	| Lexema:	"Abel"			|	String
 Linha:	4	| Lexema:	;			|	Delimitador
 Linha:	4	| Lexema:	=			|	Operador Relacional
 Linha:	4	| Lexema:	string			|	Palavra Reservada
