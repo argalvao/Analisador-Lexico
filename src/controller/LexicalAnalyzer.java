@@ -73,19 +73,7 @@ public class LexicalAnalyzer {
                                             break;
                                         }
                                     }
-                                    word = wordList.get(i).toString().split("");
-                                    for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){ // Identifica os delimitadores de String
-                                        if(wordList.get(i).toString().contains("\"")){
-                                            gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + "\"  \t\t\t" + "|\tDelimitador de String");
-                                            dComentario = true;
-                                            break;
-                                        } else if (wordList.get(i).toString().contains("\"")){
-                                            gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + "\"  \t\t\t" + "|\tDelimitador de String");
-                                            dComentario = false;
-                                            mesma_linha= true;
-                                            break;
-                                        }
-                                    }
+                                    
                                     word = wordList.get(i).toString().split("([\\;]|([ ])|[(])|[)]|[|]|[&]|[=]|[{]|[}]"); // Pega todos os conjutos de caracteres usando esses simbolos para separar cada um
                                     for (int t = 0; t < word.length; t++){
                                         if(!word[t].equals("") && word[t].matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?") && !dComentarioL && !dComentario){ // Pega todos os numerais, inteiros e reais
@@ -103,8 +91,8 @@ public class LexicalAnalyzer {
                                     word = null;
                                     word = wordList.get(i).toString().split("[\\W]");
                                     for (int g = 0; g < word.length; g++){
-                                        for (int k = 0; k < LexicalStructures.aSLexical.size(); k++){ // Identifica tokens, idetificadores
-                                            if (!word[g].equals("") && !LexicalStructures.aSLexical.toString().contains(word[g]) && !word[g].matches("[0-9]+") && word[g].matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*") || dComentario && !word[g].equals("") || dComentarioL && !word[g].equals("")) {
+                                        for (int k = 0; k < LexicalStructures.aSLexical.size(); k++){ // Identifica tokens, identificadores
+                                            if (!word[g].equals("") && !LexicalStructures.aSLexical.toString().contains(word[g]) && !word[g].matches("[0-9]+") && word[g].matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*") || dComentario && !word[g].equals("") ||!word[g].equals("") && dComentarioL) {
                                                 gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + word[g] + "\t\t\t" + "|\tIdentificador");
                                                 break;
                                             }
