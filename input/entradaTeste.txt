@@ -8,10 +8,11 @@ public void teste() $ {
     soma = azul + amarelo;
     return soma;
     if (!azul > amarelo & amarelo ==9.8 && azul# == 70.j | rosa > 9){
-        /*
+        /* 
         comentario int
-        */
-
-        //
+        */ var *
+		int
+        // brabo 123 i47 int
+        real
     }
 }
