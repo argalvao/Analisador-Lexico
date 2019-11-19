@@ -1,3 +1,10 @@
+/*
+ *
+ Abel Ramalho Galvão
+ Ramon de Cerqueira Silva
+ *
+ */
+
 package controller;
 
 
@@ -63,6 +70,19 @@ public class LexicalAnalyzer {
                                         }if(wordList.get(i).toString().contains("//") && !dComentarioL) {
                                         	gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + "//  \t\t\t" + "|\tDelimitador de Comentario");
                                             dComentarioL = true;
+                                            break;
+                                        }
+                                    }
+                                    word = wordList.get(i).toString().split("");
+                                    for (int k = 0; k < CommentDelimiters.aCDelimiters.size(); k++){ // Identifica os delimitadores de String
+                                        if(wordList.get(i).toString().contains("\"")){
+                                            gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + "\"  \t\t\t" + "|\tDelimitador de String");
+                                            dComentario = true;
+                                            break;
+                                        } else if (wordList.get(i).toString().contains("\"")){
+                                            gravarArq.println("Linha:\t" + (line+1) + "\t" + "| Lexema:\t" + "\"  \t\t\t" + "|\tDelimitador de String");
+                                            dComentario = false;
+                                            mesma_linha= true;
                                             break;
                                         }
                                     }
@@ -161,6 +181,7 @@ public class LexicalAnalyzer {
                             }
                             outputArq.close();
                             line = 0;
+                            errorList.clear();
                         }
                     }
                 }

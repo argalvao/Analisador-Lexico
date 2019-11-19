@@ -1,3 +1,9 @@
+/*
+ *
+ Abel Ramalho Galvão
+ Ramon de Cerqueira Silva
+ *
+ */
 package model;
 
 public class Token {

@@ -1,8 +1,12 @@
 package model;
 
 import java.util.ArrayList;
-
-
+/*
+ *
+ Abel Ramalho Galvão
+ Ramon de Cerqueira Silva
+ *
+ */
 public class ReservedWords {
 	@SuppressWarnings("serial")
 	public static final ArrayList<String> aRWords = new ArrayList<String>() {{

@@ -1,3 +1,9 @@
+/*
+ *
+ Abel Ramalho Galvão
+ Ramon de Cerqueira Silva
+ *
+ */
 package model;
 
 import java.util.ArrayList;
@@ -98,6 +104,7 @@ public class Symbol {
 		add(">=");
 		add("=ss");
 		add("=");
+		add("\"");
 	}};
 
 	public static Object aSymbol(int u) {
