@@ -39,7 +39,7 @@ public class LexicalAnalyzer {
 
 	private void classifyLexeme(int lineNumber) {
 		//verifying all symbols
-		if (this.lexeme.toString().matches([]))
+		//if (this.lexeme.toString().matches([]))
 	}
 
 	private void parseLine(String line, int lineNumber) {
