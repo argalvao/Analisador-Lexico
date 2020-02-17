@@ -8,6 +8,8 @@ import java.util.Set;
 public class TokenInformation {
 
 	private static TokenInformation instance;
+	private final HashSet<Character> splitWords;
+	private final HashMap<Character, Character> togetherWords;
 	private final HashSet<String> reservedWords;
 	private final HashSet<String> arithmeticOperators;
 	private final HashSet<String> relationalOperators;
@@ -24,6 +26,16 @@ public class TokenInformation {
 		this.arithmeticOperators = new HashSet<>(Arrays.asList("+", "-", "*", "/", "++", "--"));
 		this.relationalOperators = new HashSet<>(Arrays.asList("!=", "==", "<", "<=", ">", ">=", "="));
 		this.logicalOperators = new HashSet<>(Arrays.asList("!", "&&", "||"));
+		this.splitWords = new HashSet<>(Arrays.asList('+', '-', '*', '/', '!', '=', '<', '>', '&', '|'));
+		this.togetherWords = new HashMap<>();
+		this.togetherWords.put('+', '+');
+		this.togetherWords.put('-', '-');
+		this.togetherWords.put('!', '=');
+		this.togetherWords.put('=', '=');
+		this.togetherWords.put('<', '=');
+		this.togetherWords.put('>', '=');
+		this.togetherWords.put('&', '&');
+		this.togetherWords.put('|', '|');
 		this.delimiters = new HashSet<>(Arrays.asList(";", ",", "(", ")", "[", "]", "{", "}", "."));
 		this.commentDelimiters = new HashMap<String, Byte>();
 		this.commentDelimiters.put("//", (byte) 1);
@@ -54,6 +66,14 @@ public class TokenInformation {
 
 	public HashSet<String> getLogicalOperators() {
 		return this.logicalOperators;
+	}
+
+	public HashSet<Character> getSplitWords() {
+		return this.splitWords;
+	}
+
+	public HashMap<Character, Character> getTogetherWords() {
+		return this.togetherWords;
 	}
 
 	public HashSet<String> getDelimiters() {

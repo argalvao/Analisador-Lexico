@@ -38,6 +38,9 @@ public class Main {
 								new FileWriter("output/" + fileList[counter].getName().replace("entrada", "saida")));
 						PrintWriter printWriter = new PrintWriter(bufferedWriter);
 						printWriter.printf("LISTA DE TOKENS:\n\n");
+						for (Token token : fileTokens.get(fileList[counter].getName())) {
+							printWriter.println(token);
+						}
 						printWriter.close();
 					}
 				}

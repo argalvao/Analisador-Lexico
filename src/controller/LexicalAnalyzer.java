@@ -27,7 +27,7 @@ public class LexicalAnalyzer {
 	private final ArrayList<String> errorList;
 
 	private LexicalAnalyzer() {
-		this.errorList = new ArrayList<String>();
+		this.errorList = new ArrayList<>();
 	}
 
 	public static LexicalAnalyzer getInstance() {
@@ -38,14 +38,31 @@ public class LexicalAnalyzer {
 	}
 
 	private void classifyLexeme(int lineNumber) {
-		//verifying all symbols
-		//if (this.lexeme.toString().matches([]))
+		if (TokenInformation.getInstance().getReservedWords().contains(this.lexeme.toString())) {
+			this.wordList.add(new Token(TokenTypes.RESERVED, this.lexeme.toString(), lineNumber));
+		} else if (this.lexeme.toString().matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?")) {
+			this.wordList.add(new Token(TokenTypes.NUMBER, this.lexeme.toString(), lineNumber));
+		} else if (this.lexeme.toString().matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*")) {
+			this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber));
+		} else {
+			this.errorList.add("Error bad-formed Identifier");
+		}
+
+	}
+
+	private char lookAhead(String line, int currentIndex) {
+		if (currentIndex + 1 < line.length()) {
+			return line.charAt(currentIndex + 1);
+		}
+		return 0;
 	}
 
 	private void parseLine(String line, int lineNumber) {
+		char previousWord = 0;
 		for (int index = 0; index < line.length(); index += 1) {
 			char word = line.charAt(index);
 			boolean isDelimiter = TokenInformation.getInstance().getDelimiters().contains("" + word);
+			boolean isSplit = TokenInformation.getInstance().getSplitWords().contains(word);
 			if (this.openComment > 0) {
 				this.lexeme.append(word);
 				if(this.openComment == 1) {
@@ -72,12 +89,50 @@ public class LexicalAnalyzer {
 					this.lexeme = new StringBuilder();
 					this.openString = 0;
 				}
-			} else if (word == ' ' || word == '\n' || word == '\t' || isDelimiter) {
+			} else if (word == ' ' || word == '\n' || word == '\t' || isDelimiter || isSplit) {
 				if (isDelimiter) {
 					if (lexeme.length() > 0) {
-						char temporaryCharacter = lexeme.charAt(lexeme.length() - 1);
-						if (!(temporaryCharacter >= '0' && temporaryCharacter <= '9')) {
+						char temporaryCharacter = lexeme.charAt(0);
+						if (!(word == '.' && temporaryCharacter >= '0' && temporaryCharacter <= '9')) {
+							this.classifyLexeme(lineNumber);
+							this.lexeme = new StringBuilder();
 							this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
+						} else {
+							this.lexeme.append(word);
+						}
+					} else {
+						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
+					}
+				} else if (isSplit) {
+					if (TokenInformation.getInstance().getTogetherWords().containsKey(previousWord) && this.lexeme.length() == 1) {
+						if (TokenInformation.getInstance().getTogetherWords().get(previousWord) == word) {
+							lexeme.append(word);
+							if (TokenInformation.getInstance().getArithmeticOperators().contains(this.lexeme.toString())) {
+								this.wordList.add(new Token(TokenTypes.ARITHMETIC, this.lexeme.toString(), lineNumber));
+							} else if (TokenInformation.getInstance().getLogicalOperators().contains(this.lexeme.toString())) {
+								this.wordList.add(new Token(TokenTypes.LOGIC, this.lexeme.toString(), lineNumber));
+							} else if (TokenInformation.getInstance().getRelationalOperators().contains(this.lexeme.toString())) {
+								this.wordList.add(new Token(TokenTypes.RELATIONAL, this.lexeme.toString(), lineNumber));
+							}
+							this.lexeme = new StringBuilder();
+						} else {
+							if (TokenInformation.getInstance().getLogicalOperators().contains("" + previousWord + TokenInformation.getInstance().getTogetherWords().get(previousWord))) {
+								this.errorList.add("Error " + lineNumber + " Logical Operator bad-formed");
+							}
+						}
+					} else {
+						this.classifyLexeme(lineNumber);
+						this.lexeme = new StringBuilder();
+						if (word == '/' && this.lookAhead(line, index) == '/') {
+							this.lexeme.append(word);
+						} else if (TokenInformation.getInstance().getTogetherWords().containsKey(word)) {
+							lexeme.append(word);
+						} else if (TokenInformation.getInstance().getArithmeticOperators().contains("" + word)) {
+							this.wordList.add(new Token(TokenTypes.ARITHMETIC, "" + word, lineNumber));
+						} else if (TokenInformation.getInstance().getLogicalOperators().contains("" + word)) {
+							this.wordList.add(new Token(TokenTypes.LOGIC, "" + word, lineNumber));
+						} else if (TokenInformation.getInstance().getRelationalOperators().contains("" + word)) {
+							this.wordList.add(new Token(TokenTypes.RELATIONAL, "" + word, lineNumber));
 						}
 					}
 				} else {
@@ -88,9 +143,15 @@ public class LexicalAnalyzer {
 				if (word == '"' || word == '\'') {
 					this.classifyLexeme(lineNumber);
 					this.lexeme = new StringBuilder();
+					this.openString = (byte) (word == '"' ? 1 : 0);
+				} else if (word == '/' && previousWord == '/') {
+					this.openComment = 1;
+				} else if (word == '*' && previousWord == '/') {
+					this.openComment = 2;
 				}
 				this.lexeme.append(word);
 			}
+			previousWord = word;
 		}
 	}
 
@@ -115,5 +176,10 @@ public class LexicalAnalyzer {
 		return this.wordList;
 	}
 
+	public ArrayList<String> getErrorList() {
+		return  this.errorList;
+	}
+
 }
+
 // tratar comentarios, guardar lista de tokens, tratar erros.
