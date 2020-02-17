@@ -74,9 +74,11 @@ public class LexicalAnalyzer {
 				}
 			} else if (word == ' ' || word == '\n' || word == '\t' || isDelimiter) {
 				if (isDelimiter) {
-					char temporaryCharacter = lexeme.charAt(lexeme.length() - 1);
-					if (!(temporaryCharacter >= '0' && temporaryCharacter <= '9')) {
-						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
+					if (lexeme.length() > 0) {
+						char temporaryCharacter = lexeme.charAt(lexeme.length() - 1);
+						if (!(temporaryCharacter >= '0' && temporaryCharacter <= '9')) {
+							this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
+						}
 					}
 				} else {
 					this.classifyLexeme(lineNumber);

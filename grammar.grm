@@ -32,9 +32,9 @@ Boolean = 'true' + 'false'
 
 <Valor> ::= Numero | String | Boolean | Id
 
-!<ValorVetor> ::= IntPos | Id
+<ValorVetor> ::= IntPos | Id
 
-!<Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
+<Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
 
 <Tipo> ::= 'int' | 'boolean' | 'string' | 'real' | Id
 
@@ -104,13 +104,13 @@ Boolean = 'true' + 'false'
 
 <IdVar> ::= Id <Var2>
 
-<Var2> ::= ',' <IdVar> | ';' <Var3> | '=' <Valor> <Var4> | <Vetor> <Var4>
+<Var2> ::= ',' <IdVar> | ';' <Var3> | '=' <Valor> <Var4> | <VetorDeclaracao> <Var4>
 
 <Var3> ::= '}' | <TipoVar>
 
 <Var4> ::= ',' <IdVar> | ';' <Var3>
 
-!<Vetor> ::= '[' <ValorVetor> ']' <Matriz>
+<VetorDeclaracao> ::= '[' <ValorVetor> ']' <Matriz>
 
 !Chamada de uma procedimento / função
 
