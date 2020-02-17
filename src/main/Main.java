@@ -27,7 +27,7 @@ public class Main {
 			File directory = new File("input"); // Identifica o diretório de entrada de arquivos
 			if (directory.isDirectory()) {
 				File outputDirectory = new File("output");
-				//noinspection ResultOfMethodCallIgnored
+				// noinspection ResultOfMethodCallIgnored
 				outputDirectory.mkdir();
 				File fileList[] = directory.listFiles(); // Lista todos os arquivos do diretório e armazena em um array
 				for (int counter = 0; counter < fileList.length; counter++) {
@@ -40,6 +40,9 @@ public class Main {
 						printWriter.printf("LISTA DE TOKENS:\n\n");
 						for (Token token : fileTokens.get(fileList[counter].getName())) {
 							printWriter.println(token);
+						}
+						for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
+							printWriter.println(errorMessage);
 						}
 						printWriter.close();
 					}

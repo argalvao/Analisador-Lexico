@@ -83,7 +83,7 @@ public class TokenInformation {
 	public HashMap<String, Byte> getCommentDelimiters() {
 		return this.commentDelimiters;
 	}
-	
+
 	public HashMap<String, Set<String>> getSymbols() {
 		HashMap<String, Set<String>> tempHash = new HashMap<String, Set<String>>();
 		tempHash.put("reserved", this.reservedWords);

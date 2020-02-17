@@ -38,14 +38,16 @@ public class LexicalAnalyzer {
 	}
 
 	private void classifyLexeme(int lineNumber) {
-		if (TokenInformation.getInstance().getReservedWords().contains(this.lexeme.toString())) {
-			this.wordList.add(new Token(TokenTypes.RESERVED, this.lexeme.toString(), lineNumber));
-		} else if (this.lexeme.toString().matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?")) {
-			this.wordList.add(new Token(TokenTypes.NUMBER, this.lexeme.toString(), lineNumber));
-		} else if (this.lexeme.toString().matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*")) {
-			this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber));
-		} else {
-			this.errorList.add("Error bad-formed Identifier");
+		if (this.lexeme.length() > 0) {
+			if (TokenInformation.getInstance().getReservedWords().contains(this.lexeme.toString())) {
+				this.wordList.add(new Token(TokenTypes.RESERVED, this.lexeme.toString(), lineNumber));
+			} else if (this.lexeme.toString().matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?")) {
+				this.wordList.add(new Token(TokenTypes.NUMBER, this.lexeme.toString(), lineNumber));
+			} else if (this.lexeme.toString().matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*")) {
+				this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber));
+			} else {
+				this.errorList.add("Line " + lineNumber + ": '" + this.lexeme.toString() + "' Error bad-formed Identifier");
+			}
 		}
 
 	}
@@ -104,6 +106,7 @@ public class LexicalAnalyzer {
 						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
 					}
 				} else if (isSplit) {
+					System.out.println(word);
 					if (TokenInformation.getInstance().getTogetherWords().containsKey(previousWord) && this.lexeme.length() == 1) {
 						if (TokenInformation.getInstance().getTogetherWords().get(previousWord) == word) {
 							lexeme.append(word);
@@ -125,6 +128,10 @@ public class LexicalAnalyzer {
 						this.lexeme = new StringBuilder();
 						if (word == '/' && this.lookAhead(line, index) == '/') {
 							this.lexeme.append(word);
+							this.openComment = 1;
+						} else if (word == '/' && this.lookAhead(line, index) == '*') {
+							this.lexeme.append(word);
+							this.openComment = 2;
 						} else if (TokenInformation.getInstance().getTogetherWords().containsKey(word)) {
 							lexeme.append(word);
 						} else if (TokenInformation.getInstance().getArithmeticOperators().contains("" + word)) {
@@ -143,7 +150,7 @@ public class LexicalAnalyzer {
 				if (word == '"' || word == '\'') {
 					this.classifyLexeme(lineNumber);
 					this.lexeme = new StringBuilder();
-					this.openString = (byte) (word == '"' ? 1 : 0);
+					this.openString = (byte) (word == '"' ? 2 : 1);
 				} else if (word == '/' && previousWord == '/') {
 					this.openComment = 1;
 				} else if (word == '*' && previousWord == '/') {
