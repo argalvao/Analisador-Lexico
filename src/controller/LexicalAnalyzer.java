@@ -49,7 +49,6 @@ public class LexicalAnalyzer {
 				this.errorList.add("Line " + lineNumber + ": '" + this.lexeme.toString() + "' Error bad-formed Identifier");
 			}
 		}
-
 	}
 
 	private char lookAhead(String line, int currentIndex) {
@@ -106,7 +105,6 @@ public class LexicalAnalyzer {
 						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber));
 					}
 				} else if (isSplit) {
-					System.out.println(word);
 					if (TokenInformation.getInstance().getTogetherWords().containsKey(previousWord) && this.lexeme.length() == 1) {
 						if (TokenInformation.getInstance().getTogetherWords().get(previousWord) == word) {
 							lexeme.append(word);
@@ -132,7 +130,7 @@ public class LexicalAnalyzer {
 						} else if (word == '/' && this.lookAhead(line, index) == '*') {
 							this.lexeme.append(word);
 							this.openComment = 2;
-						} else if (TokenInformation.getInstance().getTogetherWords().containsKey(word)) {
+						} else if (TokenInformation.getInstance().getTogetherWords().containsKey(word) && this.lookAhead(line, index) == TokenInformation.getInstance().getTogetherWords().get(word)) {
 							lexeme.append(word);
 						} else if (TokenInformation.getInstance().getArithmeticOperators().contains("" + word)) {
 							this.wordList.add(new Token(TokenTypes.ARITHMETIC, "" + word, lineNumber));
@@ -140,6 +138,8 @@ public class LexicalAnalyzer {
 							this.wordList.add(new Token(TokenTypes.LOGIC, "" + word, lineNumber));
 						} else if (TokenInformation.getInstance().getRelationalOperators().contains("" + word)) {
 							this.wordList.add(new Token(TokenTypes.RELATIONAL, "" + word, lineNumber));
+						} else {
+							this.errorList.add("Error " + lineNumber + " " + word + " Operator bad-formed");
 						}
 					}
 				} else {
@@ -173,7 +173,7 @@ public class LexicalAnalyzer {
 		this.wordList = new ArrayList<>();
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filename)); // // Passa o caminho e o nome do
 																						// arquivo
-		int counter = 1;
+		int counter = 0;
 		while (bufferedReader.ready()) {
 			this.parseLine(bufferedReader.readLine(), counter);
 			counter++;
