@@ -14,8 +14,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import controller.LexicalAnalyzer;
+import controller.SynthaticAnalyzer;
+import model.SynthaticNode;
 import model.Token;
 
 public class Main {
@@ -36,6 +40,9 @@ public class Main {
 						BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output/" + fileList[counter].getName().replace("entrada", "saida")));
 						PrintWriter printWriter = new PrintWriter(bufferedWriter);
 						printWriter.printf("LISTA DE TOKENS:\n\n");
+						Queue<Token> tempQueue = new LinkedList<Token>(fileTokens.get(fileList[counter].getName()));
+						SynthaticNode synthaticNode = SynthaticAnalyzer.getInstance().start(tempQueue);
+						SynthaticAnalyzer.getInstance().showDerivation(synthaticNode);
 						for (Token token : fileTokens.get(fileList[counter].getName())) {
 							printWriter.println(token);
 						}
