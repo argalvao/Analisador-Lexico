@@ -1,0 +1,8 @@
+bin/
+output/
+out/
+*.class
+.classpath
+.project
+Analisador-Lexico.iml
+thenafter

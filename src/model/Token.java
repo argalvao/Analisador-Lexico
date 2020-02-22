@@ -7,45 +7,34 @@
 package model;
 
 public class Token {
-    private String tipo;
-    private String lexema;
-    private int linha;
-    
-    public Token(String tipo, String lexema, int linha) {
-        this.lexema = lexema;
-        this.tipo = tipo;
-        this.linha = linha;
-    }
-    
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
+	private final TokenTypes type;
+	private final String lexeme;
+	private final int line;
 
-    public void setLexema(String lexema) {
-        this.lexema = lexema;
-    }
-    
-    public void setLinha(int linha) {
-        this.linha = linha;
-    }
-    
-    public String getTipo() {
-        return this.tipo;
-    }
+	public Token(TokenTypes type, String lexeme, int line) {
+		this.lexeme = lexeme;
+		this.type = type;
+		this.line = line;
+	}
 
-    public String getLexema() {
-        return this.lexema;
-    }
+	public TokenTypes getType() {
+		return type;
+	}
 
-    public int getLinha() {
-        return this.linha;
-    }
+	public String getLexeme() {
+		return lexeme;
+	}
 
-    @Override
-    public String toString() {
-        //if (tipo == String.ERRO_SINT)
-           //return (this.linha + " " + this.lexema + " " + this.tipo);
-        //else
-            return ("Linha:\t" + (this.linha+1) + "\t" + "| Lexema:\t" + this.lexema + "\t\t\t" + "|\t"+this.tipo);
-    }
+	public int getLine() {
+		return line;
+	}
+
+	@Override
+	public String toString() {
+		// if (tipo == String.ERRO_SINT)
+		// return (this.linha + " " + this.lexema + " " + this.tipo);
+		// else
+		return ("Linha:\t" + (this.line + 1) + "\t" + "| Lexema:\t" + this.lexeme + "\t\t\t" + "|\t"
+				+ this.type.getName());
+	}
 }

@@ -1,0 +1,226 @@
+! -----------------------------------------------------------------------
+!Gramática desenvolvida como parte do problema 2 do MI PROCESSADORES DE
+!LINGUAGEM DE PROGRAMAÇÃO. Essa gramática auxiliará no desenvolvimento dos
+!demais componentes que constam um compilador. Será de extrema importância
+!no processo de geração da árvore sintática que, como o próprio nome sugere,
+!será utilizado pelo analisador sintático.
+! -----------------------------------------------------------------------
+
+"Name" = 'PBL Compiladores'
+
+"Author" = 'Abel Galvão, Caique Trindade, Emerson Souza, Felipe Damascena, Pedro Brandão, Ramon Silva, Solenir Figuerêdo, Victor Souza'
+
+"Version" = '1.0'
+
+"About" = 'Grammar'
+
+"Start Symbol" = <Inicio>
+
+"Case Sensitive" = True
+
+!Definição de expressão regulares e conjuntos a serem utilizados na Gramática
+
+Id = {Letter}{Alphanumeric}*
+Real = ('-')? {Digit} + '.' {Digit} +
+IntPos = {Digit}+
+IntNeg = '-'{Digit}+
+Int = IntPos + IntNeg
+{String Ch} = {Printable} - ["] + [\"]
+String = ["] {String Ch}* ["]
+Numero = Int + Real
+Boolean = 'true' + 'false'
+
+<Valor> ::= Numero | String | Boolean | Id
+
+<ValorVetor> ::= IntPos | Id
+
+<Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
+
+<Tipo> ::= 'int' | 'boolean' | 'string' | 'real' | Id
+
+<Inicio> ::= <Const> <Struct> <Var> <GeraFuncaoeProcedure> <Start>
+
+!Bloco Condicional
+
+<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo>'}' <CondEnd>
+
+<CondEnd> ::= 'else' '{' <Corpo> '}'|
+
+!Bloco de repetição
+
+<Laco> ::= 'while' '(' <ExpressaoLogicaRelacional> ')' '{'<Corpo> '}'
+
+! Criação função e procedimento
+
+<GeraFuncaoeProcedure> ::= <Funcao> <GeraFuncaoeProcedure> | <Procedimento> <GeraFuncaoeProcedure> |
+
+! Bloco de função e procedimento
+
+<Funcao> ::= 'function' <Tipo> Id '(' <Parametro>
+
+<Procedimento> ::= 'procedure' Id '(' <Parametro>
+
+<Parametro> ::= <Tipo> Id <Para2> <Para1>
+
+<Para1> ::= ',' <Parametro> | ')' <F2>
+
+<Para2> ::= '[' ']'<Para3> |
+
+<Para3> ::= '[' ']' |
+
+<F2> ::= '{' <Corpo>
+
+!Bloco de declaração de constantes
+
+<Const> ::= 'const' ' { ' <TipoConst> |
+
+<TipoConst> ::= <Tipo> <IdConst>
+
+<IdConst> ::= Id <Valor> <Const2>
+
+<Const2> ::= ' , ' <IdConst> | ' ; ' <Const3>
+
+<Const3> ::= ' } ' | <TipoConst>
+
+!Bloco de declaração de structs
+
+<Struct> ::= 'typedef' 'struct' Id <Extends> <TipoStruct> <Struct> |
+
+<Extends> ::= 'extends' Id '{' | '{'
+
+<TipoStruct> ::= <Tipo> <IdStruct>
+
+<IdStruct> ::= Id <Struct2>
+
+<Struct2> ::= ',' <IdStruct> | ';' <Struct3>
+
+<Struct3> ::= '}' | <TipoStruct>
+
+!Bloco de declaração de variáveis
+
+<Var> ::= 'var' '{' <TipoVar> |
+
+<TipoVar> ::= <Tipo> <IdVar>
+
+<IdVar> ::= Id <Var2>
+
+<Var2> ::= ',' <IdVar> | ';' <Var3> | '=' <Valor> <Var4> | <VetorDeclaracao> <Var4>
+
+<Var3> ::= '}' | <TipoVar>
+
+<Var4> ::= ',' <IdVar> | ';' <Var3>
+
+<VetorDeclaracao> ::= '[' <ValorVetor> ']' <Matriz>
+
+!Chamada de uma procedimento / função
+
+<ListaParametros> ::= <ListaParametros2> <ContListaParametros>
+
+<ContListaParametros> ::= ',' <ListaParametros> |
+
+<ListaParametros2> ::= <Identificador> | Numero | String
+
+!Acesso a Identificadores (variáveis, structs, matrizes e funções)
+
+<Identificador> ::= <Escopo> Id <Identificador2> | Id <Identificador3>
+
+<Identificador2> ::= '.' Id <Vetor> | <Vetor> |
+
+<Identificador3> ::= <Identificador2> | '(' <ListaParametros> ')'
+
+<Identificador4> ::= '.' Id <Vetor> |
+
+<Vetor> ::= '[' <IndiceVetor> ']' <Vetor2> <Identificador4> | <Identificador4>
+
+<Vetor2> ::= '[' <IndiceVetor> ']' |
+
+<IndiceVetor> ::= IntPos | <Identificador>
+
+<Escopo> ::= 'local' '.' | 'global' '.'
+
+!Acesso a Identificadores (sem funções)
+
+<IdentificadorSemFuncao> ::= <Escopo> Id <Identificador2> | Id <Identificador2>
+
+!Expressões Aritméticas
+
+<ExpressaoAritmetica> ::= <T> <E2> | <IdentificadorAritmetico> | '++' <IdentificadorSemFuncao> <T2> <E2> | '--' <IdentificadorSemFuncao> <T2> <E2>
+
+<ExpressaoAritmetica2> ::= '++' <T2> <E2> | '--' <T2> <E2> | <T2> <E2>
+
+<E2> ::= '+' <ExpressaoAritmetica> | '-' <ExpressaoAritmetica> |
+
+<T> ::= <F> <T2>
+
+<T2> ::= '*' <ExpressaoAritmetica> | '/' <ExpressaoAritmetica> |
+
+<F> ::= '(' <ExpressaoAritmetica> ')' | Numero
+
+<IdentificadorAritmetico> ::= <Escopo> Id <Identificador2> <ExpressaoAritmetica2> | Id <IdentificadorAritmetico3>
+
+<IdentificadorAritmetico3> ::= <Identificador2> <ExpressaoAritmetica2> | '(' <ListaParametros> ')' <T2> <E2>
+
+!Expressões Relacionais e Lógicas
+
+<ExpressaoLogicaRelacional> ::= <ExpressaoLR> | '(' <ExpressaoLR> ')' <ExpressaoLR3>
+
+<ExpressaoLR> ::= <ArgumentoLR2> <ExpressaoLR2> | <ArgumentoLR3> <OperadorRelacional> <ArgumentoLR> <ExpressaoLR3>
+
+<ExpressaoLR2> ::= <OperadorRelacional> <ArgumentoLR> <ExpressaoLR3> | <ExpressaoLR3>
+
+<ExpressaoLR3> ::= <OperadorLogico> <ExpressaoLogicaRelacional> |
+
+<ArgumentoLR> ::= <ArgumentoLR2> | <ArgumentoLR3>
+
+<ArgumentoLR2> ::= '!' <ArgumentoLR2_1> | true | false
+
+<ArgumentoLR2_1> ::= Id | true | false
+
+<ArgumentoLR3> ::= String | <ExpressaoAritmetica>
+
+<OperadorRelacional> ::= '!=' | '==' | '<' | '>' | '<=' | '>='
+
+<OperadorLogico> ::= '&&' | '||'
+
+!Função print
+
+<Print> ::= 'print' '(' <Print1>
+
+<Print1> ::= String <AuxPrint> | <Identificador> <AuxPrint> | Numero <AuxPrint>
+
+<AuxPrint> ::= ',' <Print1> | <PrintFim>
+
+<PrintFim> ::= ')' ';'
+
+!Função read
+
+<Read> ::= 'read' '(' <Read1>
+
+<Read1> ::= <IdentificadorSemFuncao> <AuxRead>
+
+<AuxRead> ::= ',' <Read1> | <ReadFim>
+
+<ReadFim> ::= ')' ';'
+
+!Corpo
+
+<Corpo> ::= <Var> <Corpo2> '}' | '}'
+
+<Corpo2> ::= <Comandos> <Corpo2> |
+
+<Comandos> ::= <Condicional> | <Laco> | <Read> | <Print> | <ComandosReturn> | <IdentificadorComandos>
+
+<IdentificadorComandos> ::= <IdentificadorSemFuncao> <IdentificadorComandos2> ';'
+
+<IdentificadorComandos2> ::= '=' <IdentificadorComandos2_1> | '(' <ListaParametros> ')'
+
+<IdentificadorComandos2_1> ::= <ExpressaoAritmetica> | String | Boolean
+
+<ComandosReturn> ::= 'return' <CodigosRetornos>
+
+<CodigosRetornos> ::= ';' | <ExpressaoAritmetica> ';'
+
+!Chamada do Start
+
+<Start> ::= 'start' '(' ')' '{' <Corpo> '}'
+
