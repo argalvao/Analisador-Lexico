@@ -41,8 +41,8 @@ public class Main {
 						PrintWriter printWriter = new PrintWriter(bufferedWriter);
 						printWriter.printf("LISTA DE TOKENS:\n\n");
 						Queue<Token> tempQueue = new LinkedList<Token>(fileTokens.get(fileList[counter].getName()));
-						SynthaticNode synthaticNode = SynthaticAnalyzer.getInstance().start(tempQueue);
-						SynthaticAnalyzer.getInstance().showDerivation(synthaticNode);
+						//SynthaticNode synthaticNode = SynthaticAnalyzer.getInstance().start(tempQueue);
+						//SynthaticAnalyzer.getInstance().showDerivation(synthaticNode);
 						for (Token token : fileTokens.get(fileList[counter].getName())) {
 							printWriter.println(token);
 						}

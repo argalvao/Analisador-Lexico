@@ -17,10 +17,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 	private SynthaticAnalyzer() {
 		super();
 		this.errors = new ArrayList<>();
-		// return null, se não tiver vazio 
-		// return tokenmap se tiver vazio
-		// predict sempre quando começar com a produção <producao>
-		// Correto conserto do vazio, usar para os proximos, olhando a gramatica e encadeando os IFS
+		// Tratamento de Vazio
+		// Return corretos
 		this.functions.put("<Var>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -49,12 +47,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (token != null && "return".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
-			return tokenMap;
+			return null;
 		});
 
-		// Certo	
+		// Vazio	
 		this.functions.put("<ContListaParametros>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -63,12 +62,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				SynthaticNode temporary = this.call("<ListaParametros>", tokens).getTokenNode();
 				if (temporary != null && !temporary.isEmpty()) {
 					tokenMap.add(temporary);
-					return tokenMap;
 				} else {
 					this.errors.add("Erro na produção <ListaParametros>");
 				}
 			}
-			return null;
+			return tokenMap;
 		});
 		
 		// Certo
@@ -78,28 +76,33 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && ";".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Const3>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
-		// Certo, colocou else if nos ifs
+		// Certo
 		this.functions.put("<ArgumentoLR2_1>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "true".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "false".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
-		// Certo
+		// Vazio
 		this.functions.put("<VetorDeclaracao>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -109,10 +112,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
+					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
+					return tokenMap;
 				}
-				tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo	
@@ -134,12 +138,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 							tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
+								return tokenMap;
 							}
 						}
 					}
 				}
 			}
-			return tokenMap;
+			return null;
 		});
 		
 		//Certo
@@ -148,30 +153,37 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (this.predict("<Identificador>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
+				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
-			return tokenMap;
+			return null;
 		});
 
-		// Certo, else if no if
+		// Certo
 		this.functions.put("<Var4>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && ";".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
-		// Certo, else if
+		// Certo
 		this.functions.put("<Identificador3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -181,23 +193,27 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ListaParametros>", tokens).getTokenNode());
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
+					return tokenMap;
 				}
 			}else if (this.predict("<Identificador2>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
-		//Certo, else if
+		//Certo
 		this.functions.put("<ArgumentoLR3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("<ExpressaoAritmetica>", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 		
 		// Certo
@@ -207,8 +223,9 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<ListaParametros2>", tokens.peek())) {
 				tokenMap.add(this.call("<ListaParametros2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ContListaParametros>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -218,11 +235,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "{".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 		
-		// Certo, aninhado
+		// Certo
 		this.functions.put("<Laco>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -242,26 +260,30 @@ public class SynthaticAnalyzer extends ChainedCall {
 							tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
+								return tokenMap;
 							}
 						}
 					}
 				}
 			}
-			return tokenMap;
+			return null;
 		});
 
-		// Certo, else if
+		// Certo
 		this.functions.put("<ListaParametros2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("<Identificador>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -271,8 +293,9 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<IdentificadorSemFuncao>", tokens.peek())) {
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -281,18 +304,24 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (token != null && "!=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "==".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "<".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && ">".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "<=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && ">=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -302,8 +331,9 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -313,15 +343,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorAritmetico3>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (this.predict("<Escopo>", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
+					return tokenMap;
 				}
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -330,10 +362,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "IntPos".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
@@ -342,10 +376,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (this.predict("<TipoStruct>", tokens.peek())) {
 				tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
+				return tokenMap;
 			}else if (token != null && "}".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 		
 		// Certo
@@ -354,18 +390,24 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (this.predict("<Condicional>", tokens.peek())) {
 				tokenMap.add(this.call("<Condicional>", tokens).getTokenNode());
+				return tokenMap;
 			} else if (this.predict("<Laco>", tokens.peek())) {
 				tokenMap.add(this.call("<Laco>", tokens).getTokenNode());
+				return tokenMap;
 			} else if (this.predict("<Read>", tokens.peek())) {
 				tokenMap.add(this.call("<Read>", tokens).getTokenNode());
+				return tokenMap;
 			} else if (this.predict("<Print>", tokens.peek())) {
 				tokenMap.add(this.call("<Print>", tokens).getTokenNode());
+				return tokenMap;
 			} else if (this.predict("<ComandosReturn>", tokens.peek())) {
 				tokenMap.add(this.call("<ComandosReturn>", tokens).getTokenNode());
+				return tokenMap;
 			} else if (this.predict("<IdentificadorComandos>", tokens.peek())) {
 				tokenMap.add(this.call("<IdentificadorComandos>", tokens).getTokenNode());
+				return tokenMap;
 			}
-			return tokenMap;
+			return null;
 		});
 		
 		// Certo
@@ -374,15 +416,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
 			}else if (token != null && "(".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
+					return tokenMap;
 				}
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// TEM VAZIO
@@ -409,9 +453,10 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "(".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Read1>", tokens).getTokenNode());
+					return tokenMap;
 				}
 			}
-			return tokenMap;
+			return null;
 		});
 
 		// Certo
