@@ -72,15 +72,15 @@ Boolean = 'true' + 'false'
 
 !Bloco de declaração de constantes
 
-<Const> ::= 'const' ' { ' <TipoConst> |
+<Const> ::= 'const' '{' <TipoConst> |
 
 <TipoConst> ::= <Tipo> <IdConst>
 
 <IdConst> ::= Id <Valor> <Const2>
 
-<Const2> ::= ' , ' <IdConst> | ' ; ' <Const3>
+<Const2> ::= ',' <IdConst> | ';' <Const3>
 
-<Const3> ::= ' } ' | <TipoConst>
+<Const3> ::= '}' | <TipoConst>
 
 !Bloco de declaração de structs
 
@@ -172,9 +172,9 @@ Boolean = 'true' + 'false'
 
 <ArgumentoLR> ::= <ArgumentoLR2> | <ArgumentoLR3>
 
-<ArgumentoLR2> ::= '!' <ArgumentoLR2_1> | true | false
+<ArgumentoLR2> ::= '!' <ArgumentoLR2_1> | 'true' | 'false'
 
-<ArgumentoLR2_1> ::= Id | true | false
+<ArgumentoLR2_1> ::= Id | 'true' | 'false'
 
 <ArgumentoLR3> ::= String | <ExpressaoAritmetica>
 
