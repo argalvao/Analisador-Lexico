@@ -32,11 +32,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 						tokenMap.add(temporary);
 						return tokenMap;
 					} else {
-						this.errors.add("No production on TipoVar ");
+						this.errors.add("Erro na produção TipoVar ");
 					}
 				} else {
-					this.errors.add("Expected '{' but received" + token.getLexeme());
+					this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Experado 'var' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -49,6 +51,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'return' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -65,6 +69,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				} else {
 					this.errors.add("Erro na produção <ListaParametros>");
 				}
+			}else {
+				this.errors.add("Experado ',' mas recebeu" + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -81,6 +87,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado ',' ou ';' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -98,6 +106,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && "false".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'Id' ou 'true' ou 'false' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -114,7 +124,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
 					return tokenMap;
+				}else {
+					this.errors.add("Experado ']' mas recebeu" + token.getLexeme());
 				}
+			}else {
+				this.errors.add("Experado '[' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -139,10 +153,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
+							}else {
+								this.errors.add("Experado '}' mas recebeu" + token.getLexeme());
 							}
+						}else {
+							this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
 						}
+					}else {
+						this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
 					}
+				}else {
+					this.errors.add("Experado '(' mas recebeu" + token.getLexeme());
 				}
+			}else {
+				this.errors.add("Experado 'start' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -163,6 +187,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add("Experado 'String' ou 'Numero' ou ocorreu um erro na produção Identificador");
 			}
 			return null;
 		});
@@ -179,6 +205,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado ';' ou ',' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -194,10 +222,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				}else {
+					this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
 				}
 			}else if (this.predict("<Identificador2>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado '(' ou ocorreu um erro na produção Identificador2");
 			}
 			return null;
 		});
@@ -212,6 +244,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'String' ou ocorreu um erro na produção ExpressaoAritmetica");
 			}
 			return null;
 		});
@@ -224,6 +258,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ListaParametros2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ContListaParametros>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Erro na produção ListaParametros2");
 			}
 			return null;
 		});
@@ -236,6 +272,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -261,10 +299,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
+							}else {
+								this.errors.add("Experado '}' mas recebeu" + token.getLexeme());
 							}
+						}else {
+							this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
 						}
+					}else {
+						this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
 					}
+				}else {
+					this.errors.add("Experado '(' mas recebeu" + token.getLexeme());
 				}
+			}else {
+				this.errors.add("Experado 'while' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -282,6 +330,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'Numero' ou 'String ou ocorreu um erro na produção Identificador");
 			}
 			return null;
 		});
@@ -294,6 +344,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Erro na produção IdentificadorSemFuncao");
 			}
 			return null;
 		});
@@ -320,6 +372,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && ">=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado um operador relacional mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -332,6 +386,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'Id' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -351,7 +407,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 					return tokenMap;
+				}else {
+					this.errors.add("Experado 'Id' mas recebeu" + token.getLexeme());
 				}
+			}else {
+				this.errors.add("Experado 'Id' ou ocorreu um erro na produção Escopo");
 			}
 			return null;
 		});
@@ -366,6 +426,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && "IntPos".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado 'Id' ou 'IntPos' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -380,6 +442,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (token != null && "}".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			}else {
+				this.errors.add("Experado '}' ou ocorreu um erro na produção TipoStruct");
 			}
 			return null;
 		});
@@ -406,6 +470,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			} else if (this.predict("<IdentificadorComandos>", tokens.peek())) {
 				tokenMap.add(this.call("<IdentificadorComandos>", tokens).getTokenNode());
 				return tokenMap;
+			}else {
+				this.errors.add("Erro na produção Comandos");
 			}
 			return null;
 		});
@@ -424,7 +490,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				}else {
+					this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
 				}
+			}else {
+				this.errors.add("Experado 'Numero' ou '(' mas recebeu" + token.getLexeme());
 			}
 			return null;
 		});
@@ -439,10 +509,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 			}else if (this.predict("<OperadorLogico>", tokens.peek())) {
 				tokenMap.add(this.call("<OperadorLogico>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLogicaRelacional>", tokens).getTokenNode());
+			}else {
+				this.errors.add("Experado <Vazio> ou ocorreu um erro na produção OperadorLogico");
 			}
 			return tokenMap;
 		});
 
+		// Continuar a declaração dos erros
 		// Certo
 		this.functions.put("<Read>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
