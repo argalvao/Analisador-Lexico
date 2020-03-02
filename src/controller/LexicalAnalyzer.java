@@ -46,7 +46,7 @@ public class LexicalAnalyzer {
 			} else if (this.lexeme.toString().matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*")) {
 				this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber));
 			} else {
-				this.errorList.add("Line " + lineNumber + ": '" + this.lexeme.toString() + "' Error bad-formed Identifier");
+				this.errorList.add("Linha " + lineNumber + ": '" + this.lexeme.toString() + "' Error bad-formed Identifier");
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class LexicalAnalyzer {
 							this.lexeme = new StringBuilder();
 						} else {
 							if (TokenInformation.getInstance().getLogicalOperators().contains("" + previousWord + TokenInformation.getInstance().getTogetherWords().get(previousWord))) {
-								this.errorList.add("Error " + lineNumber + " Logical Operator bad-formed");
+								this.errorList.add("Linha " + lineNumber + ": Logical Operator bad-formed");
 							}
 						}
 					} else {
@@ -139,7 +139,7 @@ public class LexicalAnalyzer {
 						} else if (TokenInformation.getInstance().getRelationalOperators().contains("" + word)) {
 							this.wordList.add(new Token(TokenTypes.RELATIONAL, "" + word, lineNumber));
 						} else {
-							this.errorList.add("Error " + lineNumber + " " + word + " Operator bad-formed");
+							this.errorList.add("Linha " + lineNumber + ": " + word + " Operator bad-formed");
 						}
 					}
 				} else {
