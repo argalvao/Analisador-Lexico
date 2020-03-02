@@ -27,15 +27,15 @@ public abstract class ChainedCall {
         if (token != null) {
             if (this.first.get(productionName) != null) {
                 return this.first.get(productionName).contains(token.getLexeme())
-                        || (TokenTypes.IDENTIFIER == token.getType() && this.first.get(productionName).contains("Identifier"))
-                        || (TokenTypes.NUMBER == token.getType() && this.first.get(productionName).contains("NumberTerminal"))
-                        || (TokenTypes.STRING == token.getType() && this.first.get(productionName).contains("StringLiteral"))
+                        || (TokenTypes.IDENTIFIER == token.getType() && this.first.get(productionName).contains("Id"))
+                        || (TokenTypes.NUMBER == token.getType() && this.first.get(productionName).contains("Numero"))
+                        || (TokenTypes.STRING == token.getType() && this.first.get(productionName).contains("String"))
                         || (this.first.get(productionName).contains(""));
-            } else if ("NumberTerminal".equals(productionName) && token.getType() == TokenTypes.NUMBER) {
+            } else if ("Numero".equals(productionName) && token.getType() == TokenTypes.NUMBER) {
                 return true;
-            } else if ("Identifier".equals(productionName) && token.getType() == TokenTypes.IDENTIFIER) {
+            } else if ("Id".equals(productionName) && token.getType() == TokenTypes.IDENTIFIER) {
                 return true;
-            } else return "StringLiteral".equals(productionName) && token.getType() == TokenTypes.STRING;
+            } else return "String".equals(productionName) && token.getType() == TokenTypes.STRING;
         }
         return false;
     }

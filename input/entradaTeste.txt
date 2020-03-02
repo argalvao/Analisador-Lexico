@@ -4,10 +4,11 @@ public void teste() $ {
     string abel = "Abel";
     int azul = i.8;
     int amarelo = 14;
+    int ;
     int rosa* = -8.6;
     soma = azul + amarelo;
     return soma;
-    if (!azul > amarelo & amarelo ==9.8 && azul# == 70.j | rosa > 9){
+    if (!azul > amarelo & amarelo ==9.8 && azul# ==[ 70.j | rosa > 9){
         /* 
         comentario int
         */ var 

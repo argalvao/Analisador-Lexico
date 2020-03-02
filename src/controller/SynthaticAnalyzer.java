@@ -12,7 +12,7 @@ import util.FirstFollow;
 public class SynthaticAnalyzer extends ChainedCall {
 
 	private static SynthaticAnalyzer instance;
-	private List<String> errors;
+	public List<String> errors;
 
 	private SynthaticAnalyzer() {
 		super();
@@ -31,18 +31,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					if (temporary != null && !temporary.isEmpty()) {
 						tokenMap.add(temporary);
 						return tokenMap;
-					} else {
-						this.errors.add("Erro na produção TipoVar ");
 					}
 				} else {
-					this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
+					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add("Experado 'var' mas recebeu" + token.getLexeme());
+				this.errors.add("Esperado 'var' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<ComandosReturn>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -51,13 +49,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'return' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado 'return' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
 
-		// Vazio	
+		// Vazio
 		this.functions.put("<ContListaParametros>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -66,15 +64,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				SynthaticNode temporary = this.call("<ListaParametros>", tokens).getTokenNode();
 				if (temporary != null && !temporary.isEmpty()) {
 					tokenMap.add(temporary);
-				} else {
-					this.errors.add("Erro na produção <ListaParametros>");
 				}
-			}else {
-				this.errors.add("Experado ',' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado ',' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
-		
+
 		// Certo
 		this.functions.put("<Const2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -83,12 +79,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Const3>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado ',' ou ';' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -100,14 +96,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "true".equals(token.getLexeme())) {
+			} else if (token != null && "true".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "false".equals(token.getLexeme())) {
+			} else if (token != null && "false".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'Id' ou 'true' ou 'false' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -124,16 +120,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
 					return tokenMap;
-				}else {
-					this.errors.add("Experado ']' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
-			}else {
-				this.errors.add("Experado '[' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
 
-		// Certo	
+		// Certo
 		this.functions.put("<Start>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -153,25 +149,25 @@ public class SynthaticAnalyzer extends ChainedCall {
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
-							}else {
-								this.errors.add("Experado '}' mas recebeu" + token.getLexeme());
+							} else {
+								this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
 							}
-						}else {
-							this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
+						} else {
+							this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 						}
-					}else {
-						this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
+					} else {
+						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 					}
-				}else {
-					this.errors.add("Experado '(' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 				}
-			}else {
-				this.errors.add("Experado 'start' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado 'start' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
-		
-		//Certo
+
+		// Certo
 		this.functions.put("<Print1>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -179,16 +175,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<Identificador>", tokens.peek())) {
+			} else if (this.predict("<Identificador>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "Numero".equals(token.getLexeme())) {
+			} else if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add("Experado 'String' ou 'Numero' ou ocorreu um erro na produção Identificador");
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -201,12 +197,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado ';' ou ',' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -222,34 +218,34 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
-				}else {
-					this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 				}
-			}else if (this.predict("<Identificador2>", tokens.peek())) {
+			} else if (this.predict("<Identificador2>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado '(' ou ocorreu um erro na produção Identificador2");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		//Certo
+		// Certo
 		this.functions.put("<ArgumentoLR3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("<ExpressaoAritmetica>", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "String".equals(token.getLexeme())) {
+			} else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'String' ou ocorreu um erro na produção ExpressaoAritmetica");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<ListaParametros>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -258,8 +254,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ListaParametros2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ContListaParametros>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Erro na produção ListaParametros2");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -272,12 +268,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<Laco>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -299,20 +295,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 							if (token != null && "}".equals(token.getLexeme())) {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
-							}else {
-								this.errors.add("Experado '}' mas recebeu" + token.getLexeme());
+							} else {
+								this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
 							}
-						}else {
-							this.errors.add("Experado '{' mas recebeu" + token.getLexeme());
+						} else {
+							this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 						}
-					}else {
-						this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
+					} else {
+						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 					}
-				}else {
-					this.errors.add("Experado '(' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 				}
-			}else {
-				this.errors.add("Experado 'while' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado 'while' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
@@ -324,14 +320,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<Identificador>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "Numero".equals(token.getLexeme())) {
+			} else if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "String".equals(token.getLexeme())) {
+			} else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'Numero' ou 'String ou ocorreu um erro na produção Identificador");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -344,8 +340,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Erro na produção IdentificadorSemFuncao");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -357,23 +353,23 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "!=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "==".equals(token.getLexeme())) {
+			} else if (token != null && "==".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "<".equals(token.getLexeme())) {
+			} else if (token != null && "<".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && ">".equals(token.getLexeme())) {
+			} else if (token != null && ">".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "<=".equals(token.getLexeme())) {
+			} else if (token != null && "<=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && ">=".equals(token.getLexeme())) {
+			} else if (token != null && ">=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado um operador relacional mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -386,8 +382,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'Id' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add("Esperado 'Id' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
@@ -400,18 +396,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorAritmetico3>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<Escopo>", tokens.peek())) {
+			} else if (this.predict("<Escopo>", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 					return tokenMap;
-				}else {
-					this.errors.add("Experado 'Id' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado 'Id' mas recebeu " + token.getLexeme());
 				}
-			}else {
-				this.errors.add("Experado 'Id' ou ocorreu um erro na produção Escopo");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -423,11 +419,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "IntPos".equals(token.getLexeme())) {
+			} else if (token != null && "IntPos".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado 'Id' ou 'IntPos' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -439,15 +435,15 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<TipoStruct>", tokens.peek())) {
 				tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "}".equals(token.getLexeme())) {
+			} else if (token != null && "}".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else {
-				this.errors.add("Experado '}' ou ocorreu um erro na produção TipoStruct");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<Comandos>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -470,12 +466,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 			} else if (this.predict("<IdentificadorComandos>", tokens.peek())) {
 				tokenMap.add(this.call("<IdentificadorComandos>", tokens).getTokenNode());
 				return tokenMap;
-			}else {
-				this.errors.add("Erro na produção Comandos");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<F>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -483,18 +479,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "(".equals(token.getLexeme())) {
+			} else if (token != null && "(".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
-				}else {
-					this.errors.add("Experado ')' mas recebeu" + token.getLexeme());
+				} else {
+					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 				}
-			}else {
-				this.errors.add("Experado 'Numero' ou '(' mas recebeu" + token.getLexeme());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -503,19 +499,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 		this.functions.put("<ExpressaoLR3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			//VAZIO
-			if (token != null && "".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-			}else if (this.predict("<OperadorLogico>", tokens.peek())) {
+			// VAZIO
+			if (this.predict("<OperadorLogico>", tokens.peek())) {
 				tokenMap.add(this.call("<OperadorLogico>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLogicaRelacional>", tokens).getTokenNode());
-			}else {
-				this.errors.add("Experado <Vazio> ou ocorreu um erro na produção OperadorLogico");
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
 
-		// Continuar a declaração dos erros
 		// Certo
 		this.functions.put("<Read>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -527,7 +520,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Read1>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado 'read' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
@@ -542,19 +539,25 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ".".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado '.' mas recebeu " + token.getLexeme());
 				}
-			}else if (token != null && "local".equals(token.getLexeme())) {
+			} else if (token != null && "local".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && ".".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado '.' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// VAZIO 
+		// VAZIO
 		this.functions.put("<CondEnd>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -567,8 +570,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 					if (token != null && "}".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
 					}
+				} else {
+					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado 'else' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -581,18 +590,19 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ArgumentoLR2_1>", tokens).getTokenNode());
 				return tokenMap;
-			}
-			else if (token != null && "true".equals(token.getLexeme())) {
+			} else if (token != null && "true".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "false".equals(token.getLexeme())) {
+			} else if (token != null && "false".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// Certo 
+		// Certo
 		this.functions.put("<IdentificadorAritmetico3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -605,15 +615,19 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 				}
-			}else if (this.predict("<Identificador2>", tokens.peek())) {
+			} else if (this.predict("<Identificador2>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
-		
+
 		// Vazio
 		this.functions.put("<E2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -621,15 +635,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "+".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
-			}
-			else if (token != null && "-".equals(token.getLexeme())) {
+			} else if (token != null && "-".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
 
-		//Certo
+		// Certo
 		this.functions.put("<Condicional>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -654,11 +669,23 @@ public class SynthaticAnalyzer extends ChainedCall {
 									tokenMap.add(new SynthaticNode(tokens.remove()));
 									tokenMap.add(this.call("<CondEnd>", tokens).getTokenNode());
 									return tokenMap;
+								} else {
+									this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
 								}
+							} else {
+								this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 							}
+						} else {
+							this.errors.add("Esperado 'then' mas recebeu " + token.getLexeme());
 						}
+					} else {
+						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 					}
+				} else {
+					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado 'if' mas recebeu " + token.getLexeme());
 			}
 			return null;
 		});
@@ -671,10 +698,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<F2>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -686,9 +715,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "||".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "&&".equals(token.getLexeme())) {
+			} else if (token != null && "&&".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -702,11 +733,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// Vazio 
+		// Vazio
 		this.functions.put("<T2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -717,6 +750,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "/".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -731,7 +766,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ";".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -744,6 +783,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -756,6 +797,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -772,11 +815,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<ExpressaoLR3>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 				}
-			}
-			else if (this.predict("<ExpressaoLR>", tokens.peek())) {
+			} else if (this.predict("<ExpressaoLR>", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoLR>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -791,12 +837,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
 
-		// Vazio 
+		// Vazio
 		this.functions.put("<Const>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -806,7 +856,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "{".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
+				} else {
+					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -821,6 +875,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			} else if (this.predict("<Procedimento>", tokens.peek())) {
 				tokenMap.add(this.call("<Procedimento>", tokens).getTokenNode());
 				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -832,9 +888,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<Identificador>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "IntPos".equals(token.getLexeme())) {
+			} else if (token != null && "IntPos".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -852,12 +910,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 					}
 					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
-			
+
 			return null;
 		});
 
@@ -873,10 +937,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 					}
 					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -888,9 +958,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<TipoConst>", tokens.peek())) {
 				tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && " } ".equals(token.getLexeme())) {
+			} else if (token != null && " } ".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -904,10 +976,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ";".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
 				}
-			}else if (token != null && ";".equals(token.getLexeme())) {
+			} else if (token != null && ";".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -919,7 +995,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "{".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "extends".equals(token.getLexeme())) {
+			} else if (token != null && "extends".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && "Id".equals(token.getLexeme())) {
@@ -927,11 +1003,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 					token = tokens.peek();
 					if (token != null && "{".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
 					}
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
-			return null;			
+			return null;
 		});
 
 		// Certo
@@ -942,13 +1024,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<Escopo>", tokens.peek())) {
+			} else if (this.predict("<Escopo>", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -963,10 +1049,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
-			}
-			if (this.predict("<Vetor>", tokens.peek())) {
+			} else if (this.predict("<Vetor>", tokens.peek())) {
 				tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -977,13 +1066,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 			Token token = tokens.peek();
 			if (this.predict("<Const>", tokens.peek())) {
 				tokenMap.add(this.call("<Const>", tokens).getTokenNode());
-				tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
-				tokenMap.add(this.call("<Var>", tokens).getTokenNode());
-				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
-				tokenMap.add(this.call("<Start>", tokens).getTokenNode());
-				return tokenMap;
 			}
-			return null;
+			if (this.predict("<Struct>", tokens.peek())) {
+				tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
+			}
+			if (this.predict("<Var>", tokens.peek())) {
+				tokenMap.add(this.call("<Var>", tokens).getTokenNode());
+			}
+			if (this.predict("<GeraFuncaoeProcedure>", tokens.peek())) {
+				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
+			}
+			if (this.predict("<Start>", tokens.peek())) {
+				tokenMap.add(this.call("<Start>", tokens).getTokenNode());
+			}
+			return tokenMap;
 		});
 
 		// Certo
@@ -997,11 +1093,15 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ")".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
 				}
-			}else if (token != null && "=".equals(token.getLexeme())) {
+			} else if (token != null && "=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorComandos2_1>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1016,7 +1116,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ";".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1029,6 +1133,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1043,7 +1149,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IndiceVetor>", tokens).getTokenNode());
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1058,7 +1168,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<T>", tokens.peek())) {
+			} else if (this.predict("<T>", tokens.peek())) {
 				tokenMap.add(this.call("<T>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
@@ -1071,6 +1181,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1083,11 +1195,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// Vazio 
+		// Vazio
 		this.functions.put("<Para2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1097,7 +1211,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Para3>", tokens).getTokenNode());
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1109,7 +1227,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<Identificador4>", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador4>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "[".equals(token.getLexeme())) {
+			} else if (token != null && "[".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<IndiceVetor>", tokens).getTokenNode());
@@ -1118,7 +1236,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Vetor2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<Identificador4>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1130,7 +1252,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<ReadFim>", tokens.peek())) {
 				tokenMap.add(this.call("<ReadFim>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Read1>", tokens).getTokenNode());
 				return tokenMap;
@@ -1146,16 +1268,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
-				return tokenMap;	
-			}else if (token != null && "--".equals(token.getLexeme())) {
+				return tokenMap;
+			} else if (token != null && "--".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<T2>", tokens.peek())) {
+			} else if (this.predict("<T2>", tokens.peek())) {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1170,6 +1294,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			} else if (this.predict("<ArgumentoLR2>", tokens.peek())) {
 				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1195,6 +1321,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1209,7 +1337,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && ";".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1225,22 +1357,28 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Print1>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		/// Certo 
+		/// Certo
 		this.functions.put("<AuxPrint>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("<PrintFim>", tokens.peek())) {
 				tokenMap.add(this.call("<PrintFim>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Print1>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1253,6 +1391,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<F>", tokens).getTokenNode());
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1272,8 +1412,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 						tokenMap.add(this.call("<Extends>", tokens).getTokenNode());
 						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
 						tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
+					} else {
+						this.errors.add(token.getLexeme() + " não esperado.");
 					}
+				} else {
+					this.errors.add("Esperado 'struct' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -1285,15 +1431,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "Numero".equals(token.getLexeme())) {
+			} else if (token != null && "Numero".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "String".equals(token.getLexeme())) {
+			} else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "Boolean".equals(token.getLexeme())) {
+			} else if (token != null && "Boolean".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1312,11 +1460,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLR2>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// Vazio 
+		// Vazio
 		this.functions.put("<Para3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1325,7 +1475,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 				token = tokens.peek();
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1337,12 +1491,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<ExpressaoAritmetica>", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "String".equals(token.getLexeme())) {
+			} else if (token != null && "String".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "Boolean".equals(token.getLexeme())) {
+			} else if (token != null && "Boolean".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1359,6 +1515,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ArgumentoLR>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLR3>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1374,12 +1532,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
 
-		// 
+		//
 		this.functions.put("<Identificador>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1387,13 +1549,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador3>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (this.predict("<Escopo>", tokens.peek())) {
+			} else if (this.predict("<Escopo>", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				if (token != null && "Id".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add(token.getLexeme() + " não esperado.");
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1405,6 +1571,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<Comandos>", tokens.peek())) {
 				tokenMap.add(this.call("<Comandos>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Corpo2>", tokens).getTokenNode());
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return tokenMap;
 		});
@@ -1417,12 +1585,14 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Struct3>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && ",".equals(token.getLexeme())) {
+			} else if (token != null && ",".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
-			return null;		
+			return null;
 		});
 
 		// Certo
@@ -1432,7 +1602,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<Var4>", tokens.peek())) {
 				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "[".equals(token.getLexeme())) {
+			} else if (token != null && "[".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
@@ -1440,7 +1610,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1452,18 +1626,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "int".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "boolean".equals(token.getLexeme())) {
+			} else if (token != null && "boolean".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "string".equals(token.getLexeme())) {
+			} else if (token != null && "string".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "real".equals(token.getLexeme())) {
+			} else if (token != null && "real".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (token != null && "Id".equals(token.getLexeme())) {
+			} else if (token != null && "Id".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1475,13 +1651,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (token != null && "}".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			}else if (this.predict("<Var>", tokens.peek())) {
+			} else if (this.predict("<Var>", tokens.peek())) {
 				tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Corpo2>", tokens).getTokenNode());
 				if (token != null && "}".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
+				} else {
+					this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
 				}
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1493,9 +1673,11 @@ public class SynthaticAnalyzer extends ChainedCall {
 			if (this.predict("<TipoVar>", tokens.peek())) {
 				tokenMap.add(this.call("<TipoVar>", tokens).getTokenNode());
 				return tokenMap;
-			}else if (token != null && "}".equals(token.getLexeme())) {
+			} else if (token != null && "}".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				this.errors.add(token.getLexeme() + " não esperado.");
 			}
 			return null;
 		});
@@ -1506,22 +1688,28 @@ public class SynthaticAnalyzer extends ChainedCall {
 		if (instance == null) {
 			instance = new SynthaticAnalyzer();
 		}
+		System.out.println("Retorno de instancia");
 		return instance;
 	}
 
 	public SynthaticNode start(Queue<Token> queue) {
-		return this.functions.get(FirstFollow.getInstance().StartSymbol.replace("<", "").replace(">", "")).run(queue);
+		System.out.println("Passou no start");
+		return this.functions.get(FirstFollow.getInstance().StartSymbol).run(queue);
 	}
 
 	public void showDerivation(SynthaticNode node) {
 		if (node != null) {
 			if (node.getNodeList().isEmpty()) {
-				System.out.println(node.getToken() != null ? node.getToken() : "Empty");
+				System.out.println(node.getToken() != null ? node.getToken() : "Sucesso!");
 			} else {
 				for (SynthaticNode synthaticNode : node.getNodeList()) {
 					this.showDerivation(synthaticNode);
 				}
 			}
 		}
+	}
+
+	public List<String> getList() {
+		return errors;
 	}
 }
