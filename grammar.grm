@@ -37,7 +37,7 @@ Boolean = 'true' + 'false'
 <Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
 
 <Tipo> ::= 'int' | 'boolean' | 'string' | 'real' | Id
-
+	
 <Inicio> ::= <Const> <Struct> <Var> <GeraFuncaoeProcedure> <Start>
 
 !Bloco Condicional

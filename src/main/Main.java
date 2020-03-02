@@ -40,7 +40,7 @@ public class Main {
 						BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("output/" + fileList[counter].getName().replace("entrada", "saida")));
 						PrintWriter printWriter = new PrintWriter(bufferedWriter);
 						printWriter.printf("LISTA DE TOKENS:\n\n");
-						Queue<Token> tempQueue = new LinkedList<Token>(fileTokens.get(fileList[counter].getName()));
+						Queue<Token> tempQueue = new LinkedList<Token>(fileTokens.get(fileList[counter].getName()));				
 						SynthaticNode synthaticNode = SynthaticAnalyzer.getInstance().start(tempQueue);
 						SynthaticAnalyzer.getInstance().showDerivation(synthaticNode);
 						for (Token token : fileTokens.get(fileList[counter].getName())) {

@@ -43,7 +43,9 @@ public abstract class ChainedCall {
     protected ChainedCall call(String productionName, Queue<Token> tokenList) {
         this.tokenList = tokenList;
         this.tokenNode = null;
-        if (this.functions.containsKey(productionName) && this.predict(productionName, tokenList.peek())) {
+
+        if (this.functions.containsKey(productionName)) {
+        	System.out.println("Entrou");
             this.tokenNode = this.functions.get(productionName).run(tokenList);
         }
         return this;
