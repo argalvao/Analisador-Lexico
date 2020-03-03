@@ -42,13 +42,13 @@ Boolean = 'true' + 'false'
 
 !Bloco Condicional
 
-<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo>'}' <CondEnd>
+<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo> <CondEnd>
 
-<CondEnd> ::= 'else' '{' <Corpo> '}'|
+<CondEnd> ::= 'else' '{' <Corpo> |
 
 !Bloco de repetição
 
-<Laco> ::= 'while' '(' <ExpressaoLogicaRelacional> ')' '{'<Corpo> '}'
+<Laco> ::= 'while' '(' <ExpressaoLogicaRelacional> ')' '{'<Corpo> 
 
 ! Criação função e procedimento
 
@@ -222,5 +222,5 @@ Boolean = 'true' + 'false'
 
 !Chamada do Start
 
-<Start> ::= 'start' '(' ')' '{' <Corpo> '}'
+<Start> ::= 'start' '(' ')' '{' <Corpo>
 

@@ -1,6 +1,6 @@
 /*
  *
- Abel Ramalho Galv√£o
+ Abel Ramalho Galv„o
  Ramon de Cerqueira Silva
  *
  */

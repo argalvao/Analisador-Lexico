@@ -220,7 +220,7 @@ public class FirstFollow {
 		productions.put("<ExpressaoAritmetica2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'++'", "<T2>", "<E2>")), new ArrayList<>(Arrays.asList("'--'", "<T2>", "<E2>")), new ArrayList<>(Arrays.asList("<T2>", "<E2>")))));
 		productions.put("<IdConst>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("Id", "<Valor>", "<Const2>")))));
 		productions.put("<Parametro>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Tipo>", "Id", "<Para2>", "<Para1>")))));
-		productions.put("<Condicional>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'if'", "'('", "<ExpressaoLogicaRelacional>", "')'", "'then'", "'{'", "<Corpo>", "'}'", "<CondEnd>")))));
+		productions.put("<Condicional>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'if'", "'('", "<ExpressaoLogicaRelacional>", "')'", "'then'", "'{'", "<Corpo>", "<CondEnd>")))));
 		productions.put("<ArgumentoLR>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<ArgumentoLR2>")), new ArrayList<>(Arrays.asList("<ArgumentoLR3>")))));
 		productions.put("<Procedimento>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'procedure'", "Id", "'('", "<Parametro>")))));
 		productions.put("<Identificador4>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'.'", "Id", "<Vetor>")), new ArrayList<>(Arrays.asList("")))));
@@ -235,7 +235,7 @@ public class FirstFollow {
 		productions.put("<TipoStruct>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Tipo>", "<IdStruct>")))));
 		productions.put("<Identificador3>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Identificador2>")), new ArrayList<>(Arrays.asList("'('", "<ListaParametros>", "')'")))));
 		productions.put("<ExpressaoLR2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<OperadorRelacional>", "<ArgumentoLR>", "<ExpressaoLR3>")), new ArrayList<>(Arrays.asList("<ExpressaoLR3>")))));
-		productions.put("<CondEnd>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'else'", "'{'", "<Corpo>", "'}'")), new ArrayList<>(Arrays.asList("")))));
+		productions.put("<CondEnd>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'else'", "'{'", "<Corpo>")), new ArrayList<>(Arrays.asList("")))));
 		productions.put("<ComandosReturn>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'return'", "<CodigosRetornos>")))));
 		productions.put("<TipoVar>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Tipo>", "<IdVar>")))));
 		productions.put("<IdentificadorComandos2_1>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<ExpressaoAritmetica>")), new ArrayList<>(Arrays.asList("String")), new ArrayList<>(Arrays.asList("Boolean")))));
@@ -252,7 +252,7 @@ public class FirstFollow {
 		productions.put("<ExpressaoLR>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<ArgumentoLR2>", "<ExpressaoLR2>")), new ArrayList<>(Arrays.asList("<ArgumentoLR3>", "<OperadorRelacional>", "<ArgumentoLR>", "<ExpressaoLR3>")))));
 		productions.put("<Read>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'read'", "'('", "<Read1>")))));
 		productions.put("<E2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'+'", "<ExpressaoAritmetica>")), new ArrayList<>(Arrays.asList("'-'", "<ExpressaoAritmetica>")), new ArrayList<>(Arrays.asList("")))));
-		productions.put("<Laco>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'while'", "'('", "<ExpressaoLogicaRelacional>", "')'", "'{'", "<Corpo>", "'}'")))));
+		productions.put("<Laco>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'while'", "'('", "<ExpressaoLogicaRelacional>", "')'", "'{'", "<Corpo>")))));
 		productions.put("<AuxPrint>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("','", "<Print1>")), new ArrayList<>(Arrays.asList("<PrintFim>")))));
 		productions.put("<ListaParametros2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Identificador>")), new ArrayList<>(Arrays.asList("Numero")), new ArrayList<>(Arrays.asList("String")))));
 		productions.put("<ArgumentoLR3>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("String")), new ArrayList<>(Arrays.asList("<ExpressaoAritmetica>")))));
@@ -262,7 +262,7 @@ public class FirstFollow {
 		productions.put("<ContListaParametros>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("','", "<ListaParametros>")), new ArrayList<>(Arrays.asList("")))));
 		productions.put("<ValorVetor>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("IntPos")), new ArrayList<>(Arrays.asList("Id")))));
 		productions.put("<Corpo2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("<Comandos>", "<Corpo2>")), new ArrayList<>(Arrays.asList("")))));
-		productions.put("<Start>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'start'", "'('", "')'", "'{'", "<Corpo>", "'}'")))));
+		productions.put("<Start>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'start'", "'('", "')'", "'{'", "<Corpo>")))));
 		productions.put("<Struct>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'typedef'", "'struct'", "Id", "<Extends>", "<TipoStruct>", "<Struct>")), new ArrayList<>(Arrays.asList("")))));
 		productions.put("<Para1>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("','", "<Parametro>")), new ArrayList<>(Arrays.asList("')'", "<F2>")))));
 		productions.put("<ArgumentoLR2>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'!'", "<ArgumentoLR2_1>")), new ArrayList<>(Arrays.asList("true")), new ArrayList<>(Arrays.asList("false")))));
