@@ -45,7 +45,6 @@ public abstract class ChainedCall {
         this.tokenNode = null;
 
         if (this.functions.containsKey(productionName)) {
-        	System.out.println("Entrou");
             this.tokenNode = this.functions.get(productionName).run(tokenList);
         }
         return this;

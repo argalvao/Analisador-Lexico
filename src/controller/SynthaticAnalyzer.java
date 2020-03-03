@@ -143,7 +143,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 
 		// Certo
 		this.functions.put("<Start>", tokens -> {
-			System.out.println("Chegou aqui nessa bagaça");
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "start".equals(token.getLexeme())) {
@@ -1235,7 +1234,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 		this.functions.put("<Inicio>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			while (!tokens.isEmpty()) {
-				System.out.println("Iniciou");
 				Token token = tokens.peek();
 				if (this.predict("Const", tokens.peek())) {
 					tokenMap.add(this.call("<Const>", tokens).getTokenNode());
@@ -1250,7 +1248,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
 				}
 				if (this.predict("Start", tokens.peek())) {
-					System.out.println("Iniciou start");
 					tokenMap.add(this.call("<Start>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
@@ -1942,7 +1939,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 		if (instance == null) {
 			instance = new SynthaticAnalyzer();
 		}
-		System.out.println("Passou GetInstance");
 		return instance;
 	}
 
