@@ -1,3 +1,6 @@
 start () {
-    var { int a;
+    var { int a = 1.k;
+    var { int abel#;}
+    boolean = "jorge";
+    // teste
 }

@@ -15,7 +15,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 	public List<String> errors;
 
 	private SynthaticAnalyzer() {
-		super();
+		//super();
 		this.errors = new ArrayList<>();
 		this.functions.put("<Var>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -1234,7 +1234,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 		this.functions.put("<Inicio>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			while (!tokens.isEmpty()) {
-				System.out.println("Iniciou");
 				Token token = tokens.peek();
 				if (this.predict("Const", tokens.peek())) {
 					tokenMap.add(this.call("<Const>", tokens).getTokenNode());
@@ -1940,7 +1939,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 		if (instance == null) {
 			instance = new SynthaticAnalyzer();
 		}
-		System.out.println("Passou GetInstance");
 		return instance;
 	}
 

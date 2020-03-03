@@ -30,7 +30,7 @@ public abstract class ChainedCall {
                         || (TokenTypes.IDENTIFIER == token.getType() && this.first.get(productionName).contains("Id"))
                         || (TokenTypes.NUMBER == token.getType() && this.first.get(productionName).contains("Numero"))
                         || (TokenTypes.STRING == token.getType() && this.first.get(productionName).contains("String"))
-                        || (this.first.get(productionName).contains(""));
+                        || (this.first.get(productionName).contains(" "));
             } else if ("Numero".equals(productionName) && token.getType() == TokenTypes.NUMBER) {
                 return true;
             } else if ("Id".equals(productionName) && token.getType() == TokenTypes.IDENTIFIER) {
@@ -45,7 +45,6 @@ public abstract class ChainedCall {
         this.tokenNode = null;
 
         if (this.functions.containsKey(productionName)) {
-        	System.out.println("Entrou");
             this.tokenNode = this.functions.get(productionName).run(tokenList);
         }
         return this;
