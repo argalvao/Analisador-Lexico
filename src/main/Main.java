@@ -46,11 +46,11 @@ public class Main {
 						for (Token token : fileTokens.get(fileList[counter].getName())) {
 							printWriter.println(token);
 						}
-						printWriter.printf("\n\nLISTA DE ERROS LÉXICOS:\n\n");
+						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
 						for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 							printWriter.println(errorMessage);
 						}
-						printWriter.printf("\n\n\n LISTA DE ERRORS SINTÁTICOS:\n\n");
+						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
 							printWriter.println(synthaticError);
 						}
