@@ -118,7 +118,7 @@ public class LexicalAnalyzer {
 							this.lexeme = new StringBuilder();
 						} else {
 							if (TokenInformation.getInstance().getLogicalOperators().contains("" + previousWord + TokenInformation.getInstance().getTogetherWords().get(previousWord))) {
-								this.errorList.add("Linha " + lineNumber + ": Operador logico mal formado");
+								this.errorList.add("Linha " + lineNumber + ": Logical Operator bad-formed");
 							}
 						}
 					} else {

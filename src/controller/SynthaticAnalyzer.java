@@ -15,7 +15,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 	public List<String> errors;
 
 	private SynthaticAnalyzer() {
-		super();
+		//super();
 		this.errors = new ArrayList<>();
 		this.functions.put("<Var>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -143,6 +143,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 
 		// Certo
 		this.functions.put("<Start>", tokens -> {
+			System.out.println("Chegou aqui nessa bagaça");
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "start".equals(token.getLexeme())) {
@@ -1249,6 +1250,7 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
 				}
 				if (this.predict("Start", tokens.peek())) {
+					System.out.println("Iniciou start");
 					tokenMap.add(this.call("<Start>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
