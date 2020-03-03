@@ -31,11 +31,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 						return tokenMap;
 					}
 				} else {
-					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'var' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'var' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -50,7 +52,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add("Esperado 'return' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'return' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -67,7 +70,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(temporary);
 				}
 			} else {
-				this.errors.add("Esperado ',' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado ',' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return tokenMap;
@@ -86,7 +90,6 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -106,7 +109,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -125,11 +129,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -156,23 +162,28 @@ public class SynthaticAnalyzer extends ChainedCall {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
 							} else {
-								this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
+								int line = token.getLine() + 1;
+								this.errors.add("Linha: " + line + " | Esperado '}' mas recebeu " + token.getLexeme());
 								tokens.remove();
 							}
 						} else {
-							this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+							int line = token.getLine() + 1;
+							this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 							tokens.remove();
 						}
 					} else {
-						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 				} else {
-					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'start' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'start' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -195,7 +206,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -214,7 +226,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -232,14 +245,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else if (this.predict("Identificador2", tokens.peek())) {
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -256,7 +271,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -271,7 +287,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ContListaParametros>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -286,7 +303,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -314,23 +332,28 @@ public class SynthaticAnalyzer extends ChainedCall {
 								tokenMap.add(new SynthaticNode(tokens.remove()));
 								return tokenMap;
 							} else {
-								this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
+								int line = token.getLine() + 1;
+								this.errors.add("Linha: " + line + " | Esperado '}' mas recebeu " + token.getLexeme());
 								tokens.remove();
 							}
 						} else {
-							this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+							int line = token.getLine() + 1;
+							this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 							tokens.remove();
 						}
 					} else {
-						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 				} else {
-					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'while' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'while' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -350,7 +373,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -365,7 +389,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -394,7 +419,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -409,7 +435,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add("Esperado 'Id' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'Id' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -431,11 +458,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado 'Id' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado 'Id' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -452,7 +481,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -469,7 +499,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -498,7 +529,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdentificadorComandos>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -519,11 +551,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -538,7 +572,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<OperadorLogico>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLogicaRelacional>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -556,11 +591,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Read1>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'read' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'read' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -577,7 +614,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado '.' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '.' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else if (token != null && "local".equals(token.getLexeme())) {
@@ -587,11 +625,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado '.' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '.' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -611,15 +651,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 					if (token != null && "}".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 					} else {
-						this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '}' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 				} else {
-					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'else' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'else' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return tokenMap;
@@ -640,7 +683,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -660,7 +704,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else if (this.predict("Identificador2", tokens.peek())) {
@@ -668,7 +713,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -685,7 +731,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -717,27 +764,33 @@ public class SynthaticAnalyzer extends ChainedCall {
 									tokenMap.add(this.call("<CondEnd>", tokens).getTokenNode());
 									return tokenMap;
 								} else {
-									this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
+									int line = token.getLine() + 1;
+									this.errors.add("Linha: " + line + " | Esperado '}' mas recebeu " + token.getLexeme());
 									tokens.remove();
 								}
 							} else {
-								this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+								int line = token.getLine() + 1;
+								this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 								tokens.remove();
 							}
 						} else {
-							this.errors.add("Esperado 'then' mas recebeu " + token.getLexeme());
+							int line = token.getLine() + 1;
+							this.errors.add("Linha: " + line + " | Esperado 'then' mas recebeu " + token.getLexeme());
 							tokens.remove();
 						}
 					} else {
-						this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 				} else {
-					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add("Esperado 'if' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'if' mas recebeu " + token.getLexeme());
 				tokens.remove();
 			}
 			return null;
@@ -756,7 +809,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -773,7 +827,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -789,7 +844,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -807,7 +863,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -824,11 +881,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ';' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -843,7 +902,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -858,7 +918,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -877,14 +938,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<ExpressaoLR3>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else if (this.predict("ExpressaoLR", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoLR>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -901,11 +964,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -922,11 +987,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
 				} else {
-					this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -943,7 +1010,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Procedimento>", tokens).getTokenNode());
 				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -960,7 +1028,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -980,17 +1049,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 					} else {
-						this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 
@@ -1010,17 +1082,20 @@ public class SynthaticAnalyzer extends ChainedCall {
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 					} else {
-						this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1037,7 +1112,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1053,14 +1129,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ';' mas recebeu " + token.getLexeme());
 					tokens.remove();
 				}
 			} else if (token != null && ";".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1082,16 +1160,19 @@ public class SynthaticAnalyzer extends ChainedCall {
 					if (token != null && "{".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 					} else {
-						this.errors.add("Esperado '{' mas recebeu " + token.getLexeme());
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu " + token.getLexeme());
 						tokens.remove();
 					}
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1112,11 +1193,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1133,13 +1216,15 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else if (this.predict("Vetor", tokens.peek())) {
 				tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -1165,8 +1250,10 @@ public class SynthaticAnalyzer extends ChainedCall {
 				}
 				if (this.predict("Start", tokens.peek())) {
 					tokenMap.add(this.call("<Start>", tokens).getTokenNode());
+					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1187,14 +1274,16 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ')' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ')' mas recebeu " + token.getLexeme());
 				}
 			} else if (token != null && "=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorComandos2_1>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1211,10 +1300,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ';' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1229,7 +1320,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1246,10 +1338,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1278,7 +1372,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1293,7 +1388,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1310,10 +1406,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Para3>", tokens).getTokenNode());
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1335,10 +1433,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Identificador4>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1378,7 +1478,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1395,7 +1496,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1423,7 +1525,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1440,10 +1543,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ';' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ';' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1461,10 +1566,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Print1>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado '(' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1482,7 +1589,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Print1>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1497,7 +1605,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1519,14 +1628,17 @@ public class SynthaticAnalyzer extends ChainedCall {
 						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
 						tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
 					} else {
-						this.errors.add(token.getLexeme() + " não esperado.");
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 						tokens.remove();
 					}
 				} else {
-					this.errors.add("Esperado 'struct' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado 'struct' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -1549,7 +1661,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1570,7 +1683,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ExpressaoLR2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1586,10 +1700,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 				if (token != null && "]".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add("Esperado '[' mas recebeu " + token.getLexeme());
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu " + token.getLexeme());
 			}
 			return tokenMap;
 		});
@@ -1608,7 +1724,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1627,7 +1744,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<ExpressaoLR3>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1645,11 +1763,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1670,11 +1790,13 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add(token.getLexeme() + " não esperado.");
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 					tokens.remove();
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1688,7 +1810,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<Comandos>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Corpo2>", tokens).getTokenNode());
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return tokenMap;
@@ -1707,7 +1830,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1729,10 +1853,12 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado ']' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1758,7 +1884,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
@@ -1778,16 +1905,18 @@ public class SynthaticAnalyzer extends ChainedCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					return tokenMap;
 				} else {
-					this.errors.add("Esperado '}' mas recebeu " + token.getLexeme());
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado '}' mas recebeu " + token.getLexeme());
 				}
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
 		});
 
-		// Certo
+		// Certo 
 		this.functions.put("<Var3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1798,7 +1927,8 @@ public class SynthaticAnalyzer extends ChainedCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
-				this.errors.add(token.getLexeme() + " não esperado.");
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " não esperado.");
 				tokens.remove();
 			}
 			return null;
