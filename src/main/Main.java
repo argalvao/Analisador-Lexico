@@ -1,6 +1,6 @@
 /*
  *
- Abel Ramalho GalvÃ£o
+ Abel Ramalho Galvão
  Ramon de Cerqueira Silva
  *
  */
@@ -53,6 +53,9 @@ public class Main {
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
 							printWriter.println(synthaticError);
+						}
+						if(SynthaticAnalyzer.getInstance().getList().isEmpty()) {
+							System.out.println("Código não apresenta erros, parabéns!");
 						}
 						printWriter.close();
 					}

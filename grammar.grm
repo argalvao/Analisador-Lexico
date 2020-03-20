@@ -4,6 +4,7 @@
 !demais componentes que constam um compilador. Será de extrema importância
 !no processo de geração da árvore sintática que, como o próprio nome sugere,
 !será utilizado pelo analisador sintático.
+! Foi tirado das produ��es dos seguintes de <Corpo> o "}"
 ! -----------------------------------------------------------------------
 
 "Name" = 'PBL Compiladores'
@@ -20,7 +21,7 @@
 
 !Definição de expressão regulares e conjuntos a serem utilizados na Gramática
 
-Id = {Letter}{Alphanumeric}*
+Id = {Letter}({AlphaNumeric} | '_')*
 Real = ('-')? {Digit} + '.' {Digit} +
 IntPos = {Digit}+
 IntNeg = '-'{Digit}+
@@ -34,21 +35,19 @@ Boolean = 'true' + 'false'
 
 <ValorVetor> ::= IntPos | Id
 
-<Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
-
 <Tipo> ::= 'int' | 'boolean' | 'string' | 'real' | Id
 	
 <Inicio> ::= <Const> <Struct> <Var> <GeraFuncaoeProcedure> <Start>
 
 !Bloco Condicional
 
-<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo>'}' <CondEnd>
+<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo> <CondEnd>
 
-<CondEnd> ::= 'else' '{' <Corpo> '}'|
+<CondEnd> ::= 'else' '{' <Corpo> |
 
 !Bloco de repetição
 
-<Laco> ::= 'while' '(' <ExpressaoLogicaRelacional> ')' '{'<Corpo> '}'
+<Laco> ::= 'while' '(' <ExpressaoLogicaRelacional> ')' '{'<Corpo> 
 
 ! Criação função e procedimento
 
@@ -64,7 +63,7 @@ Boolean = 'true' + 'false'
 
 <Para1> ::= ',' <Parametro> | ')' <F2>
 
-<Para2> ::= '[' ']'<Para3> |
+<Para2> ::= '[' ']' <Para3> |
 
 <Para3> ::= '[' ']' |
 
@@ -98,7 +97,7 @@ Boolean = 'true' + 'false'
 
 !Bloco de declaração de variáveis
 
-<Var> ::= 'var' '{' <TipoVar> |
+<Var> ::= 'var' '{' <TipoVar>  |
 
 <TipoVar> ::= <Tipo> <IdVar>
 
@@ -111,6 +110,8 @@ Boolean = 'true' + 'false'
 <Var4> ::= ',' <IdVar> | ';' <Var3>
 
 <VetorDeclaracao> ::= '[' <ValorVetor> ']' <Matriz>
+
+<Matriz> ::= '[' <ValorVetor> ']' <Var4> | <Var4>
 
 !Chamada de uma procedimento / função
 
@@ -222,5 +223,5 @@ Boolean = 'true' + 'false'
 
 !Chamada do Start
 
-<Start> ::= 'start' '(' ')' '{' <Corpo> '}'
+<Start> ::= 'start' '(' ')' '{' <Corpo>
 

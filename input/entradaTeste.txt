@@ -1,6 +1,18 @@
-start () {
-    var { int a = 1.k;
-    var { int abel#;}
-    boolean = "jorge";
-    // teste
+const {
+	int A 5, B 6;
+	int C;
+}
+
+function boolean cadastrarPessoas(pessoa pessoa) {
+	var {
+	    boolean retorno = false;
+	}
+	if (global.pessoas_cadastradas < tamanho_vetor) then {
+		global.vetor_pessoas[global.pessoas_cadastradas] = pessoa;
+		global.pessoas_cadastradas = global.pessoas_cadastradas + 1;
+		retorno = true;
+	}
+	else {
+		return retorno;
+	}
 }

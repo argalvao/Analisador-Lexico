@@ -12,696 +12,68 @@ import model.TokenTypes;
 import util.RecursiveCall;
 import util.FirstFollow;
 
-public class SynthaticAnalyzer extends RecursiveCall {
+public class SemanticAnalyzer extends RecursiveCall {
 
-	private static SynthaticAnalyzer instance;
+	private static SemanticAnalyzer instance;
 	public List<String> errors;
 
-	private SynthaticAnalyzer() {
+	private SemanticAnalyzer() {
 
-		// Debugar Fuction e olhar follow a apartir do erro da linha 10, Ir direto na espressaolr, debugar a partir de argumentolr
 		// super();
 		this.errors = new ArrayList<>();
-		// Certo
-		this.functions.put("<Inicio>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			while (!tokens.isEmpty()) {
-				Token token = tokens.peek();
-				if (this.predict("Const", tokens.peek())) {
-					tokenMap.add(this.call("<Const>", tokens).getTokenNode());
-					if (tokens.peek() != null)
-						token = tokens.peek();
-				}
-				// System.out.println(tokens.peek().getLexeme());
-				if (this.predict("Struct", tokens.peek())) {
-					tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
-					if (tokens.peek() != null)
-						token = tokens.peek();
-				}
-				if (this.predict("Var", tokens.peek())) {
-					tokenMap.add(this.call("<Var>", tokens).getTokenNode());
-					if (tokens.peek() != null)
-						token = tokens.peek();
-				}
-				if (this.predict("GeraFuncaoeProcedure", tokens.peek())) {
-					tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
-					if (tokens.peek() != null)
-						token = tokens.peek();
-				}
-				if (this.predict("Start", tokens.peek())) {
-					tokenMap.add(this.call("<Start>", tokens).getTokenNode());
-				}
-				// Errors gerais
-				if (!tokens.isEmpty() && token != null) {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					System.out.println(tokens.peek().getLexeme());
-					while (token != null && !token.getLexeme().equals("}") && !tokens.isEmpty()) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-					if (!tokens.isEmpty()) {
-						tokens.remove();
-					}
-				}
-			}
-			return null;
-		});
 
 		this.functions.put("<Var>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
+			// Follow de VAR System.out.println(this.follow.get("Var"));
 			if (token != null && "var".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && "{".equals(token.getLexeme())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<TipoVar>", tokens).getTokenNode());
-					// System.out.println(this.call("<Var>", tokens).getTokenNode().);
+					token = tokens.peek();
+					if (token != null && "}".equals(token.getLexeme())) {
+						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
 				} else {
 					int line = token.getLine() + 1;
 					this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
-					while (tokens.peek() != null && !this.follow.get("Var").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
-				while (tokens.peek() != null && !this.follow.get("Var").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return tokenMap;
-		});
-
-		// Certo
-		this.functions.put("<TipoVar>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			// System.out.println(tokens.peek().getLexeme());
-			if (this.predict("Tipo", tokens.peek())) {
-				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
-				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("TipoVar").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<IdVar>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("IdVar").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Var2>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("VetorDeclaracao", tokens.peek())) {
-				tokenMap.add(this.call("<VetorDeclaracao>", tokens).getTokenNode());
-				// Tirado da Gramatica pois houve erros <var4>
-				// tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
-				// System.out.println("Saiu " + tokens.peek().getLexeme() + " em <Var2> na volta
-				// de <Var4>");
-				return tokenMap;
-			} else if (token != null && ",".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && ";".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && "=".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
-				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Var2").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Var3>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("TipoVar", tokens.peek())) {
-				tokenMap.add(this.call("<TipoVar>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && "}".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Var3").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Var4>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && ";".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && ",".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Var4").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Vazio
-		this.functions.put("<VetorDeclaracao>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "[".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
-				token = tokens.peek();
-				if (token != null && "]".equals(token.getLexeme())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("VetorDeclaracao").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("VetorDeclaracao").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Matriz>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("Var4", tokens.peek())) {
-				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
-				return tokenMap;
-			}
-			if (token != null && "[".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
-				token = tokens.peek();
-				if (token != null && "]".equals(token.getLexeme())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Matriz").contains(token.getLexeme())) {
-						if (!tokens.isEmpty()) {
-							tokens.remove();
-							token = tokens.peek();
-						}
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Matriz").contains(token.getLexeme())) {
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 						token = tokens.peek();
 					}
-				}
-			}
-			return null;
-		});
-
-		// Vazio
-		this.functions.put("<Struct>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "typedef".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				if (token != null && "struct".equals(token.getLexeme())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					token = tokens.peek();
-					if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-						tokenMap.add(new SynthaticNode(tokens.remove()));
-						tokenMap.add(this.call("<Extends>", tokens).getTokenNode());
-						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
-						tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
-					} else {
-						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-						while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
-							tokens.remove();
-							token = tokens.peek();
-						}
-					}
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				if (!this.follow.get("Struct").contains(token.getLexeme())) {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				}
-				while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return tokenMap;
-		});
-
-		// Certo
-		this.functions.put("<Extends>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "{".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				return tokenMap;
-			} else if (token != null && "extends".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					token = tokens.peek();
 					if (token != null && "{".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
-					} else {
-						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-						while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
-							tokens.remove();
-							token = tokens.peek();
-						}
-					}
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
-						tokens.remove();
+						tokenMap.add(this.call("<TipoVar>", tokens).getTokenNode());
 						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<TipoStruct>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("Tipo", tokens.peek())) {
-				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
-				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				if (!this.follow.get("TipoStruct").contains(token.getLexeme())) {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				}
-				while (tokens.peek() != null && !this.follow.get("TipoStruct").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<IdStruct>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("IdStruct").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Struct2>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && ";".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Struct3>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && ",".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Struct2").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Struct3>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("TipoStruct", tokens.peek())) {
-				tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && "}".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Struct3").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Vazio
-		this.functions.put("<GeraFuncaoeProcedure>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("Funcao", tokens.peek())) {
-				tokenMap.add(this.call("<Funcao>", tokens).getTokenNode());
-				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
-			} else if (this.predict("Procedimento", tokens.peek())) {
-				tokenMap.add(this.call("<Procedimento>", tokens).getTokenNode());
-				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
-			} else {
-				if (tokens.peek() != null && !this.follow.get("GeraFuncaoeProcedure").contains(token.getLexeme())) {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null
-							&& !this.follow.get("GeraFuncaoeProcedure").contains(token.getLexeme())) {
-						if (!tokens.isEmpty()) {
-							tokens.remove();
-							token = tokens.peek();
+						if (token != null && "}".equals(token.getLexeme())) {
+							tokenMap.add(new SynthaticNode(tokens.remove()));
+						} else {
+							if (!tokens.isEmpty()) {
+								line = token.getLine() + 1;
+								this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
+								tokens.remove();
+							}
 						}
 					}
+				}
+			} else if (this.follow.get("Var").contains(token.getLexeme())) {
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'var' mas recebeu: " + token.getLexeme());
+				if (!tokens.isEmpty()) {
+					tokens.remove();
 				}
 			}
 			return tokenMap;
-		});
-
-		// Certo
-		this.functions.put("<Funcao>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "function".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
-				token = tokens.peek();
-				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					token = tokens.peek();
-					if (token != null && "(".equals(token.getLexeme())) {
-						tokenMap.add(new SynthaticNode(tokens.remove()));
-						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
-					} else {
-						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-						while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
-							tokens.remove();
-							token = tokens.peek();
-						}
-					}
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
-						System.out.println(tokens.peek().getLexeme());
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Procedimento>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "procedure".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					token = tokens.peek();
-					if (token != null && "(".equals(token.getLexeme())) {
-						tokenMap.add(new SynthaticNode(tokens.remove()));
-						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
-					} else {
-						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-						while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
-							tokens.remove();
-							token = tokens.peek();
-						}
-					}
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Parametro>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("Tipo", tokens.peek())) {
-				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
-				token = tokens.peek();
-				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
-					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
-					return tokenMap;
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Parametro").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Parametro").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Para1>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && ")".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<F2>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && ",".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Para1").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Vazio
-		this.functions.put("<Para2>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "[".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				if (token != null && "]".equals(token.getLexeme())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-					tokenMap.add(this.call("<Para3>", tokens).getTokenNode());
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Para2").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else if (this.follow.get("Para2").contains(token.getLexeme())) {
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Para2").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return tokenMap;
-		});
-
-		// Vazio
-		this.functions.put("<Para3>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "[".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				token = tokens.peek();
-				if (token != null && "]".equals(token.getLexeme())) {
-					tokenMap.add(new SynthaticNode(tokens.remove()));
-				} else {
-					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Para3").contains(token.getLexeme())) {
-						tokens.remove();
-						token = tokens.peek();
-					}
-				}
-			} else if (this.follow.get("Para3").contains(token.getLexeme())) {
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Para3").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return tokenMap;
-		});
-
-		// Certo
-		this.functions.put("<F2>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && "{".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("F2").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
 		});
 
 		// Certo
@@ -745,6 +117,34 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		});
 
 		// Certo
+		this.functions.put("<Const2>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && ";".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Const3>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && ",".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
+				return tokenMap;
+				// Conjunto seguinte adicionado para verificar erro
+			} else if (token != null && "}".equals(token.getLexeme())) {
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado ',' mas recebeu: " + token.getLexeme());
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
 		this.functions.put("<ArgumentoLR2_1>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -760,6 +160,36 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | " + token.getLexeme() + " (" + token.getLexeme() + ") não.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Vazio
+		this.functions.put("<VetorDeclaracao>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "[".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
+				token = tokens.peek();
+				if (token != null && "]".equals(token.getLexeme())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					tokenMap.add(this.call("<Matriz>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu: " + token.getLexeme());
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
+				}
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu: " + token.getLexeme());
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -784,8 +214,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 							tokenMap.add(new SynthaticNode(tokens.remove()));
 							token = tokens.peek();
 							tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
-							token = tokens.peek();
-							return tokenMap;
 						} else {
 							int line = token.getLine() + 1;
 							this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
@@ -844,6 +272,28 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		});
 
 		// Certo
+		this.functions.put("<Var4>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && ";".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && ",".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
 		this.functions.put("<Identificador3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -885,8 +335,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else if (TokenTypes.STRING.equals(token.getType())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			} else if (this.follow.get("ArgumentoLR3").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -908,6 +356,24 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<F2>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "{".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Corpo>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1039,6 +505,24 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		});
 
 		// Certo
+		this.functions.put("<IdVar>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado 'Id' mas recebeu: " + token.getLexeme());
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
 		this.functions.put("<IdentificadorAritmetico>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1048,7 +532,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else if (this.predict("Escopo", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
-				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
@@ -1061,8 +544,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokens.remove();
 					}
 				}
-			} else if (this.follow.get("IdentificadorAritmetico").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1080,21 +561,35 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			} else if (token != null && !TokenTypes.DELIMITER.equals(token.getType())
-					&& Integer.parseInt(token.getLexeme()) >= 0) {
+			} else if (token != null && Integer.parseInt(token.getLexeme()) >= 0) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				// while (tokens.peek() != null &&
-				// !this.follow.get("Var").contains(token.getLexeme())) {
-
 				if (!tokens.isEmpty()) {
 					tokens.remove();
-					token = tokens.peek();
 				}
+			}
+			return null;
+		});
 
+		// Certo
+		this.functions.put("<Struct3>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("TipoStruct", tokens.peek())) {
+				tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && "}".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
 			}
 			return null;
 		});
@@ -1239,8 +734,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokens.remove();
 					}
 				}
-			} else if (this.follow.get("Escopo").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1348,8 +841,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else if (token != null && "-".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
-			} else if (this.follow.get("E2").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1421,6 +912,28 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		});
 
 		// Certo
+		this.functions.put("<Para1>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && ")".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<F2>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && ",".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
 		this.functions.put("<OperadorLogico>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1429,6 +942,25 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else if (token != null && "&&".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<IdConst>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
+				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -1451,8 +983,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (token != null && "/".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
-			} else if (this.follow.get("T2").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1480,6 +1010,42 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokens.remove();
 					}
 				}
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<IdStruct>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<TipoStruct>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("Tipo", tokens.peek())) {
+				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
+				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
+				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1561,82 +1127,135 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-					while (tokens.peek() != null && !this.follow.get("Const").contains(token.getLexeme())) {
+					this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
+					if (!tokens.isEmpty()) {
 						tokens.remove();
-						token = tokens.peek();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Const").contains(token.getLexeme())) {
+				if (!tokens.isEmpty()) {
 					tokens.remove();
-					token = tokens.peek();
+				}
+			}
+			return tokenMap;
+		});
+
+		// Vazio
+		this.functions.put("<GeraFuncaoeProcedure>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("Funcao", tokens.peek())) {
+				tokenMap.add(this.call("<Funcao>", tokens).getTokenNode());
+				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
+			} else if (this.predict("Procedimento", tokens.peek())) {
+				tokenMap.add(this.call("<Procedimento>", tokens).getTokenNode());
+				tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
 				}
 			}
 			return tokenMap;
 		});
 
 		// Certo
-		this.functions.put("<TipoConst>", tokens -> {
+		this.functions.put("<IndiceVetor>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			if (this.predict("Tipo", tokens.peek())) {
+			if (this.predict("Identificador", tokens.peek())) {
+				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && "IntPos".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<Funcao>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "function".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
-				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
-				return tokenMap;
+				token = tokens.peek();
+				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					token = tokens.peek();
+					if (token != null && "(".equals(token.getLexeme())) {
+						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu: " + token.getLexeme());
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
+					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
+				}
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("TipoConst").contains(token.getLexeme())) {
+				if (!tokens.isEmpty()) {
 					tokens.remove();
-					token = tokens.peek();
 				}
 			}
+
 			return null;
 		});
 
 		// Certo
-		this.functions.put("<IdConst>", tokens -> {
+		this.functions.put("<Procedimento>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+			if (token != null && "procedure".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
-				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
-				return tokenMap;
-			} else {
-
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("IdConst").contains(token.getLexeme())) {
-					tokens.remove();
+				token = tokens.peek();
+				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
+					if (token != null && "(".equals(token.getLexeme())) {
+						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '(' mas recebeu: " + token.getLexeme());
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
+					tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
 				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<Const2>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (token != null && ";".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<Const3>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && ",".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
-				return tokenMap;
 			} else {
-
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Const2").contains(token.getLexeme())) {
+				if (!tokens.isEmpty()) {
 					tokens.remove();
-					token = tokens.peek();
 				}
 			}
 			return null;
@@ -1650,27 +1269,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (token != null && "}".equals(token.getLexeme())) {
-				tokenMap.add(new SynthaticNode(tokens.remove()));
-				return tokenMap;
-			} else {
-				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
-				while (tokens.peek() != null && !this.follow.get("Const3").contains(token.getLexeme())) {
-					tokens.remove();
-					token = tokens.peek();
-				}
-			}
-			return null;
-		});
-
-		// Certo
-		this.functions.put("<IndiceVetor>", tokens -> {
-			SynthaticNode tokenMap = new SynthaticNode();
-			Token token = tokens.peek();
-			if (this.predict("Identificador", tokens.peek())) {
-				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (token != null && "IntPos".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -1703,6 +1301,46 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else if (token != null && ";".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<Extends>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "{".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else if (token != null && "extends".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					token = tokens.peek();
+					if (token != null && "{".equals(token.getLexeme())) {
+						tokenMap.add(new SynthaticNode(tokens.remove()));
+					} else {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado '{' mas recebeu: " + token.getLexeme());
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
+				}
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1764,8 +1402,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else if (this.predict("Vetor", tokens.peek())) {
 				tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
-			} else if (this.follow.get("Identificador2").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1777,9 +1413,46 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		});
 
 		// Certo
-		this.functions.put("<IdentificadorComandos2>", tokens ->
+		this.functions.put("<Inicio>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			while (tokens.size() > 0) {
+				Token token = tokens.peek();
+				if (this.predict("Const", tokens.peek())) {
+					tokenMap.add(this.call("<Const>", tokens).getTokenNode());
+					token = tokens.peek();
+				}
+				// verificar erros com struct
+				// System.out.println(tokens.peek().getLexeme());
+				if (this.predict("Struct", tokens.peek())) {
+					tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
+					token = tokens.peek();
+				}
+				if (this.predict("Var", tokens.peek())) {
+					tokenMap.add(this.call("<Var>", tokens).getTokenNode());
+					token = tokens.peek();
+				}
+				if (this.predict("GeraFuncaoeProcedure", tokens.peek())) {
+					tokenMap.add(this.call("<GeraFuncaoeProcedure>", tokens).getTokenNode());
+					token = tokens.peek();
+				}
+				if (this.predict("Start", tokens.peek())) {
+					tokenMap.add(this.call("<Start>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					if (!tokens.isEmpty()) {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
+				}
+			}
+			return null;
+		});
 
-		{
+		// Certo
+		this.functions.put("<IdentificadorComandos2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "(".equals(token.getLexeme())) {
@@ -1832,6 +1505,28 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			return null;
 		});
 
+		// Certo
+		this.functions.put("<TipoVar>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			System.out.println("Tipovar " + tokens.peek().getLexeme());
+			if (this.predict("Tipo", tokens.peek())) {
+				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
+				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (this.follow.get("TipoVar").contains(token.getLexeme())) {
+				System.out.println(this.follow.get("Passou follow TipoVar"));
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
 		// Vazio
 		this.functions.put("<Vetor2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -1858,7 +1553,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		this.functions.put("<ExpressaoAritmetica>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			// System.out.println(tokens.peek().getLexeme());
 			if (token != null && "--".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
@@ -1870,7 +1564,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (this.predict("IdentificadorAritmetico", tokens.peek())) {
-				// System.out.println(tokens.peek().getLexeme());
 				tokenMap.add(this.call("<IdentificadorAritmetico>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (token != null && "++".equals(token.getLexeme())) {
@@ -1878,8 +1571,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
-				return tokenMap;
-			} else if (this.follow.get("ExpressaoAritmetica").contains(token.getLexeme())) {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -1889,6 +1580,45 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			}
 			return null;
+		});
+
+		// Certo
+		this.functions.put("<TipoConst>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("Tipo", tokens.peek())) {
+				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
+				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Vazio
+		this.functions.put("<Para2>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "[".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				if (token != null && "]".equals(token.getLexeme())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					tokenMap.add(this.call("<Para3>", tokens).getTokenNode());
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu: " + token.getLexeme());
+				}
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu: " + token.getLexeme());
+			}
+			return tokenMap;
 		});
 
 		// Certo
@@ -1955,8 +1685,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
-			} else if (this.follow.get("ExpressaoAritmetica2").contains(token.getLexeme())) {
-				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -1976,6 +1704,40 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else if (this.predict("ArgumentoLR2", tokens.peek())) {
 				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<Var2>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("VetorDeclaracao", tokens.peek())) {
+				tokenMap.add(this.call("<VetorDeclaracao>", tokens).getTokenNode());
+				// Tirado da Gramatica pois houve erros <var4>
+				// tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
+				// System.out.println("Saiu " + tokens.peek().getLexeme() + " em <Var2> na volta
+				// de <Var4>");
+				return tokenMap;
+			} else if (token != null && ",".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && ";".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Var3>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && "=".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
+				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -2076,6 +1838,52 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			return null;
 		});
 
+		// Vazio
+		this.functions.put("<Struct>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "typedef".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				if (token != null && "struct".equals(token.getLexeme())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					token = tokens.peek();
+					if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+						tokenMap.add(new SynthaticNode(tokens.remove()));
+						tokenMap.add(this.call("<Extends>", tokens).getTokenNode());
+						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
+						tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
+					} else {
+						int line = token.getLine() + 1;
+						this.errors.add("Linha: " + line + " | Esperado 'struct' mas recebeu: " + token.getLexeme());
+						if (!tokens.isEmpty()) {
+							tokens.remove();
+						}
+					}
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado 'struct' mas recebeu: " + token.getLexeme());
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
+				}
+			} else if (token != null && "const".equals(token.getLexeme())
+					|| token != null && "var".equals(token.getLexeme())
+					|| token != null && "function".equals(token.getLexeme())
+					|| token != null && "start".equals(token.getLexeme())
+					|| token != null && "procedure".equals(token.getLexeme())) {
+				return tokenMap;
+			} else {
+
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return tokenMap;
+		});
+
 		// Certo
 		this.functions.put("<Valor>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -2089,8 +1897,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else if (TokenTypes.STRING.equals(token.getType())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
-			} else if (token != null && "true".equals(token.getLexeme())
-					|| token != null && "false".equals(token.getLexeme())) {
+			} else if (token != null && "Boolean".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -2125,6 +1932,26 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			}
 			return null;
+		});
+
+		// Vazio
+		this.functions.put("<Para3>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && "[".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				if (token != null && "]".equals(token.getLexeme())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu: " + token.getLexeme());
+				}
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | Esperado '[' mas recebeu: " + token.getLexeme());
+			}
+			return tokenMap;
 		});
 
 		// Certo
@@ -2162,6 +1989,35 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<ArgumentoLR>", tokens).getTokenNode());
 				tokenMap.add(this.call("<ExpressaoLR3>", tokens).getTokenNode());
 				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<Parametro>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("Tipo", tokens.peek())) {
+				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
+				token = tokens.peek();
+				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
+					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+					if (!tokens.isEmpty()) {
+						tokens.remove();
+					}
+				}
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
@@ -2219,6 +2075,58 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			}
 			return tokenMap;
+		});
+
+		// Certo
+		this.functions.put("<Struct2>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (token != null && ";".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<Struct3>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && ",".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
+		// Certo
+		this.functions.put("<Matriz>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("Var4", tokens.peek())) {
+				tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && "[".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				token = tokens.peek();
+				tokenMap.add(this.call("<ValorVetor>", tokens).getTokenNode());
+				token = tokens.peek();
+				if (token != null && "]".equals(token.getLexeme())) {
+					tokenMap.add(new SynthaticNode(tokens.remove()));
+					tokenMap.add(this.call("<Var4>", tokens).getTokenNode());
+					return tokenMap;
+				} else {
+					int line = token.getLine() + 1;
+					this.errors.add("Linha: " + line + " | Esperado ']' mas recebeu: " + token.getLexeme());
+				}
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
 		});
 
 		// Certo
@@ -2281,11 +2189,31 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			return null;
 		});
 
+		// Certo
+		this.functions.put("<Var3>", tokens -> {
+			SynthaticNode tokenMap = new SynthaticNode();
+			Token token = tokens.peek();
+			if (this.predict("TipoVar", tokens.peek())) {
+				tokenMap.add(this.call("<TipoVar>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (token != null && "}".equals(token.getLexeme())) {
+				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else {
+				int line = token.getLine() + 1;
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") não esperado.");
+				if (!tokens.isEmpty()) {
+					tokens.remove();
+				}
+			}
+			return null;
+		});
+
 	}
 
-	public static SynthaticAnalyzer getInstance() {
+	public static SemanticAnalyzer getInstance() {
 		if (instance == null) {
-			instance = new SynthaticAnalyzer();
+			instance = new SemanticAnalyzer();
 		}
 		return instance;
 	}
