@@ -54,6 +54,9 @@ public class Main {
 						for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
 							printWriter.println(synthaticError);
 						}
+						if(SynthaticAnalyzer.getInstance().getList().isEmpty()) {
+							System.out.println("Código não apresenta erros, parabéns!");
+						}
 						printWriter.close();
 					}
 				}
