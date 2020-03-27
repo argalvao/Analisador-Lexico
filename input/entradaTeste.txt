@@ -1,6 +1,6 @@
 const {
 	int A 5, B 6;
-	int C;
+	int C 2;
 }
 
 function boolean cadastrarPessoas(pessoa pessoa) {

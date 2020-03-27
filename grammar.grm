@@ -4,7 +4,7 @@
 !demais componentes que constam um compilador. Será de extrema importância
 !no processo de geração da árvore sintática que, como o próprio nome sugere,
 !será utilizado pelo analisador sintático.
-! Foi tirado das produ��es dos seguintes de <Corpo> o "}"
+! Foi tirado das produ?es dos seguintes de <Corpo> o "}"
 ! -----------------------------------------------------------------------
 
 "Name" = 'PBL Compiladores'
@@ -41,7 +41,7 @@ Boolean = 'true' + 'false'
 
 !Bloco Condicional
 
-<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{'<Corpo> <CondEnd>
+<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{' <Corpo> <CondEnd>
 
 <CondEnd> ::= 'else' '{' <Corpo> |
 
@@ -151,7 +151,7 @@ Boolean = 'true' + 'false'
 
 <E2> ::= '+' <ExpressaoAritmetica> | '-' <ExpressaoAritmetica> |
 
-<T> ::= <F> <T2>
+<T> ::= <F> <T2>                                                                             System.out.println(tokens.peek().getLexeme());
 
 <T2> ::= '*' <ExpressaoAritmetica> | '/' <ExpressaoAritmetica> |
 
@@ -224,4 +224,3 @@ Boolean = 'true' + 'false'
 !Chamada do Start
 
 <Start> ::= 'start' '(' ')' '{' <Corpo>
-
