@@ -50,11 +50,12 @@ public class Main {
 						for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 							printWriter.println(errorMessage);
 						}
+						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
-						for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
+						for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 							printWriter.println(synthaticError);
 						}
-						if(SynthaticAnalyzer.getInstance().getList().isEmpty()) {
+						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
 							System.out.println("Código não apresenta erros, parabéns!");
 						}
 						printWriter.close();

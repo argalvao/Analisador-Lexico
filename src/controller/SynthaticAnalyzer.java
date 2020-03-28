@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
 
@@ -16,19 +18,23 @@ public class SynthaticAnalyzer extends RecursiveCall {
 
 	private static SynthaticAnalyzer instance;
 	public List<String> errors;
-
+	public List<Token> id;
+	public HashMap<String, Token> procedimentos;
+	public HashMap<String, Token> funcoes;
 	private SynthaticAnalyzer() {
-
-		// Debugar Fuction e olhar follow a apartir do erro da linha 10, Ir direto na
-		// espressaolr, debugar a partir de argumentolr
-		// super();
+		
+		//super();
 		this.errors = new ArrayList<>();
-
+		this.id = new ArrayList<>();
+		this.procedimentos = new HashMap<>();
+		this.funcoes = new HashMap<>();
+		
 		// Certo
 		this.functions.put("<Valor>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.NUMBER.equals(token.getType())) {
@@ -56,6 +62,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && !TokenTypes.DELIMITER.equals(token.getType())
@@ -91,6 +98,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -339,6 +347,13 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
+					// Verificação Semantica de nomes iguais de funções
+					if (tokens.peek() != null &&  !this.funcoes.containsKey(tokens.peek().getLexeme())) {
+						this.funcoes.put(tokens.peek().getLexeme(), tokens.peek());
+					} else {
+						System.out.println("Já houve um declaração de funcao com o nome: " + tokens.peek().getLexeme());
+					}
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {
@@ -381,6 +396,13 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
+					// Verificação Semantica de nomes iguais de procedimentos
+					if (tokens.peek() != null &&  !this.procedimentos.containsKey(tokens.peek().getLexeme())) {
+						this.procedimentos.put(tokens.peek().getLexeme(), tokens.peek());
+					} else {
+						System.out.println("Já houve um declaração de procedimento com o nome: " + tokens.peek().getLexeme());
+					}
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {
@@ -423,6 +445,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
@@ -605,6 +628,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
@@ -676,6 +700,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+						this.id.add(tokens.peek());
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 						tokenMap.add(this.call("<Extends>", tokens).getTokenNode());
 						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
@@ -722,6 +747,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "{".equals(token.getLexeme())) {
@@ -781,6 +807,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
 				return tokenMap;
@@ -896,6 +923,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
@@ -1128,6 +1156,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador3>", tokens).getTokenNode());
 				//System.out.println(tokens.peek().getLexeme() + tokens.peek().getLine());
@@ -1136,6 +1165,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
@@ -1164,6 +1194,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
@@ -1230,6 +1261,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
@@ -1383,6 +1415,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
@@ -1390,6 +1423,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
@@ -1578,6 +1612,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorAritmetico3>", tokens).getTokenNode());
 				return tokenMap;
@@ -1585,6 +1620,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
@@ -1791,6 +1827,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())) {
@@ -2368,7 +2405,11 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		}
 	}
 
-	public List<String> getList() {
+	public List<String> getErros() {
 		return errors;
+	}
+	
+	public List<Token> getId() {
+		return id;
 	}
 }
