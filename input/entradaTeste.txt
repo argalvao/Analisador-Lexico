@@ -1,39 +1,22 @@
-procedure imprimirPessoas(string vetor) {
-	var {
-		int i = 0;
-	}
+var {
+	int x = 8;
+	pessoa pedro = "teste";
+	pessoa pedro = "tododile";
 }
 
 procedure imprimirPessoas(string vetor) {
 	var {
 		int i = 0;
+		int i = 4;
 	}
-}
 
-function boolean cadastrarPessoas(pessoa pessoa) {
-	var {
-	    boolean retorno = false;
-	}
-	if (global.pessoas_cadastradas < tamanho_vetor) then {
-		global.vetor_pessoas[global.pessoas_cadastradas] = pessoa;
-		global.pessoas_cadastradas = global.pessoas_cadastradas + 1;
-		retorno = true;
+	if (vetor == "vetor_pessoas") then {
+		while( i < global.pessoas_cadastradas) {
+			print(vetor_pessoas[i]);
+			i = i + 1;
+		}
 	}
 	else {
-		return retorno;
-	}
-}
-
-function boolean cadastrarPessoas(pessoa pessoa) {
-	var {
-	    boolean retorno = false;
-	}
-	if (global.pessoas_cadastradas < tamanho_vetor) then {
-		global.vetor_pessoas[global.pessoas_cadastradas] = pessoa;
-		global.pessoas_cadastradas = global.pessoas_cadastradas + 1;
-		retorno = true;
-	}
-	else {
-		return retorno;
+		print(vetor_funcionarios);
 	}
 }
