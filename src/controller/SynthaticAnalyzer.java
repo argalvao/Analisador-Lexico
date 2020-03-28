@@ -99,6 +99,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokens.remove();
 				}
 			}
+			
 			return null;
 		});
 

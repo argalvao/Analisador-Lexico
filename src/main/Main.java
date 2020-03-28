@@ -47,15 +47,22 @@ public class Main {
 							printWriter.println(token);
 						}
 						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
-						for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
-							printWriter.println(errorMessage);
+						if(LexicalAnalyzer.getInstance().getErrorList().isEmpty()) {
+							System.out.println("Código não apresenta erros léxicos, parabéns!");
+						}else {
+							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
+								printWriter.println(errorMessage);
+								System.out.println("ATENÇÂO - Erros léxicos foram encontrados!");
+							}
 						}
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
-						for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
-							printWriter.println(synthaticError);
-						}
 						if(SynthaticAnalyzer.getInstance().getList().isEmpty()) {
-							System.out.println("Código não apresenta erros, parabéns!");
+							System.out.println("Código não apresenta erros sintáticos, parabéns!");
+						}else {
+							for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
+								printWriter.println(synthaticError);
+							}
+							System.out.println("ATENÇÂO - Erros sintáticos foram encontrados!");
 						}
 						printWriter.close();
 					}

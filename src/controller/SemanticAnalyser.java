@@ -47,7 +47,7 @@ public class SemanticAnalyser {
 	private void toAnalyse(SynthaticNode synthaticNode, HashSet<String> error, String lexeme) {
 		if (this.postAnalysis.contains(synthaticNode)) {
 			if (!this.alreadyAnalyzed.contains(synthaticNode)) {
-				this.errors.add(error, lexeme);
+				this.errors.add(lexeme);
 			} else {
 				this.alreadyAnalyzed.add(synthaticNode);
 			}
