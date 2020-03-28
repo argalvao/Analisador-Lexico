@@ -56,10 +56,10 @@ public class Main {
 							}
 						}
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
-						if(SynthaticAnalyzer.getInstance().getList().isEmpty()) {
+						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
 							System.out.println("Código não apresenta erros sintáticos, parabéns!");
 						}else {
-							for(String synthaticError : SynthaticAnalyzer.getInstance().getList()) {
+							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
 							}
 							System.out.println("ATENÇÂO - Erros sintáticos foram encontrados!");
