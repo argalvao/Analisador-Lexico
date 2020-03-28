@@ -1,6 +1,6 @@
 /*
  *
- Abel Ramalho Galvão
+ Abel Ramalho Galvï¿½o
  Ramon de Cerqueira Silva
  *
  */
@@ -47,16 +47,23 @@ public class Main {
 							printWriter.println(token);
 						}
 						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
-						for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
-							printWriter.println(errorMessage);
+						if(LexicalAnalyzer.getInstance().getErrorList().isEmpty()) {
+							System.out.println("Cï¿½digo nï¿½o apresenta erros lï¿½xicos, parabï¿½ns!");
+						}else {
+							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
+								printWriter.println(errorMessage);
+								System.out.println("ATENï¿½ï¿½O - Erros lï¿½xicos foram encontrados!");
+							}
 						}
 						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
-						for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
-							printWriter.println(synthaticError);
-						}
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
-							System.out.println("Código não apresenta erros, parabéns!");
+							System.out.println("Cï¿½digo nï¿½o apresenta erros sintï¿½ticos, parabï¿½ns!");
+						}else {
+							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
+								printWriter.println(synthaticError);
+							}
+							System.out.println("ATENï¿½ï¿½O - Erros sintï¿½ticos foram encontrados!");
 						}
 						printWriter.close();
 					}
