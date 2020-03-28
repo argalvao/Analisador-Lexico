@@ -18,7 +18,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public List<String> errors;
 
 	private SynthaticAnalyzer() {
-
 		// Debugar Fuction e olhar follow a apartir do erro da linha 10, Ir direto na
 		// espressaolr, debugar a partir de argumentolr
 		// super();
@@ -43,7 +42,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um valor de variavel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um valor de variavel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -64,7 +63,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um valor v·lido para vetor.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um valor v√°lido para vetor.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 					token = tokens.peek();
@@ -95,7 +94,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um tipo.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um tipo.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -142,7 +141,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokens.remove();
 				} else if (!tokens.isEmpty() && token != null && !this.first.get("Inicio").contains(tokens.peek().getLexeme())){
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia nenhum bloco algoritmico.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia nenhum bloco algoritmico.");
 					//System.out.println(tokens.peek().getLexeme());
 					while (token != null) {
 						tokens.remove();
@@ -182,35 +181,39 @@ public class SynthaticAnalyzer extends RecursiveCall {
 								return tokenMap;
 							} else {
 								int line = token.getLine() + 1;
-								this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o corpo da funÁ„o if/then.");
+								this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+										+ ") n√£o inicia o corpo da fun√ß√£o if/then.");
 								if (!tokens.isEmpty()) {
 									tokens.remove();
 								}
 							}
 						} else {
 							int line = token.getLine() + 1;
-							this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o faz parte da declaraÁ„o para funÁ„o if/then.");
+							this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+									+ ") n√£o faz parte da declara√ß√£o para fun√ß√£o if/then.");
 							if (!tokens.isEmpty()) {
 								tokens.remove();
 							}
 						}
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de parametros para funÁ„o if/then.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o finaliza a declara√ß√£o de parametros para fun√ß√£o if/then.");
 						if (!tokens.isEmpty()) {
 							tokens.remove();
 						}
 					}
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de parametros para funÁ„o if/then.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia a declara√ß√£o de parametros para fun√ß√£o if/then.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a funÁ„o if/then.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a fun√ß√£o if/then.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -232,7 +235,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia corpo da funÁ„o else.");
+					this.errors
+							.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia corpo da fun√ß√£o else.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -241,14 +245,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È continuaÁ„o da funÁ„o if/then.");
+				this.errors
+						.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© continua√ß√£o da fun√ß√£o if/then.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
 			}
 			return tokenMap;
 		});
-		
+
 		// Certo
 		this.functions.put("<Laco>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -272,35 +277,37 @@ public class SynthaticAnalyzer extends RecursiveCall {
 							return tokenMap;
 						} else {
 							int line = token.getLine() + 1;
-							this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia corpo da funÁ„o while");
+							this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia corpo da fun√ß√£o while");
 							if (!tokens.isEmpty()) {
 								tokens.remove();
 							}
 						}
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de parametros para funÁ„o while.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o finaliza a declara√ß√£o de parametros para fun√ß√£o while.");
 						if (!tokens.isEmpty()) {
 							tokens.remove();
 						}
 					}
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de parametros para funÁ„o while.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia a declara√ß√£o de parametros para fun√ß√£o while.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a funÁ„o while.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a fun√ß√£o while.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
 			}
 			return null;
 		});
-		
+
 		// Vazio
 		this.functions.put("<GeraFuncaoeProcedure>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -316,7 +323,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				if (tokens.peek() != null && !this.follow.get("GeraFuncaoeProcedure").contains(token.getLexeme())) {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de um bloco de funÁ„o ou procedimento.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia a declara√ß√£o de um bloco de fun√ß√£o ou procedimento.");
 					while (tokens.peek() != null
 							&& !this.follow.get("GeraFuncaoeProcedure").contains(token.getLexeme())) {
 						if (!tokens.isEmpty()) {
@@ -346,7 +354,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia declaraÁ„o de parametro do bloco function.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o inicia declara√ß√£o de parametro do bloco function.");
 						while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
 							tokens.remove();
 							token = tokens.peek();
@@ -355,16 +364,18 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador do bloco function.");
+					this.errors.add(
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© identificador do bloco function.");
 					while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
-						//System.out.println(tokens.peek().getLexeme());
+						// System.out.println(tokens.peek().getLexeme());
 						tokens.remove();
 						token = tokens.peek();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o do bloco function.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a declara√ß√£o do bloco function.");
 				while (tokens.peek() != null && !this.follow.get("Funcao").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -388,7 +399,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia declaraÁ„o de parametro do bloco procedure.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o inicia declara√ß√£o de parametro do bloco procedure.");
 						while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
 							tokens.remove();
 							token = tokens.peek();
@@ -397,7 +409,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador do bloco procedure.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© identificador do bloco procedure.");
 					while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -406,7 +419,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				int line = token.getLine() + 1;
 				this.errors.add(
-						"Linha: " + line + " | (" + token.getLexeme() + ") inicia a declaraÁ„o do bloco procedure.");
+						"Linha: " + line + " | (" + token.getLexeme() + ") inicia a declara√ß√£o do bloco procedure.");
 				while (tokens.peek() != null && !this.follow.get("Procedimento").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -429,7 +442,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador do parametro de function/procedure.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© identificador do parametro de function/procedure.");
 					while (tokens.peek() != null && !this.follow.get("Parametro").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -437,8 +451,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors
-						.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È tipo do parametro de function/procedure.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© tipo do parametro de function/procedure.");
 				while (tokens.peek() != null && !this.follow.get("Parametro").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -461,7 +475,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza ou continua a declaraÁ„o do parametro do bloco function/procedure.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza ou continua a declara√ß√£o do parametro do bloco function/procedure.");
 				while (tokens.peek() != null && !this.follow.get("Para1").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -482,7 +497,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(this.call("<Para3>", tokens).getTokenNode());
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza declaraÁ„o de vetor no parametro do bloco function/procedure.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza declara√ß√£o de vetor no parametro do bloco function/procedure.");
 					while (tokens.peek() != null && !this.follow.get("Para2").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -492,7 +508,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia declaraÁ„o de vetor no parametro do bloco function/procedure.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia declara√ß√£o de vetor no parametro do bloco function/procedure.");
 				while (tokens.peek() != null && !this.follow.get("Para2").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -512,7 +529,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza declaraÁ„o de matriz no parametro do bloco function/procedure.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza declara√ß√£o de matriz no parametro do bloco function/procedure.");
 					while (tokens.peek() != null && !this.follow.get("Para3").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -522,7 +540,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia declaraÁ„o de matriz no parametro do bloco function/procedure.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia declara√ß√£o de matriz no parametro do bloco function/procedure.");
 				while (tokens.peek() != null && !this.follow.get("Para3").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -541,7 +560,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o escopo do bloco function/procedure.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia o escopo do bloco function/procedure.");
 				while (tokens.peek() != null && !this.follow.get("F2").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -562,7 +582,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(this.call("<TipoConst>", tokens).getTokenNode());
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o escopo do bloco const.");
+					this.errors.add(
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia o escopo do bloco const.");
 					while (tokens.peek() != null && !this.follow.get("Const").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -572,7 +593,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o do bloco const.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a declara√ß√£o do bloco const.");
 				while (tokens.peek() != null && !this.follow.get("Const").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -591,7 +613,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um tipo de vari·vel no bloco const.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um tipo de vari√°vel no bloco const.");
 				while (tokens.peek() != null && !this.follow.get("TipoConst").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -612,7 +635,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de vari·vel no bloco const.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um identificador de vari√°vel no bloco const.");
 				while (tokens.peek() != null && !this.follow.get("IdConst").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -635,7 +659,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza ou continua a declaracao de uma vari·vel no bloco const.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza ou continua a declaracao de uma vari√°vel no bloco const.");
 				while (tokens.peek() != null && !this.follow.get("Const2").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -656,7 +681,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza o escopo do bloco const ou continua a declaraÁ„o de uma vari·vel no bloco const.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza o escopo do bloco const ou continua a declara√ß√£o de uma vari√°vel no bloco const.");
 				while (tokens.peek() != null && !this.follow.get("Const3").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -682,7 +708,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokenMap.add(this.call("<Struct>", tokens).getTokenNode());
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador do bloco struct");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o √© identificador do bloco struct");
 						while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
 							tokens.remove();
 							token = tokens.peek();
@@ -690,7 +717,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					}
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È parte da declaraÁ„o do bloco struct");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© parte da declara√ß√£o do bloco struct");
 					while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -701,7 +729,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				if (!this.follow.get("Struct").contains(token.getLexeme())) {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o do bloco struct");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia a declara√ß√£o do bloco struct");
 				}
 				while (tokens.peek() != null && !this.follow.get("Struct").contains(token.getLexeme())) {
 					tokens.remove();
@@ -728,7 +757,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o escopo do bloco struct.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o inicia o escopo do bloco struct.");
 						while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
 							tokens.remove();
 							token = tokens.peek();
@@ -738,7 +768,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				} else {
 					int line = token.getLine() + 1;
 					this.errors.add(
-							"Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador do bloco struct.");
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© identificador do bloco struct.");
 					while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -746,7 +776,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o estende ou inicia o escopo do bloco struct.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o estende ou inicia o escopo do bloco struct.");
 				while (tokens.peek() != null && !this.follow.get("Extends").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -766,7 +797,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			} else {
 				if (!this.follow.get("TipoStruct").contains(token.getLexeme())) {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um tipo de struct.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um tipo de struct.");
 				}
 				while (tokens.peek() != null && !this.follow.get("TipoStruct").contains(token.getLexeme())) {
 					tokens.remove();
@@ -786,7 +817,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de vari·vel do bloco struct.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um identificador de vari√°vel do bloco struct.");
 				while (tokens.peek() != null && !this.follow.get("IdStruct").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -809,7 +841,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua ou finaliza a declaraÁ„o de variaveis do bloco struct.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua ou finaliza a declara√ß√£o de variaveis do bloco struct.");
 				while (tokens.peek() != null && !this.follow.get("Struct2").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -830,7 +863,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua a declaraÁ„o de vari·veis ou finaliza o escopo do bloco struct.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua a declara√ß√£o de vari√°veis ou finaliza o escopo do bloco struct.");
 				while (tokens.peek() != null && !this.follow.get("Struct3").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -852,7 +886,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					// System.out.println(this.call("<Var>", tokens).getTokenNode().);
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | " + token.getLexeme() + " n„o inicia o escopo do bloco var.");
+					this.errors
+							.add("Linha: " + line + " | " + token.getLexeme() + " n√£o inicia o escopo do bloco var.");
 					while (tokens.peek() != null && !this.follow.get("Var").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -862,7 +897,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | " + token.getLexeme() + "  n„o inicia a declaraÁ„o do bloco var.");
+				this.errors
+						.add("Linha: " + line + " | " + token.getLexeme() + "  n√£o inicia a declara√ß√£o do bloco var.");
 				while (tokens.peek() != null && !this.follow.get("Var").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -882,7 +918,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um tipo de vari·vel no bloco var.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um tipo de vari√°vel no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("TipoVar").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -901,7 +938,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de vari·vel no bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um identificador de vari√°vel no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("IdVar").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -932,7 +970,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza, continua, dar valor ou comeÁa um vetor no bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza, continua, dar valor ou come√ßa um vetor no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("Var2").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -953,7 +992,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua as declaraÁıes de vari·veis, ou finaliza o bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua as declara√ß√µes de vari√°veis, ou finaliza o bloco var.");
 				while (tokens.peek() != null && !this.follow.get("Var3").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -976,7 +1016,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua ou finaliza as declaraÁıes de variaveis no bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua ou finaliza as declara√ß√µes de variaveis no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("Var4").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -1000,7 +1041,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de um vetor no bloco var.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza a declara√ß√£o de um vetor no bloco var.");
 					while (tokens.peek() != null && !this.follow.get("VetorDeclaracao").contains(token.getLexeme())) {
 						tokens.remove();
 						token = tokens.peek();
@@ -1010,7 +1052,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de um vetor no bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia a declara√ß√£o de um vetor no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("VetorDeclaracao").contains(token.getLexeme())) {
 					tokens.remove();
 					token = tokens.peek();
@@ -1037,7 +1080,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de uma matriz no bloco var.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza a declara√ß√£o de uma matriz no bloco var.");
 					while (tokens.peek() != null && !this.follow.get("Matriz").contains(token.getLexeme())) {
 						if (!tokens.isEmpty()) {
 							tokens.remove();
@@ -1047,7 +1091,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de uma matriz no bloco var.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia a declara√ß√£o de uma matriz no bloco var.");
 				while (tokens.peek() != null && !this.follow.get("Matriz").contains(token.getLexeme())) {
 					if (!tokens.isEmpty()) {
 						tokens.remove();
@@ -1068,7 +1113,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia um parametro de uma express„o.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia um parametro de uma express√£o.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1088,9 +1134,10 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else if (this.follow.get("ContListaParametros").contains(token.getLexeme())) {
 				return tokenMap;
-			} else { 
+			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua a declaraÁ„o de outro elemento no parametro de uma express„o.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua a declara√ß√£o de outro elemento no parametro de uma express√£o.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1115,7 +1162,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um tipo de vari·vel no parametro.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um tipo de vari√°vel no parametro.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1141,14 +1189,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de acesso, apos o global/local.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© um identificador de acesso, apos o global/local.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de acesso.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um identificador de acesso.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1168,7 +1217,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de acesso a vetor.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© um identificador de acesso a vetor.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1179,7 +1229,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um acesso a vetor.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um acesso a vetor.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1201,7 +1251,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um acesso a vetor.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um acesso a vetor.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1213,7 +1263,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um acesso a vetor ou inicia uma entrada de parametros.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um acesso a vetor ou inicia uma entrada de parametros.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1234,7 +1285,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de acesso.");
+					this.errors
+							.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um identificador de acesso.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1243,7 +1295,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um acesso a vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um acesso a vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1271,16 +1323,18 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de um vetor.");
+					this.errors.add(
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o finaliza a declara√ß√£o de um vetor.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
-			}  else if (this.follow.get("Vetor").contains(token.getLexeme())) {
+			} else if (this.follow.get("Vetor").contains(token.getLexeme())) {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma declaraÁ„o de um vetor ou n„o acessa uma vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma declara√ß√£o de um vetor ou n√£o acessa uma vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1301,7 +1355,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza uma declaraÁ„o de um vetor ou n„o acessa uma vari·vel.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza uma declara√ß√£o de um vetor ou n√£o acessa uma vari√°vel.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1310,7 +1365,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma declaraÁ„o de um vetor ou n„o acessa uma vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma declara√ß√£o de um vetor ou n√£o acessa uma vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1330,7 +1386,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um valor v·lido para o tamanho de um vetor.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um valor v√°lido para o tamanho de um vetor.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1350,7 +1407,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitador de acesso a uma vari·vel.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© um delimitador de acesso a uma vari√°vel.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1363,14 +1421,16 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitador de acesso a uma vari·vel.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© um delimitador de acesso a uma vari√°vel.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador de escopo de vari·vel.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© identificador de escopo de vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1395,14 +1455,16 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de vari·vel.");
+					this.errors.add(
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um identificador de vari√°vel.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador de escopo de vari·vel ou identificador de vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© identificador de escopo de vari√°vel ou identificador de vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1414,7 +1476,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		this.functions.put("<ExpressaoAritmetica>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			//System.out.println(tokens.peek().getLexeme());
+			// System.out.println(tokens.peek().getLexeme());
 			if (token != null && "--".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
@@ -1437,7 +1499,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma express„o aritmÈtica.");
+				this.errors
+						.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia uma express√£o aritm√©tica.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1445,7 +1508,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			return null;
 		});
 
-		// Vazio 
+		// Vazio
 		this.functions.put("<ExpressaoAritmetica2>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
@@ -1463,14 +1526,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<T2>", tokens).getTokenNode());
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 				return tokenMap;
-				//DUVIDA se pode ser ter vazio em expressao com produÁıes vaziass
-			} else if(this.predict("E2", tokens.peek())){
+				// DUVIDA se pode ser ter vazio em expressao com produ√ß√µes vaziass
+			} else if (this.predict("E2", tokens.peek())) {
 				tokenMap.add(this.call("<E2>", tokens).getTokenNode());
 			} else if (this.follow.get("ExpressaoAritmetica2").contains(token.getLexeme())) {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma express„o aritmÈtica(1).");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia uma express√£o aritm√©tica(1).");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1492,7 +1556,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitar aritmÈtico de somar ou subtrair.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um delimitar aritm√©tico de somar ou subtrair.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1510,7 +1575,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitador aritmÈtico .");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um delimitador aritm√©tico .");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1533,7 +1598,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitar aritmÈtico de multiplicar ou dividir.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um delimitar aritm√©tico de multiplicar ou dividir.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1558,14 +1624,16 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza uma declaraÁ„o aritmÈtica.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza uma declara√ß√£o aritm√©tica.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um n˙mero ou inicia uma declaraÁ„o aritmÈtica.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um n√∫mero ou inicia uma declara√ß√£o aritm√©tica.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1591,14 +1659,16 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de vari·vel.");
+					this.errors.add(
+							"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um identificador de vari√°vel.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È identificador de escopo de vari·vel ou identificador de vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© identificador de escopo de vari√°vel ou identificador de vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1622,7 +1692,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza uma lista de parametros aritmÈticos.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza uma lista de parametros aritm√©ticos.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1632,11 +1703,12 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<ExpressaoAritmetica2>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (this.follow.get("IdentificadorAritmetico3").contains(token.getLexeme())) {
-				//System.out.println(tokens.peek().getLexeme());
+				// System.out.println(tokens.peek().getLexeme());
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma lista de parametros aritmÈticos ou um acesso a vari·vel.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma lista de parametros aritm√©ticos ou um acesso a vari√°vel.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1658,7 +1730,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza uma express„o lÛgica ou relacional.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza uma express√£o l√≥gica ou relacional.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -1668,7 +1741,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma express„o lÛgica ou relacional.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma express√£o l√≥gica ou relacional.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1692,7 +1766,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma express„o lÛgica ou relacional.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma express√£o l√≥gica ou relacional.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1716,7 +1791,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia uma express„o lÛgica/relacional ou um operador relacional.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia uma express√£o l√≥gica/relacional ou um operador relacional.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1735,7 +1811,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um operador lÛgico para iniciar uma express„o lÛgica ou relacional.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um operador l√≥gico para iniciar uma express√£o l√≥gica ou relacional.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1754,7 +1831,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um argumento para expressıes relacional ou lÛgicas.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um argumento para express√µes relacional ou l√≥gicas.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1778,7 +1856,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um delimitador booleano ou negado.");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um delimitador booleano ou negado.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1801,7 +1880,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um identificador de v·riavel ou operador booleano");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um identificador de v√°riavel ou operador booleano");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1821,7 +1901,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È uma express„o aritmÈtica ou uma string.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© uma express√£o aritm√©tica ou uma string.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1853,7 +1934,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um operador relacional.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um operador relacional.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1873,7 +1954,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um operador lÛgico.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© um operador l√≥gico.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1894,14 +1975,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o parametro para funÁ„o print.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia o parametro para fun√ß√£o print.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a funÁ„o print.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a fun√ß√£o print.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1927,7 +2009,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um parametro v·lido para funÁ„o print.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um parametro v√°lido para fun√ß√£o print.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1948,7 +2031,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua a declaraÁ„o de parametros para funÁ„o print.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua a declara√ß√£o de parametros para fun√ß√£o print.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1968,14 +2052,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a funÁ„o print.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o finaliza a fun√ß√£o print.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de parametros para funÁ„o print.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza a declara√ß√£o de parametros para fun√ß√£o print.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -1996,14 +2081,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o de parametros para funÁ„o read.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o inicia a declara√ß√£o de parametros para fun√ß√£o read.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a funÁ„o read.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a fun√ß√£o read.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2021,7 +2107,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È um parametro v·lido para a funÁ„o read.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© um parametro v√°lido para a fun√ß√£o read.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2042,7 +2129,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o continua a delaraÁ„o de parametro da funÁ„o read.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o continua a delara√ß√£o de parametro da fun√ß√£o read.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2062,21 +2150,22 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a funÁ„o read.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o finaliza a fun√ß√£o read.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza a declaraÁ„o de parametros para funÁ„o read.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza a declara√ß√£o de parametros para fun√ß√£o read.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
 			}
 			return null;
 		});
-		
+
 		// Certo
 		this.functions.put("<Corpo>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -2093,14 +2182,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza o corpo de blocos e funÁıes.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o finaliza o corpo de blocos e fun√ß√µes.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia ou finaliza o corpo de blocos e funÁıes.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o inicia ou finaliza o corpo de blocos e fun√ß√µes.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2120,7 +2210,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o faz parte do corpo de funÁıes.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o faz parte do corpo de fun√ß√µes.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2152,7 +2242,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È comando dentro de um bloco.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© comando dentro de um bloco.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2174,14 +2264,15 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza comandos dentro do corpo de funÁ„o/bloco.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza comandos dentro do corpo de fun√ß√£o/bloco.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È comando dentro de um bloco.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o √© comando dentro de um bloco.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2203,7 +2294,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza uma lista de paraemtro na funÁ„o/bloco.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza uma lista de paraemtro na fun√ß√£o/bloco.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -2214,7 +2306,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o atribui ou inicia uma lista de parametro na funÁ„o/bloco.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o atribui ou inicia uma lista de parametro na fun√ß√£o/bloco.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2238,7 +2331,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È uma express„o aritimÈtica, string ou boolean.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o √© uma express√£o aritim√©tica, string ou boolean.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2256,7 +2350,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia um retorno.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia um retorno.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2276,7 +2370,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					return tokenMap;
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza um retorno de uma funÁ„o/bloco.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o finaliza um retorno de uma fun√ß√£o/bloco.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
@@ -2286,7 +2381,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o finaliza ou continua um retorno de uma funÁ„o/bloco.");
+				this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+						+ ") n√£o finaliza ou continua um retorno de uma fun√ß√£o/bloco.");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
@@ -2314,28 +2410,32 @@ public class SynthaticAnalyzer extends RecursiveCall {
 							return tokenMap;
 						} else {
 							int line = token.getLine() + 1;
-							this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia o corpo do bloco start.");
+							this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+									+ ") n√£o inicia o corpo do bloco start.");
 							if (!tokens.isEmpty()) {
 								tokens.remove();
 							}
 						}
 					} else {
 						int line = token.getLine() + 1;
-						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È faz parte da declaraÁ„o do bloco start.");
+						this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+								+ ") n√£o √© faz parte da declara√ß√£o do bloco start.");
 						if (!tokens.isEmpty()) {
 							tokens.remove();
 						}
 					}
 				} else {
 					int line = token.getLine() + 1;
-					this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o È faz parte da declaraÁ„o do bloco start.");
+					this.errors.add("Linha: " + line + " | (" + token.getLexeme()
+							+ ") n√£o √© faz parte da declara√ß√£o do bloco start.");
 					if (!tokens.isEmpty()) {
 						tokens.remove();
 					}
 				}
 			} else {
 				int line = token.getLine() + 1;
-				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") n„o inicia a declaraÁ„o do bloco start");
+				this.errors.add(
+						"Linha: " + line + " | (" + token.getLexeme() + ") n√£o inicia a declara√ß√£o do bloco start");
 				if (!tokens.isEmpty()) {
 					tokens.remove();
 				}
