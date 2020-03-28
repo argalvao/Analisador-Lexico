@@ -13,15 +13,16 @@ import model.Token;
 import model.TokenTypes;
 import util.RecursiveCall;
 import util.FirstFollow;
+import controller.SynthaticAnalyzer;
 
-public class SynthaticAnalyzer extends RecursiveCall {
+public class SemanticAnalyzer extends RecursiveCall {
 
 	private static SynthaticAnalyzer instance;
 	public List<String> errors;
 	public List<Token> id;
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
-	SynthaticAnalyzer() {
+	private SemanticAnalyzer() {
 		
 		//super();
 		this.errors = new ArrayList<>();
