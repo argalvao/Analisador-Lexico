@@ -5,6 +5,7 @@
 !no processo de geração da árvore sintática que, como o próprio nome sugere,
 !será utilizado pelo analisador sintático.
 ! Foi tirado das produ?es dos seguintes de <Corpo> o "}"
+! Adicionou um vazio em ListaParametros 2, para as procedures
 ! -----------------------------------------------------------------------
 
 "Name" = 'PBL Compiladores'
@@ -41,9 +42,9 @@ Boolean = 'true' + 'false'
 
 !Bloco Condicional
 
-<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{' <Corpo> <CondEnd>
+<Condicional> ::= 'if' '(' <ExpressaoLogicaRelacional> ')' 'then' '{' <Corpo>  <CondEnd>
 
-<CondEnd> ::= 'else' '{' <Corpo> |
+<CondEnd> ::= 'else' '{' <Corpo>  |
 
 !Bloco de repetição
 
@@ -119,11 +120,11 @@ Boolean = 'true' + 'false'
 
 <ContListaParametros> ::= ',' <ListaParametros> |
 
-<ListaParametros2> ::= <Identificador> | Numero | String
+<ListaParametros2> ::= <Identificador> | Numero | String |
 
 !Acesso a Identificadores (variáveis, structs, matrizes e funções)
 
-<Identificador> ::= <Escopo> Id <Identificador2> | Id <Identificador3>
+<Identificador> ::= <Escopo> Id <Identificador2> | Id <Identificador3>                             System.out.println(tokens.peek().getLexeme() + tokens.peek().getLine());
 
 <Identificador2> ::= '.' Id <Vetor> | <Vetor> |
 
@@ -151,7 +152,7 @@ Boolean = 'true' + 'false'
 
 <E2> ::= '+' <ExpressaoAritmetica> | '-' <ExpressaoAritmetica> |
 
-<T> ::= <F> <T2>                                                                             System.out.println(tokens.peek().getLexeme());
+<T> ::= <F> <T2>                                                                             
 
 <T2> ::= '*' <ExpressaoAritmetica> | '/' <ExpressaoAritmetica> |
 
@@ -223,4 +224,4 @@ Boolean = 'true' + 'false'
 
 !Chamada do Start
 
-<Start> ::= 'start' '(' ')' '{' <Corpo>
+<Start> ::= 'start' '(' ')' '{' <Corpo> 
