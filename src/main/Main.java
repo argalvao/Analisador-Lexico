@@ -1,6 +1,6 @@
 /*
  *
- Abel Ramalho Galvão
+ Abel Ramalho Galvï¿½o
  Ramon de Cerqueira Silva
  *
  */
@@ -52,9 +52,10 @@ public class Main {
 						}else {
 							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 								printWriter.println(errorMessage);
-								System.out.println("ATENÇÂO - Erros léxicos foram encontrados!");
+								System.out.println("ATENÇÃO - Erros léxicos foram encontrados!");
 							}
 						}
+						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
 							System.out.println("Código não apresenta erros sintáticos, parabéns!");
@@ -62,7 +63,7 @@ public class Main {
 							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
 							}
-							System.out.println("ATENÇÂO - Erros sintáticos foram encontrados!");
+							System.out.println("ATENÇÃO - Erros sintáticos foram encontrados!");
 						}
 						printWriter.close();
 					}
