@@ -48,22 +48,22 @@ public class Main {
 						}
 						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
 						if(LexicalAnalyzer.getInstance().getErrorList().isEmpty()) {
-							System.out.println("Cï¿½digo nï¿½o apresenta erros lï¿½xicos, parabï¿½ns!");
+							System.out.println("Código não apresenta erros léxicos, parabéns!");
 						}else {
 							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 								printWriter.println(errorMessage);
-								System.out.println("ATENï¿½ï¿½O - Erros lï¿½xicos foram encontrados!");
+								System.out.println("ATENÇÃO - Erros léxicos foram encontrados!");
 							}
 						}
 						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
-							System.out.println("Cï¿½digo nï¿½o apresenta erros sintï¿½ticos, parabï¿½ns!");
+							System.out.println("Código não apresenta erros sintáticos, parabéns!");
 						}else {
 							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
 							}
-							System.out.println("ATENï¿½ï¿½O - Erros sintï¿½ticos foram encontrados!");
+							System.out.println("ATENÇÃO - Erros sintáticos foram encontrados!");
 						}
 						printWriter.close();
 					}
