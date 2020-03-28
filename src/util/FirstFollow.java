@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import model.TokenTypes;
 
 public class FirstFollow {
 	public final String CaseSensitive;
@@ -138,7 +139,7 @@ public class FirstFollow {
 		this.follow.put("CondEnd", new HashSet<>(Arrays.asList("global", "print", "read", "if", "while", "Id", "return", "local")));
 		this.follow.put("Laco", new HashSet<>(Arrays.asList("local", "print", "read", "if", "return", "Id", "while", "global")));
 		
-		this.follow.put("GeraFuncaoeProcedure", new HashSet<>(Arrays.asList("typedef", "function", "const", "var", "procedure")));
+		this.follow.put("GeraFuncaoeProcedure", new HashSet<>(Arrays.asList("start")));
 		this.follow.put("Funcao", new HashSet<>(Arrays.asList("function", "procedure")));
 		this.follow.put("Procedimento", new HashSet<>(Arrays.asList("function", "procedure")));
 		this.follow.put("Parametro", new HashSet<>(Arrays.asList("procedure", "function")));
@@ -169,33 +170,33 @@ public class FirstFollow {
 		this.follow.put("VetorDeclaracao", new HashSet<>(Arrays.asList(",", ";")));
 		this.follow.put("Matriz", new HashSet<>(Arrays.asList(",", ";")));
 		
-		this.follow.put("ListaParametros", new HashSet<>(Arrays.asList("[", "=", ".", "(")));
-		this.follow.put("ContListaParametros", new HashSet<>(Arrays.asList("[", "(", ".", "=")));
-		this.follow.put("ListaParametros2", new HashSet<>(Arrays.asList(",")));
+		this.follow.put("ListaParametros", new HashSet<>(Arrays.asList("[", "=", ".", "(", ")")));
+		this.follow.put("ContListaParametros", new HashSet<>(Arrays.asList("[", "(", ".", ")", "=")));
+		this.follow.put("ListaParametros2", new HashSet<>(Arrays.asList(",", ")")));
 
-		this.follow.put("Identificador", new HashSet<>(Arrays.asList("[", ".", ")", ",")));
+		this.follow.put("Identificador", new HashSet<>(Arrays.asList("[", ".", ")", ",","]")));
 		this.follow.put("Identificador2", new HashSet<>(Arrays.asList("*", ")", "(", ".", "++", "local", "Numero", "/", "--", "=", "[","]", "Id", ",", "global", ">", "<", "==", "!=", ">=", "<=", "+", "-")));
-		this.follow.put("Identificador3", new HashSet<>(Arrays.asList(".", ",", ")", "[")));
-		this.follow.put("Identificador4", new HashSet<>(Arrays.asList("*", "global", "/", "--", "++", "Id", "local", "=")));
-		this.follow.put("Vetor", new HashSet<>(Arrays.asList("*", "local", "++", "Id", "--", "/", "global")));	
-		this.follow.put("Vetor2", new HashSet<>(Arrays.asList("[", ".", "=")));
+		this.follow.put("Identificador3", new HashSet<>(Arrays.asList(".", ",", ")", "[", "]")));
+		this.follow.put("Identificador4", new HashSet<>(Arrays.asList("*", "global", "/", "--", "++", "Id", "local", "=", ")")));
+		this.follow.put("Vetor", new HashSet<>(Arrays.asList("*", "local", "++", "Id", "--", "/", "global", ",", ")")));	
+		this.follow.put("Vetor2", new HashSet<>(Arrays.asList("[", ".", "=", ")")));
 		this.follow.put("IndiceVetor", new HashSet<>(Arrays.asList("[", ".")));	
 		this.follow.put("Escopo", new HashSet<>(Arrays.asList("Id")));
 		
 		this.follow.put("IdentificadorSemFuncao", new HashSet<>(Arrays.asList(")", "(", "global", "Numero", "local", "=", "Id", "--", ",", "++")));
 
 		this.follow.put("ExpressaoAritmetica", new HashSet<>(Arrays.asList("+", "*", "(", "String", "local", "!", "[", "!=", "/", "-", "||", "true", "&&", "++", "==", ">=", "--", "global", ">", ".", "<", "false", ";", "Id", "<=", "Numero")));
-		this.follow.put("ExpressaoAritmetica2", new HashSet<>(Arrays.asList("(", ";", ">=", "<=", "Numero", "<", "!=", "==", ">")));
-		this.follow.put("E2", new HashSet<>(Arrays.asList("(", ";", ">=", "<=", ">", "<", "!=", "==", "Numero")));
+		this.follow.put("ExpressaoAritmetica2", new HashSet<>(Arrays.asList("(",")", ";", ">=", "<=", "Numero", "<", "!=", "==", ">")));
+		this.follow.put("E2", new HashSet<>(Arrays.asList("(", ")", ";", ">=", "<=", ">", "<", "!=", "==", "Numero")));
 		this.follow.put("T", new HashSet<>(Arrays.asList("+", "-")));
-		this.follow.put("T2", new HashSet<>(Arrays.asList("+", "*", "(", "local", "global", "Numero", "Id", "[", "/", ".", "--", "++", "-",";")));
+		this.follow.put("T2", new HashSet<>(Arrays.asList("+", "*", "(", ")","local", "global", "Numero", "Id", "[", "/", ".", "--", "++", "-",";")));
 		this.follow.put("F", new HashSet<>(Arrays.asList("/", "*")));
 		this.follow.put("IdentificadorAritmetico", new HashSet<>(Arrays.asList("+", "*", "(", "String", "local", "Id", "[", "!=", "||", "-", ".", "global", "--", ";", "==", ">=", "&&", "<=", "Numero", "true", "<", "false", "/", "++", ">", "!")));
 		this.follow.put("IdentificadorAritmetico3", new HashSet<>(Arrays.asList("(",")", ";", ">=", "<=", ">", "<", "!=", "Numero", "==")));
 
 		this.follow.put("ExpressaoLogicaRelacional", new HashSet<>(Arrays.asList("if", "while")));
 		this.follow.put("ExpressaoLR", new HashSet<>(Arrays.asList("(", ")","!", "global", "--", "local", "Numero", "Id", "++", "if", "false", "while", "String", "true")));
-		this.follow.put("ExpressaoLR2", new HashSet<>(Arrays.asList("(", "!", "true", "String", "global", "Numero", "while", "false", "if", "++", "--", "Id", "local")));
+		this.follow.put("ExpressaoLR2", new HashSet<>(Arrays.asList("(", ")","!", "true", "String", "global", "Numero", "while", "false", "if", "++", "--", "Id", "local")));
 		this.follow.put("ExpressaoLR3", new HashSet<>(Arrays.asList("(", ")","!", "true", "String", "global", "Numero", "false", "++", "if", "Id", "while", "local", "--")));
 		this.follow.put("ArgumentoLR", new HashSet<>(Arrays.asList("(", "String", "local", "!=", "true", "++", "--", "!", ">=", "global", "<=", "||", "==", "<", "false", "&&", "Id", ">", "Numero")));
 		this.follow.put("ArgumentoLR2", new HashSet<>(Arrays.asList("(", "String", "local", "!=", "Numero", "Id", "--", "true", ">=", "global", "<=", "||", "!", "<", "false", "==", "++", "&&", ">")));
@@ -214,7 +215,7 @@ public class FirstFollow {
 		this.follow.put("AuxRead", new HashSet<>(Arrays.asList("local", "print", "read", "if", "return", "while", "Id", "global")));
 		this.follow.put("ReadFim", new HashSet<>(Arrays.asList("global", "print", "read", "if", "Id", "while", "return", "local")));
 
-		this.follow.put("Corpo", new HashSet<>(Arrays.asList("print", "read", "global", "local", "return", "if", "Id", "while", "start", "else")));
+		this.follow.put("Corpo", new HashSet<>(Arrays.asList("print", "read", "global","local", "return", "if", "Id", "while", "start", "else")));
 		this.follow.put("Corpo2", new HashSet<>(Arrays.asList("print", "read", "local", "}", "return", "if", "global", "Id", "while", "var", "else")));
 		this.follow.put("Comandos", new HashSet<>(Arrays.asList("Id", "print", "read", "if", "global", "while", "return", "local")));
 		this.follow.put("IdentificadorComandos", new HashSet<>(Arrays.asList("local", "print", "read", "if", "return", "Id", "while", "global")));
@@ -324,7 +325,7 @@ public class FirstFollow {
 		productions.put("<ComandosReturn>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'return'", "<CodigosRetornos>")))));
 		productions.put("<CodigosRetornos>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("';'")), new ArrayList<>(Arrays.asList("<ExpressaoAritmetica>", "';'")))));
 		
-		productions.put("<Start>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'start'", "'('", "')'", "'{'", "<Corpo>")))));
+		productions.put("<Start>", new ArrayList<>(Arrays.asList(new ArrayList<>(Arrays.asList("'start'", "'('", "')'", "'{'", "<Corpo>", "'}'")))));
 		
 		return productions;
 	}
