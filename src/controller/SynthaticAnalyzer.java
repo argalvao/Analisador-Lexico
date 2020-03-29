@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Queue;
 
 //import javax.swing.plaf.synth.SynthSeparatorUI;
-import controller.SemanticAnalyser;
+import controller.SemanticAnalyzer;
 import model.SynthaticNode;
 import model.Token;
 import model.TokenTypes;
@@ -21,7 +21,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public List<Token> id;
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
-	SemanticAnalyser semantic = new SemanticAnalyser();
+	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	SynthaticAnalyzer() {
 		
 		//super();
@@ -29,8 +29,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		this.id = new ArrayList<>();
 		this.procedimentos = new HashMap<>();
 		this.funcoes = new HashMap<>();
-		this.variaveisGlobais = new HashMap<>();
-		this.variaveisLocais = new HashMap<>();
+		//this.variaveisGlobais = new HashMap<>();
+		//this.variaveisLocais = new HashMap<>();
 		// Certo
 		this.functions.put("<Valor>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -132,7 +132,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 				if (this.predict("Var", tokens.peek())) {
 					if (tokens.peek() != null) {
-						escopo = true;
+						//escopo = true;
 						tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 						token = tokens.peek();
 					}
@@ -920,7 +920,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
 				// Semantica de variaveis globais
-				if (tokens.peek() != null && escopo && !this.variaveisGlobais.containsKey(tokens.peek().getLexeme())) {
+				/*if (tokens.peek() != null && escopo && !this.variaveisGlobais.containsKey(tokens.peek().getLexeme())) {
 					this.variaveisGlobais.put(tokens.peek().getLexeme(), tokens.peek());
 				} else if (escopo){
 					System.out.println("J� houve um declara��o de variavel global com o nome: " + tokens.peek().getLexeme());
@@ -930,7 +930,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					this.variaveisLocais.put(tokens.peek().getLexeme(), tokens.peek());
 				} else if (!escopo){
 					System.out.println("J� houve um declara��o de variavel local com o nome: " + tokens.peek().getLexeme());
-				}
+				}*/
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
@@ -2129,7 +2129,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (this.predict("Var", tokens.peek()) || this.follow.get("Var").contains(token.getLexeme()) || TokenTypes.IDENTIFIER.equals(tokens.peek().getType())) {
-				escopo = false;
+				//escopo = false;
 				tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Corpo2>", tokens).getTokenNode());
 				token = tokens.peek();
