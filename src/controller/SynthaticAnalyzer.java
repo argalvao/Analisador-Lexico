@@ -22,15 +22,11 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
+	
 	SynthaticAnalyzer() {
-		
-		//super();
 		this.errors = new ArrayList<>();
 		this.id = new ArrayList<>();
-		this.procedimentos = new HashMap<>();
-		this.funcoes = new HashMap<>();
-		//this.variaveisGlobais = new HashMap<>();
-		//this.variaveisLocais = new HashMap<>();
+		
 		// Certo
 		this.functions.put("<Valor>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
@@ -351,7 +347,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
-					// Verifica��o Semantica de nomes iguais de fun��es
+					// Verificacao Semantica de nomes iguais de funcoes
 					semantic.funtionsEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
