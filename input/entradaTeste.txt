@@ -4,6 +4,14 @@ var {
 	pessoa pedro = "tododile";
 }
 
+function boolean cadastrarPessoas(pessoa pessoa) {
+	var {
+	    boolean retorno = false;
+	}
+	return retorno;
+
+}
+
 procedure imprimirPessoas(string vetor) {
 	var {
 		int i = 0;
@@ -19,4 +27,57 @@ procedure imprimirPessoas(string vetor) {
 	else {
 		print(vetor_funcionarios);
 	}
+
 }
+
+procedure imprimirPessoas(string vetor) {
+
+	var {
+		int i = 0;
+	}
+
+	if (vetor == "vetor_pessoas") then {
+		while( i < global.pessoas_cadastradas) {
+			print(vetor_pessoas[i]);
+			i = i + 1;
+		}
+	}
+	else {
+		print(vetor_funcionarios);
+	}
+}
+
+
+start () {
+	var {
+		int entrada, retorno;
+		pessoa pessoa;
+	}
+
+	while (true) {
+		print("Digite 0 para cadastrar uma nova pessoa ou 1 para imprimir a lista de pessoas cadastradas:");
+		read(entrada);
+
+		if (!entrada) then {
+			print("Digite o nome, endereco e telefone da pessoa que deseja cadastrar:");
+			read(pessoa.nome, pessoa.endereco, pessoa.telefone);
+			retorno = cadastrarPessoa(pessoa);
+			if(retorno == true) then {
+				print("Nova pessoa cadastrada com sucesso.");
+			}
+			else {
+				print("A lista esta cheia.");
+			}
+		}
+		else {
+			if (entrada == 1) then {
+				imprimirPessoas();
+			}
+			else {
+				print("Entrada invalida, tente novamente.");
+			}
+		}
+	}
+}
+
+// teste de comentário
