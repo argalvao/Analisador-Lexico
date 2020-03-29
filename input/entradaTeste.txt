@@ -80,4 +80,11 @@ start () {
 	}
 }
 
+
+start () {
+	var {
+		int entrada, retorno;
+		pessoa pessoa;
+	}
+}	
 // teste de comentário
