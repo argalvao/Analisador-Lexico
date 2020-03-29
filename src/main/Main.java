@@ -49,31 +49,31 @@ public class Main {
 						}
 						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
 						if(LexicalAnalyzer.getInstance().getErrorList().isEmpty()) {
-							System.out.println("Código não apresenta erros léxicos, parabéns!");
+							System.out.println("Código não apresenta erros lexicos, parabens!");
 						}else {
 							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 								printWriter.println(errorMessage);
-								System.out.println("ATENÇÃO - Erros léxicos foram encontrados!");
+								System.out.println("ATENCAO - Erros lexicos foram encontrados!");
 							}
 						}
 						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
-							System.out.println("Código não apresenta erros sintáticos, parabéns!");
+							System.out.println("Código não apresenta erros sintaticos, parabens!");
 						}else {
 							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
 							}
-							System.out.println("ATENÇÃO - Erros sintáticos foram encontrados!");
+							System.out.println("ATENCAO - Erros sintaticos foram encontrados!");
 						}
 						printWriter.printf("\n\n\nLISTA DE ERROS SEMANTICOS:\n\n");
 						if(SemanticAnalyzer.getErros().isEmpty()) {
-							System.out.println("Código não apresenta erros semânticos, parabéns!");
+							System.out.println("Código não apresenta erros semanticos, parabens!");
 						}else {
 							for(String semanticError : SemanticAnalyzer.getErros()) {
 								printWriter.println(semanticError);
 							}
-							System.out.println("ATENÇÂO - Erros semânticos foram encontrados!");
+							System.out.println("ATENCAO - Erros semanticos foram encontrados!");
 						}
 						printWriter.close();
 					}

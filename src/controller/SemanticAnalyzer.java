@@ -43,7 +43,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.funcoes.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
-			errors.add("Linha: " + line +"	|	Já houve um declaração de funcao com o nome: " + tokens.getLexeme());
+			errors.add("Linha: " + line +"	|	Ja houve um declaracao de funcao com o nome: " + tokens.getLexeme());
 		}
 	}
 	
@@ -61,7 +61,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.procedimentos.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
-			errors.add("Linha: " + line +"	|	Já houve um declaração de procedimento com o nome: " + tokens.getLexeme());
+			errors.add("Linha: " + line +"	|	Ja houve um declaracao de procedimento com o nome: " + tokens.getLexeme());
 		}
 	}
 	
