@@ -62,7 +62,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.blocos.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
-			errors.add("Linha: " + line +"	|	Já houve declaração do bloco start");
+			errors.add("Linha: " + line +"	|	Ja houve declaracao do bloco start");
 		}
 	}
 	
@@ -91,10 +91,25 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.varGlobal.containsKey(tokens.getLexeme()));
 		} else {
-			errors.add("Linha: " + line +"	|	Já houve declaração de variavel global com o nome: " + tokens.getLexeme());
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel global com o nome: " + tokens.getLexeme());
 		}
 	}
 
+	public void localVarEqualNames(Token tokens, String tipoBloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && tipoBloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			this.blocos.get("start").get("varLocal").put(tokens.getLexeme(), tokens);
+		}else if (tokens != null && tipoBloco.equals("function") && !this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			this.funcoes.get(nomeBloco).get("varLocal").put(tokens.getLexeme(), tokens);
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.varGlobal.containsKey(tokens.getLexeme()));
+		} else if (tokens != null && tipoBloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			this.procedimentos.get(nomeBloco).get("varLocal").put(tokens.getLexeme(), tokens);
+		} else{ 
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel local de nome: "+ tokens.getLexeme() +", no bloco de tipo: " + tipoBloco);
+		}
+	}
+	
 	public static List<String> getErros() {
 		return errors;
 	}
