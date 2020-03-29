@@ -49,7 +49,7 @@ public class Main {
 						}
 						printWriter.printf("\n\nLISTA DE ERROS LEXICOS:\n\n");
 						if(LexicalAnalyzer.getInstance().getErrorList().isEmpty()) {
-							System.out.println("Código não apresenta erros lexicos, parabens!");
+							System.out.println("Codigo não apresenta erros lexicos, parabens!");
 						}else {
 							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 								printWriter.println(errorMessage);
@@ -59,7 +59,7 @@ public class Main {
 						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
-							System.out.println("Código não apresenta erros sintaticos, parabens!");
+							System.out.println("Codigo não apresenta erros sintaticos, parabens!");
 						}else {
 							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
@@ -68,7 +68,7 @@ public class Main {
 						}
 						printWriter.printf("\n\n\nLISTA DE ERROS SEMANTICOS:\n\n");
 						if(SemanticAnalyzer.getErros().isEmpty()) {
-							System.out.println("Código não apresenta erros semanticos, parabens!");
+							System.out.println("Codigo não apresenta erros semanticos, parabens!");
 						}else {
 							for(String semanticError : SemanticAnalyzer.getErros()) {
 								printWriter.println(semanticError);
