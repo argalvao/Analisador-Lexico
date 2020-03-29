@@ -37,4 +37,5 @@ public class Token {
 		return ("Linha:\t" + (this.line + 1) + "\t" + "| Lexema:\t" + this.lexeme + "\t\t\t" + "|\t"
 				+ this.type.getName());
 	}
+
 }

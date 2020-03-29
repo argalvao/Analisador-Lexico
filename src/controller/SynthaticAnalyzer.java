@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Queue;
 
 //import javax.swing.plaf.synth.SynthSeparatorUI;
-
+import controller.SemanticAnalyser;
 import model.SynthaticNode;
 import model.Token;
 import model.TokenTypes;
@@ -21,6 +21,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public List<Token> id;
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
+	SemanticAnalyser semantic = new SemanticAnalyser();
 	SynthaticAnalyzer() {
 		
 		//super();
@@ -349,11 +350,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
 					// Verificação Semantica de nomes iguais de funções
-					if (tokens.peek() != null &&  !this.funcoes.containsKey(tokens.peek().getLexeme())) {
-						this.funcoes.put(tokens.peek().getLexeme(), tokens.peek());
-					} else {
-						System.out.println("Já houve um declaração de funcao com o nome: " + tokens.peek().getLexeme());
-					}
+					semantic.funtionsEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {
@@ -398,11 +395,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
 					// Verificação Semantica de nomes iguais de procedimentos
-					if (tokens.peek() != null &&  !this.procedimentos.containsKey(tokens.peek().getLexeme())) {
-						this.procedimentos.put(tokens.peek().getLexeme(), tokens.peek());
-					} else {
-						System.out.println("Já houve um declaração de procedimento com o nome: " + tokens.peek().getLexeme());
-					}
+					semantic.procedureEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "(".equals(token.getLexeme())) {

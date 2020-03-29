@@ -19,6 +19,7 @@ import java.util.Queue;
 
 import controller.LexicalAnalyzer;
 import controller.SynthaticAnalyzer;
+import controller.SemanticAnalyser;
 import model.SynthaticNode;
 import model.Token;
 
@@ -63,6 +64,15 @@ public class Main {
 								printWriter.println(synthaticError);
 							}
 							System.out.println("ATENÇÂO - Erros sintáticos foram encontrados!");
+						}
+						printWriter.printf("\n\n\nLISTA DE ERROS SEMANTICOS:\n\n");
+						if(SemanticAnalyser.getErros().isEmpty()) {
+							System.out.println("Código não apresenta erros semânticos, parabéns!");
+						}else {
+							for(String semanticError : SemanticAnalyser.getErros()) {
+								printWriter.println(semanticError);
+							}
+							System.out.println("ATENÇÂO - Erros semânticos foram encontrados!");
 						}
 						printWriter.close();
 					}
