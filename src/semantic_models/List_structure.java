@@ -1,10 +1,10 @@
 package semantic_models;
 
-public class List {
+public class List_structure {
 	private String name;
 	private String type;
 	
-	public List(String name, String type) {
+	public List_structure(String name, String type) {
 		super();
 		this.name = name;
 		this.type = type;
