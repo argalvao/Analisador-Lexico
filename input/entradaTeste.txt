@@ -1,34 +1,7 @@
-const {
-	int tamanho_vetor 10;
-}
-
-typedef struct pessoa {
-	string nome, endereco, telefone;
-}
-
-typedef struct funcionario extends pessoa {
-	string departamento;
-	real salario;
-}
-
 var {
-	pessoa vetor_pessoas[tamanho_vetor];
-	funcionario vetor_funcionarios[50];
-	int pessoas_cadastradas = 0, funcionarios_cadastrados = 0;
-}
-
-function boolean cadastrarPessoas(pessoa pessoa) {
-	var {
-	    boolean retorno = false;
-	}
-	if (global.pessoas_cadastradas < tamanho_vetor) then {
-		global.vetor_pessoas[global.pessoas_cadastradas] = pessoa;
-		global.pessoas_cadastradas = global.pessoas_cadastradas + 1;
-		retorno = true;
-	}
-	else {
-		return retorno;
-	}
+	int x = 8;
+	pessoa pedro = "teste";
+	pessoa pedro = "tododile";
 }
 
 function boolean cadastrarPessoas(pessoa pessoa) {
@@ -40,9 +13,9 @@ function boolean cadastrarPessoas(pessoa pessoa) {
 }
 
 procedure imprimirPessoas(string vetor) {
-
 	var {
 		int i = 0;
+		int i = 4;
 	}
 
 	if (vetor == "vetor_pessoas") then {
@@ -54,6 +27,7 @@ procedure imprimirPessoas(string vetor) {
 	else {
 		print(vetor_funcionarios);
 	}
+
 }
 
 procedure imprimirPessoas(string vetor) {

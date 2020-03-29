@@ -1,6 +1,6 @@
 /*
  *
- Abel Ramalho Galvão
+ Abel Ramalho Galvï¿½o
  Ramon de Cerqueira Silva
  *
  */
@@ -19,7 +19,7 @@ import java.util.Queue;
 
 import controller.LexicalAnalyzer;
 import controller.SynthaticAnalyzer;
-import controller.SemanticAnalyser;
+import controller.SemanticAnalyzer;
 import model.SynthaticNode;
 import model.Token;
 
@@ -53,9 +53,10 @@ public class Main {
 						}else {
 							for (String errorMessage : LexicalAnalyzer.getInstance().getErrorList()) {
 								printWriter.println(errorMessage);
-								System.out.println("ATENÇÂO - Erros léxicos foram encontrados!");
+								System.out.println("ATENÇÃO - Erros léxicos foram encontrados!");
 							}
 						}
+						//System.out.println(SynthaticAnalyzer.getInstance().getId());
 						printWriter.printf("\n\n\nLISTA DE ERROS SINTATICOS:\n\n");
 						if(SynthaticAnalyzer.getInstance().getErros().isEmpty()) {
 							System.out.println("Código não apresenta erros sintáticos, parabéns!");
@@ -63,13 +64,13 @@ public class Main {
 							for(String synthaticError : SynthaticAnalyzer.getInstance().getErros()) {
 								printWriter.println(synthaticError);
 							}
-							System.out.println("ATENÇÂO - Erros sintáticos foram encontrados!");
+							System.out.println("ATENÇÃO - Erros sintáticos foram encontrados!");
 						}
 						printWriter.printf("\n\n\nLISTA DE ERROS SEMANTICOS:\n\n");
-						if(SemanticAnalyser.getErros().isEmpty()) {
+						if(SemanticAnalyzer.getErros().isEmpty()) {
 							System.out.println("Código não apresenta erros semânticos, parabéns!");
 						}else {
-							for(String semanticError : SemanticAnalyser.getErros()) {
+							for(String semanticError : SemanticAnalyzer.getErros()) {
 								printWriter.println(semanticError);
 							}
 							System.out.println("ATENÇÂO - Erros semânticos foram encontrados!");

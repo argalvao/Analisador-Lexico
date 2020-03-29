@@ -14,14 +14,14 @@ import model.TokenTypes;
 import util.RecursiveCall;
 import util.FirstFollow;
 
-public class SemanticAnalyser extends RecursiveCall {
+public class SemanticAnalyzer extends RecursiveCall {
 
-	private static SemanticAnalyser instance;
+	private static SemanticAnalyzer instance;
 	public static List<String> errors;
 	public List<Token> id;
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
-	SemanticAnalyser() {
+	SemanticAnalyzer() {
 		
 		//super();
 		this.errors = new ArrayList<>();
