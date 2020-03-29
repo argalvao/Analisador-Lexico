@@ -35,7 +35,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		this.varConst = new HashMap<>();
 	}
 	
-	// Verificação Semantica de nomes iguais de funções
+	// Verificaï¿½ï¿½o Semantica de nomes iguais de funï¿½ï¿½es
 	public void funtionsEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.funcoes.containsKey(tokens.getLexeme())) {
@@ -52,6 +52,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificaï¿½ï¿½o Semantica da declaraï¿½ï¿½o do start
 	public void startOnly(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
@@ -69,7 +70,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// OK
-	// Verificação Semantica de nomes iguais de procedimentos
+	// Verificaï¿½ï¿½o Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.procedimentos.containsKey(tokens.getLexeme())) {
@@ -86,6 +87,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificaï¿½ï¿½o Semantica da declaraï¿½ï¿½o de variï¿½veis globais
 	public void globalVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
@@ -121,7 +123,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		} else if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())){
 			return true;
 		} else {
-			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", não foi declarada no bloco var.");
+			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nï¿½o foi declarada no bloco var.");
 		}
 		return false;
 	}
