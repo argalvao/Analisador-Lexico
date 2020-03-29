@@ -1,12 +1,13 @@
 var {
 	int x = 8;
 	pessoa pedro = "teste";
-	pessoa pedro = "tododile";
 }
+
 
 function boolean cadastrarPessoas(pessoa pessoa) {
 	var {
 	    boolean retorno = false;
+	    boolean retorno;
 	}
 	return retorno;
 
@@ -30,28 +31,13 @@ procedure imprimirPessoas(string vetor) {
 
 }
 
-procedure imprimirPessoas(string vetor) {
-
-	var {
-		int i = 0;
-	}
-
-	if (vetor == "vetor_pessoas") then {
-		while( i < global.pessoas_cadastradas) {
-			print(vetor_pessoas[i]);
-			i = i + 1;
-		}
-	}
-	else {
-		print(vetor_funcionarios);
-	}
-}
 
 
 start () {
 	var {
 		int entrada, retorno;
 		pessoa pessoa;
+		string entrada;
 	}
 
 	while (true) {
@@ -81,10 +67,4 @@ start () {
 }
 
 
-start () {
-	var {
-		int entrada, retorno;
-		pessoa pessoa;
-	}
-}	
 // teste de comentário

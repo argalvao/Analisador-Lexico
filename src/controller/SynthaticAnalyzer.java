@@ -22,6 +22,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
 	public boolean global = false;
+	public String nomeBloco = "";
+	public String tipoBloco = "";
+	
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
 	SynthaticAnalyzer() {
@@ -343,6 +346,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "function".equals(token.getLexeme())) {
+				tipoBloco = token.getLexeme();
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
@@ -350,6 +354,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
 					// Verificacao Semantica de nomes iguais de funcoes
+					nomeBloco = token.getLexeme();
 					semantic.funtionsEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
@@ -390,10 +395,12 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "procedure".equals(token.getLexeme())) {
+				tipoBloco = token.getLexeme();
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
+					nomeBloco = token.getLexeme();
 					// Verifica��o Semantica de nomes iguais de procedimentos
 					semantic.procedureEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
@@ -920,7 +927,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				// Semantica de variaveis globais
 				if(global) {
 					semantic.globalVarEqualNames(tokens.peek());
-				}else {
+				} else {
+					semantic.localVarEqualNames(tokens.peek(), tipoBloco, nomeBloco);
 					// Semantica de variaveis Locais
 					//semantic.LocalVarEqualNames(tokens.peek());
 				}
@@ -2337,6 +2345,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "start".equals(token.getLexeme())) {
+				tipoBloco = token.getLexeme();
+				nomeBloco = "";
 				semantic.startOnly(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
