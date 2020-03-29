@@ -50,6 +50,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificação Semantica da declaração do start
 	public void startOnly(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
@@ -84,6 +85,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificação Semantica da declaração de variáveis globais
 	public void globalVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
@@ -95,6 +97,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 
+	// Verificação Semantica da declaração de variáveis locais
 	public void localVarEqualNames(Token tokens, String tipoBloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && tipoBloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
