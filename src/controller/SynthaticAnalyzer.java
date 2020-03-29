@@ -21,6 +21,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public List<Token> id;
 	public HashMap<String, Token> procedimentos;
 	public HashMap<String, Token> funcoes;
+	public boolean global = false;
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
 	SynthaticAnalyzer() {
@@ -128,6 +129,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 				if (this.predict("Var", tokens.peek())) {
 					if (tokens.peek() != null) {
+						global = true;
 						//escopo = true;
 						tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 						token = tokens.peek();
@@ -916,17 +918,12 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
 				// Semantica de variaveis globais
-				/*if (tokens.peek() != null && escopo && !this.variaveisGlobais.containsKey(tokens.peek().getLexeme())) {
-					this.variaveisGlobais.put(tokens.peek().getLexeme(), tokens.peek());
-				} else if (escopo){
-					System.out.println("J� houve um declaracao de variavel global com o nome: " + tokens.peek().getLexeme());
+				if(global) {
+					semantic.globalVarEqualNames(tokens.peek());
+				}else {
+					// Semantica de variaveis Locais
+					//semantic.LocalVarEqualNames(tokens.peek());
 				}
-				// Semantica de variaveis Locais
-				if (tokens.peek() != null && !escopo && !this.variaveisLocais.containsKey(tokens.peek().getLexeme())) {
-					this.variaveisLocais.put(tokens.peek().getLexeme(), tokens.peek());
-				} else if (!escopo){
-					System.out.println("J� houve um declaracao de variavel local com o nome: " + tokens.peek().getLexeme());
-				}*/
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
 				return tokenMap;
@@ -2125,7 +2122,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (this.predict("Var", tokens.peek()) || this.follow.get("Var").contains(token.getLexeme()) || TokenTypes.IDENTIFIER.equals(tokens.peek().getType())) {
-				//escopo = false;
+				global = false;
 				tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 				tokenMap.add(this.call("<Corpo2>", tokens).getTokenNode());
 				token = tokens.peek();
@@ -2340,6 +2337,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "start".equals(token.getLexeme())) {
+				semantic.startOnly(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && "(".equals(token.getLexeme())) {

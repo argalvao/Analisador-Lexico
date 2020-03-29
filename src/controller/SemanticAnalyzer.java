@@ -21,13 +21,16 @@ public class SemanticAnalyzer extends RecursiveCall {
 	public List<Token> id;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> procedimentos;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> funcoes;
-	
+	public HashMap<String, HashMap<String, HashMap<String, Token>>> blocos;
+	public HashMap<String, Token> varGlobal;
 	SemanticAnalyzer() {
 		//super();
 		this.errors = new ArrayList<>();
 		this.id = new ArrayList<>();
 		this.procedimentos = new HashMap<>();
 		this.funcoes = new HashMap<>();
+		this.blocos = new HashMap<>();
+		this.varGlobal = new HashMap<>();
 	}
 	
 	// Verificação Semantica de nomes iguais de funções
@@ -44,6 +47,22 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// System.out.println(this.funcoes.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
 			errors.add("Linha: " + line +"	|	Ja houve um declaracao de funcao com o nome: " + tokens.getLexeme());
+		}
+	}
+	
+	public void startOnly(Token tokens) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
+			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
+			HashMap <String, Token> varLocal = new HashMap<>();
+			HashMap <String, Token> varEscopo = new HashMap<>();
+			this.blocos.put(tokens.getLexeme(), variaveis);
+			this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
+			this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.blocos.get(tokens.getLexeme()).containsKey("varEscopo"));
+		} else {
+			errors.add("Linha: " + line +"	|	Já houve declaração do bloco start");
 		}
 	}
 	
@@ -65,7 +84,16 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-
+	public void globalVarEqualNames(Token tokens) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
+			this.varGlobal.put(tokens.getLexeme(), tokens);
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.varGlobal.containsKey(tokens.getLexeme()));
+		} else {
+			errors.add("Linha: " + line +"	|	Já houve declaração de variavel global com o nome: " + tokens.getLexeme());
+		}
+	}
 
 	public static List<String> getErros() {
 		return errors;
