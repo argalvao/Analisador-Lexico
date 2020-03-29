@@ -23,6 +23,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> funcoes;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> blocos;
 	public HashMap<String, Token> varGlobal;
+	public HashMap<String, Token> varConst;
 	SemanticAnalyzer() {
 		//super();
 		this.errors = new ArrayList<>();
@@ -31,9 +32,10 @@ public class SemanticAnalyzer extends RecursiveCall {
 		this.funcoes = new HashMap<>();
 		this.blocos = new HashMap<>();
 		this.varGlobal = new HashMap<>();
+		this.varConst = new HashMap<>();
 	}
 	
-	// Verificação Semantica de nomes iguais de funções
+	// Verificaï¿½ï¿½o Semantica de nomes iguais de funï¿½ï¿½es
 	public void funtionsEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.funcoes.containsKey(tokens.getLexeme())) {
@@ -50,7 +52,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verificação Semantica da declaração do start
+	// Verificaï¿½ï¿½o Semantica da declaraï¿½ï¿½o do start
 	public void startOnly(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
@@ -68,7 +70,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// OK
-	// Verificação Semantica de nomes iguais de procedimentos
+	// Verificaï¿½ï¿½o Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.procedimentos.containsKey(tokens.getLexeme())) {
@@ -85,7 +87,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verificação Semantica da declaração de variáveis globais
+	// Verificaï¿½ï¿½o Semantica da declaraï¿½ï¿½o de variï¿½veis globais
 	public void globalVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
@@ -97,19 +99,47 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 
-	// Verificação Semantica da declaração de variáveis locais
-	public void localVarEqualNames(Token tokens, String tipoBloco, String nomeBloco) {
+	public void constVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null && tipoBloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+		if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())) {
+			this.varConst.put(tokens.getLexeme(), tokens);
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.varConst.containsKey(tokens.getLexeme()));
+		} else {
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
+		}
+	}
+	
+	public boolean verificVarDeclaration(Token tokens, String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		} else if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		} else if(tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
+			return true;
+		} else if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())){
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nï¿½o foi declarada no bloco var.");
+		}
+		return false;
+	}
+	
+	public void localVarEqualNames(Token tokens, String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
 			this.blocos.get("start").get("varLocal").put(tokens.getLexeme(), tokens);
-		}else if (tokens != null && tipoBloco.equals("function") && !this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+		}else if (tokens != null && bloco.equals("function") && !this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			this.funcoes.get(nomeBloco).get("varLocal").put(tokens.getLexeme(), tokens);
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.varGlobal.containsKey(tokens.getLexeme()));
-		} else if (tokens != null && tipoBloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+		} else if (tokens != null && bloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			this.procedimentos.get(nomeBloco).get("varLocal").put(tokens.getLexeme(), tokens);
 		} else{ 
-			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel local de nome: "+ tokens.getLexeme() +", no bloco de tipo: " + tipoBloco);
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel local de nome: "+ tokens.getLexeme() +", no bloco de tipo: " + bloco);
 		}
 	}
 	

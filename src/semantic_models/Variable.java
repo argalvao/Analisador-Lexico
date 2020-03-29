@@ -1,34 +1,28 @@
 package semantic_models;
 
+import model.Token;
+
 public class Variable {
-	private String name;
+	Token token;
 	private String type;
-	private boolean global;
 	
-	public Variable(String name, String type, boolean global) {
+	public Variable(Token token, String type) {
 		super();
-		this.name = name;
+		this.token = token;
 		this.type = type;
-		this.global = global;
 	}
 	
-	public String getName() {
-		return name;
+	public Token getToken() {
+		return token;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setToken(Token token) {
+		this.token = token;
 	}
 	public String getType() {
 		return type;
 	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	public boolean isGlobal() {
-		return global;
-	}
-	public void setGlobal(boolean global) {
-		this.global = global;
 	}
 	
 		
