@@ -23,8 +23,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public HashMap<String, Token> funcoes;
 	public boolean global = false;
 	public String nomeBloco = "";
+	public String tipoBloco = "";
 	public String bloco = "";
-	
+	public String tipoVar = "";
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
 	SynthaticAnalyzer() {
@@ -349,12 +350,14 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				bloco = token.getLexeme();
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
+				tipoBloco = tokens.peek().getLexeme();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
 					// Verificacao Semantica de nomes iguais de funcoes
 					nomeBloco = token.getLexeme();
+					tokens.peek().setTipoId(tipoBloco);
 					semantic.funtionsEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
@@ -609,6 +612,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("Tipo", tokens.peek())) {
+				tipoVar = tokens.peek().getLexeme();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdConst>", tokens).getTokenNode());
 				return tokenMap;
@@ -629,6 +633,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				tokens.peek().setTipoId(tipoVar);
 				semantic.constVarEqualNames(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Valor>", tokens).getTokenNode());
@@ -905,6 +910,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			// System.out.println(tokens.peek().getLexeme());
 			if (this.predict("Tipo", tokens.peek())) {
+				tipoVar = tokens.peek().getLexeme();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdVar>", tokens).getTokenNode());
 				return tokenMap;
@@ -925,13 +931,13 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				tokens.peek().setTipoId(tipoVar);
 				// Semantica de variaveis globais
 				if(global) {
 					semantic.globalVarEqualNames(tokens.peek());
 				} else {
-					semantic.localVarEqualNames(tokens.peek(), bloco, nomeBloco);
 					// Semantica de variaveis Locais
-					//semantic.LocalVarEqualNames(tokens.peek());
+					semantic.localVarEqualNames(tokens.peek(), bloco, nomeBloco);
 				}
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Var2>", tokens).getTokenNode());
@@ -2299,7 +2305,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (token != null && "return".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
-				//if(bloco.equals(token.getType()))
+				semantic.verificTipoVarReturn(tokens.peek(), bloco, tipoBloco, nomeBloco);
 				tokenMap.add(this.call("<CodigosRetornos>", tokens).getTokenNode());
 				return tokenMap;
 			} else {

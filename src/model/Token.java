@@ -10,13 +10,23 @@ public class Token {
 	private final TokenTypes type;
 	private final String lexeme;
 	private final int line;
-
-	public Token(TokenTypes type, String lexeme, int line) {
+	private String tipoId;
+	
+	public Token(TokenTypes type, String lexeme, int line, String tipoId) {
 		this.lexeme = lexeme;
 		this.type = type;
 		this.line = line;
+		this.tipoId = tipoId;
 	}
 
+	public String getTipoId() {
+		return tipoId;
+	}
+	
+	public void setTipoId(String tipoId) {
+		this.tipoId =  tipoId;
+	}
+	
 	public TokenTypes getType() {
 		return type;
 	}

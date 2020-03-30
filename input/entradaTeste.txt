@@ -1,6 +1,5 @@
 const {
 	int C 40;
-	int C 3;
 }
 
 var {
@@ -12,7 +11,15 @@ var {
 function boolean cadastrarPessoas(pessoa pessoa) {
 	var {
 	    boolean retorno = false;
-	    boolean retorno;
+	}
+	return retorno;
+
+}
+
+
+function int cadastrar(pessoa pessoa) {
+	var {
+	    int retorno;
 	}
 	return retorno;
 
@@ -21,7 +28,6 @@ function boolean cadastrarPessoas(pessoa pessoa) {
 procedure imprimirPessoas(string vetor) {
 	var {
 		int i = 0;
-		int i = 4;
 	}
 
 	if (vetor == "vetor_pessoas") then {
@@ -42,7 +48,6 @@ start () {
 	var {
 		int entrada, retorno;
 		pessoa pessoa;
-		string entrada;
 	}
 
 	while (true) {
