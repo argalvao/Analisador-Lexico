@@ -390,18 +390,14 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// Verifica a existencia da variavel utilizada pelo read
-	public void readVarExists(Token tokens, String bloco, String nomeBloco) {
+	public boolean readVarExists(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
-			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
-			HashMap <String, Token> varLocal = new HashMap<>();
-			HashMap <String, Token> varEscopo = new HashMap<>();
-			this.blocos.put(tokens.getLexeme(), variaveis);
-			this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
-			this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			return true;	
 		} else {
 			errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
-		}	
+		}
+		return false;
 	}
 	
 	public static List<String> getErros() {
