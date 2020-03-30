@@ -40,11 +40,11 @@ public class LexicalAnalyzer {
 	private void classifyLexeme(int lineNumber) {
 		if (this.lexeme.length() > 0) {
 			if (TokenInformation.getInstance().getReservedWords().contains(this.lexeme.toString())) {
-				this.wordList.add(new Token(TokenTypes.RESERVED, this.lexeme.toString(), lineNumber,""));
+				this.wordList.add(new Token(TokenTypes.RESERVED, this.lexeme.toString(), lineNumber,"",""));
 			} else if (this.lexeme.toString().matches("(-)?\\s*[0-9]([0-9]*\\.?[0-9]+)?")) {
-				this.wordList.add(new Token(TokenTypes.NUMBER, this.lexeme.toString(), lineNumber, ""));
+				this.wordList.add(new Token(TokenTypes.NUMBER, this.lexeme.toString(), lineNumber, "",""));
 			} else if (this.lexeme.toString().matches("[_]?(([a-z]|[A-Z]|_)+[0-9]*)+(([a-z]|[A-Z]|[0-9]|_)*)*")) {
-				this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber, ""));
+				this.wordList.add(new Token(TokenTypes.IDENTIFIER, this.lexeme.toString(), lineNumber, "",""));
 			} else {
 				this.errorList.add("Linha " + lineNumber + ": '" + this.lexeme.toString() + "' Identificador mal formado");
 			}
@@ -68,13 +68,13 @@ public class LexicalAnalyzer {
 				this.lexeme.append(word);
 				if(this.openComment == 1) {
 					if(index == line.length() - 1) {
-						this.wordList.add(new Token(TokenTypes.COMMENT, this.lexeme.toString(), lineNumber, ""));
+						this.wordList.add(new Token(TokenTypes.COMMENT, this.lexeme.toString(), lineNumber, "",""));
 						this.lexeme = new StringBuilder();
 						this.openComment = 0;
 					}
 				} else {
 					if(TokenInformation.getInstance().closeComment.equals(this.lexeme.substring(this.lexeme.length() - 2))) {
-						this.wordList.add(new Token(TokenTypes.COMMENT, this.lexeme.toString(), lineNumber, ""));
+						this.wordList.add(new Token(TokenTypes.COMMENT, this.lexeme.toString(), lineNumber, "",""));
 						this.lexeme = new StringBuilder();
 						this.openComment = 0;
 					}
@@ -82,11 +82,10 @@ public class LexicalAnalyzer {
 			} else if (this.openString > 0) {
 				this.lexeme.append(word);
 				if (this.openString == 1 && word == '\'') {
-					this.wordList.add(new Token(TokenTypes.STRING, this.lexeme.toString(), lineNumber, ""));
-					this.lexeme = new StringBuilder();
+					this.wordList.add(new Token(TokenTypes.STRING, this.lexeme.toString(), lineNumber, "",""));				this.lexeme = new StringBuilder();
 					this.openString = 0;
 				} else if (this.openString == 2 && word == '"') {
-					this.wordList.add(new Token(TokenTypes.STRING, this.lexeme.toString(), lineNumber, ""));
+					this.wordList.add(new Token(TokenTypes.STRING, this.lexeme.toString(), lineNumber,"",""));
 					this.lexeme = new StringBuilder();
 					this.openString = 0;
 				}
@@ -97,23 +96,23 @@ public class LexicalAnalyzer {
 						if (!(word == '.' && temporaryCharacter >= '0' && temporaryCharacter <= '9')) {
 							this.classifyLexeme(lineNumber);
 							this.lexeme = new StringBuilder();
-							this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber, ""));
+							this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber,"",""));
 						} else {
 							this.lexeme.append(word);
 						}
 					} else {
-						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber, ""));
+						this.wordList.add(new Token(TokenTypes.DELIMITER, "" + word, lineNumber,"",""));
 					}
 				} else if (isSplit) {
 					if (TokenInformation.getInstance().getTogetherWords().containsKey(previousWord) && this.lexeme.length() == 1) {
 						if (TokenInformation.getInstance().getTogetherWords().get(previousWord) == word) {
 							lexeme.append(word);
 							if (TokenInformation.getInstance().getArithmeticOperators().contains(this.lexeme.toString())) {
-								this.wordList.add(new Token(TokenTypes.ARITHMETIC, this.lexeme.toString(), lineNumber, ""));
+								this.wordList.add(new Token(TokenTypes.ARITHMETIC, this.lexeme.toString(), lineNumber,"",""));
 							} else if (TokenInformation.getInstance().getLogicalOperators().contains(this.lexeme.toString())) {
-								this.wordList.add(new Token(TokenTypes.LOGIC, this.lexeme.toString(), lineNumber, ""));
+								this.wordList.add(new Token(TokenTypes.LOGIC, this.lexeme.toString(), lineNumber,"",""));
 							} else if (TokenInformation.getInstance().getRelationalOperators().contains(this.lexeme.toString())) {
-								this.wordList.add(new Token(TokenTypes.RELATIONAL, this.lexeme.toString(), lineNumber, ""));
+								this.wordList.add(new Token(TokenTypes.RELATIONAL, this.lexeme.toString(), lineNumber,"",""));
 							}
 							this.lexeme = new StringBuilder();
 						} else {
@@ -133,11 +132,11 @@ public class LexicalAnalyzer {
 						} else if (TokenInformation.getInstance().getTogetherWords().containsKey(word) && this.lookAhead(line, index) == TokenInformation.getInstance().getTogetherWords().get(word)) {
 							lexeme.append(word);
 						} else if (TokenInformation.getInstance().getArithmeticOperators().contains("" + word)) {
-							this.wordList.add(new Token(TokenTypes.ARITHMETIC, "" + word, lineNumber, ""));
+							this.wordList.add(new Token(TokenTypes.ARITHMETIC, "" + word, lineNumber,"",""));
 						} else if (TokenInformation.getInstance().getLogicalOperators().contains("" + word)) {
-							this.wordList.add(new Token(TokenTypes.LOGIC, "" + word, lineNumber, ""));
+							this.wordList.add(new Token(TokenTypes.LOGIC, "" + word, lineNumber,"",""));
 						} else if (TokenInformation.getInstance().getRelationalOperators().contains("" + word)) {
-							this.wordList.add(new Token(TokenTypes.RELATIONAL, "" + word, lineNumber, ""));
+							this.wordList.add(new Token(TokenTypes.RELATIONAL, "" + word, lineNumber,"",""));
 						} else {
 							this.errorList.add("Linha " + lineNumber + ": " + word + " Operador mal formado");
 						}

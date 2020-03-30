@@ -12,15 +12,16 @@ const {
 	int F 4;
 	real C 0.7;
 }
+
 var {
-	pessoa x = pessoa;
-	int y[pessoa][pessoa];
+	int x = 5;
+	int y[x][x];
 }
 
 
 function boolean cadastrarPessoas(pessoa pessoa) {
 	var {
-	    real retorno = false;
+	    boolean retorno = false;
 	}
 	return retorno;
 

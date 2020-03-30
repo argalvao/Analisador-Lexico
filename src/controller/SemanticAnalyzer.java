@@ -37,6 +37,18 @@ public class SemanticAnalyzer extends RecursiveCall {
 		
 	}
 	
+	// Adiciona parametros e verifica replica de variaveis, em funcoes e procedimentos
+	public void fuctionsProcedureAddPara(Token tokens, String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if(tokens != null && bloco.equals("function") && !this.funcoes.get(nomeBloco).get("parametros").containsKey(tokens.getLexeme())){
+			this.funcoes.get(nomeBloco).get("parametros").put(tokens.getLexeme(), tokens);
+		} else if(tokens != null && bloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("parametros").containsKey(tokens.getLexeme())){
+			this.procedimentos.get(nomeBloco).get("parametros").put(tokens.getLexeme(), tokens);
+		} else {
+			errors.add("Linha: " + line +"	|	Ja houve parametro em "+bloco+" com o nome: " + tokens.getLexeme());
+		}
+	}
+	
 	// Verificacao Semantica de nomes iguais de funcoes
 	public void funtionsEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
@@ -44,9 +56,11 @@ public class SemanticAnalyzer extends RecursiveCall {
 			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
 			HashMap <String, Token> varLocal = new HashMap<>();
 			HashMap <String, Token> varEscopo = new HashMap<>();
+			HashMap <String, Token> parametros = new HashMap<>();
 			this.funcoes.put(tokens.getLexeme(), variaveis);
 			this.funcoes.get(tokens.getLexeme()).put("varLocal", varLocal);
-			this.funcoes.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			this.funcoes.get(tokens.getLexeme()).put("varEscopo", varEscopo);
+			this.funcoes.get(tokens.getLexeme()).put("parametros", parametros);	
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.funcoes.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
@@ -88,6 +102,20 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificacao Semantica da declaracao do struct exteds com nomes iguais a struct pai
+	public void structExtendsOnly(Token tokens, String extend) {
+		int line = tokens.getLine() + 1;
+		if(tokens != null &&  this.blocos.containsKey(extend)) {
+			if (tokens != null && !this.blocos.get(extend).get("varLocal").containsKey(tokens.getLexeme())) {
+				this.blocos.get(extend).get("varLocal").put(tokens.getLexeme(), tokens);
+			} else {
+				errors.add("Linha: " + line +"	|	Não pode sobrescrita de variavel na struct extends com o nome: " + tokens.getLexeme());
+			}	
+		} else {
+			errors.add("Linha: " + line +"	|	Não houve um declaracao de struct com o nome: " + tokens.getLexeme());
+		}
+	}
+		
 	// Verifica se existe struct a ser usada pelo extends
 	public boolean verificStructExtends(Token tokens) {
 		int line = tokens.getLine() + 1;
@@ -118,9 +146,11 @@ public class SemanticAnalyzer extends RecursiveCall {
 			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
 			HashMap <String, Token> varLocal = new HashMap<>();
 			HashMap <String, Token> varEscopo = new HashMap<>();
+			HashMap <String, Token> parametros = new HashMap<>();
 			this.procedimentos.put(tokens.getLexeme(), variaveis);
 			this.procedimentos.get(tokens.getLexeme()).put("varLocal", varLocal);
-			this.procedimentos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			this.procedimentos.get(tokens.getLexeme()).put("varEscopo", varEscopo);
+			this.procedimentos.get(tokens.getLexeme()).put("parametros", parametros);	
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.procedimentos.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
@@ -203,39 +233,83 @@ public class SemanticAnalyzer extends RecursiveCall {
 			Token k = this.procedimentos.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
 			if(k.getTipoId().equals(tipoValor)) {
 				return true;
-			}else {
+			} else {
 				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
 			}
-		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+		} else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
 			if(k.getTipoId().equals(tipoValor)) {
 				return true;
-			}else {
+			} else {
 				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
 			}
-		}else if(tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+		} else if(tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
 			Token k = this.blocos.get("start").get("varLocal").get(tokens.getLexeme());
 			if(k.getTipoId().equals(tipoValor)) {
 				return true;
-			}else {
+			} else {
 				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
 			}
-		}else if (tokens != null && this.varGlobal.containsKey(tokens.getLexeme())){
+		} else if (tokens != null && this.varGlobal.containsKey(tokens.getLexeme())){
 			Token k = this.varGlobal.get(tokens.getLexeme());
 			if(k.getTipoId().equals(tipoValor)) {
 				return true;
-			}else {
+			} else {
 				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
 			}
-		}else if (tokens != null &&  this.varConst.containsKey(tokens.getLexeme())) {
+		} else if (tokens != null &&  this.varConst.containsKey(tokens.getLexeme())) {
 			Token k = this.varConst.get(tokens.getLexeme());
 			if(k.getTipoId().equals(tipoValor)) {
 				return true;
-			}else {
+			} else {
 				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
 			}
+		}else {
+			errors.add("Linha: " + line +"	|	Não existe constante ou variavel global/local com o nome : " + tokens.getLexeme());
+		}
+		return false;
+	}
+
+	// Verifica se o tipo da variavel e valor são positivos para ser valido como valor do vetor
+	public boolean verificTypeVetor(Token tokens, String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.procedimentos.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("int") && k.getValorId().matches("[+]?[0-9][0-9]*")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	O valor da variavel com nome: " + tokens.getLexeme() + ", do vetor nao tem valor positivo atribuido");
+			}
+		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("int") && k.getValorId().matches("[+]?[0-9][0-9]*")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	O valor da variavel com nome: " + tokens.getLexeme() + ", do vetor nao tem valor positivo atribuido");
+			}
+		}else if(tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.blocos.get("start").get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("int") && k.getValorId().matches("[+]?[0-9][0-9]*")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	O valor da variavel com nome: " + tokens.getLexeme() + ", do vetor nao tem valor positivo atribuido");
+			}
+		}else if (tokens != null && this.varGlobal.containsKey(tokens.getLexeme())){
+			Token k = this.varGlobal.get(tokens.getLexeme());
+			if(k.getTipoId().equals("int") && k.getValorId().matches("[+]?[0-9][0-9]*")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	O valor da variavel com nome: " + tokens.getLexeme() + ", do vetor nao tem valor positivo atribuido");
+			}
+		}else if (tokens != null &&  this.varConst.containsKey(tokens.getLexeme())) {
+			Token k = this.varConst.get(tokens.getLexeme());
+			if(k.getTipoId().equals("int") && k.getValorId().matches("[+]?[0-9][0-9]*")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	O valor da variavel com nome: " + tokens.getLexeme() + ", do vetor nao tem valor positivo atribuido");
+			}
 		} else {
-			errors.add("Linha: " + line +"	|	Não existe constante ou variavel global com o nome : " + tokens.getLexeme());
+			errors.add("Linha: " + line +"	|	Não existe constante ou variavel global, ou local com o nome : " + tokens.getLexeme());
 		}
 		return false;
 	}
