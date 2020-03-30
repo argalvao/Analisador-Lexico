@@ -18,16 +18,6 @@ var {
 	int y[x][x];
 }
 
-
-function boolean cadastrarPessoas(pessoa pessoa) {
-	var {
-	    boolean retorno = false;
-	}
-	return retorno;
-
-}
-
-
 function int cadastrar(pessoa pessoa) {
 	var {
 	    int retorno;
@@ -36,7 +26,7 @@ function int cadastrar(pessoa pessoa) {
 
 }
 
-procedure imprimirPessoas(string vetor) {
+procedure imprimirPessoas(string nome, string teste) {
 	var {
 		int i = 1;
 	}
@@ -55,16 +45,17 @@ start () {
 	var {
 		boolean entrada, retorno;
 		pessoa pessoa;
-		string nome;
+		string nome, teste;
+		int a;
 	}
 	while (true) {
 		print("Digite 0 para cadastrar uma nova pessoa ou 1 para imprimir a lista de pessoas cadastradas:");
-		read(abel);
+		read(pessoa);
 
 		if (!entrada) then {
 			print("Digite o nome, endereco e telefone da pessoa que deseja cadastrar:");
 			read(pessoa.nome, pessoa.endereco, pessoa.telefone);
-			retorno = cadastrarPessoa(pessoa);
+			retorno = cadastrarPessoa(pessoas);
 			if(retorno == true) then {
 				print("Nova pessoa cadastrada com sucesso.");
 			}
@@ -74,7 +65,8 @@ start () {
 		}
 		else {
 			if (entrada == 1) then {
-				imprimirPessoas(nome);
+				imprimirPessoas(nome, teste);
+				cadastrar(pessoa);
 			}
 			else {
 				print("Entrada invalida, tente novamente.");
