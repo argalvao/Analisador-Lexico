@@ -19,6 +19,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	private static SemanticAnalyzer instance;
 	public static List<String> errors;
 	public List<Token> id;
+	public Token aux;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> procedimentos;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> funcoes;
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> blocos;
@@ -29,6 +30,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		//super();
 		this.errors = new ArrayList<>();
 		this.id = new ArrayList<>();
+		this.aux = new Token(null, null, 0, null, null);
 		this.procedimentos = new HashMap<>();
 		this.funcoes = new HashMap<>();
 		this.blocos = new HashMap<>();
@@ -389,16 +391,30 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verifica a existencia da variavel utilizada pelo read
-	public boolean readVarExists(Token tokens, String bloco, String nomeBloco) {
-		int line = tokens.getLine() + 1;
-		if (tokens != null && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
-			return true;	
-		} else {
-			errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
+	// Funcao auxiliar da verficacao de variavel do read
+		public Token readVarExistsAux(Token tokens) {
+			aux = tokens;
+			System.out.println(aux.getLexeme());
+			return(aux);
 		}
-		return false;
-	}
+		
+		// Verifica a existencia da variavel utilizada pelo read
+		public boolean readVarExists(Token tokens, String bloco) {
+			int line = tokens.getLine() + 1;
+			if (tokens != null && bloco.equals("start") && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
+				if(!this.blocos.containsKey(aux.getLexeme()) && !this.blocos.get(bloco).get("varLocal").containsKey(aux.getLexeme())) {
+					errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + aux.getLexeme());	
+				}else {
+					return true;
+				}
+				return true;	
+			} else {
+				errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
+			}
+			return false;
+		}
+	
+	
 	
 	public static List<String> getErros() {
 		return errors;
