@@ -26,7 +26,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public String tipoBloco = "";
 	public String bloco = "";
 	public String tipoVar = "";
-	public Token Var;
+	public String extend = "";
+	public Token var;
+	
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
 	SynthaticAnalyzer() {
@@ -40,26 +42,29 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
-				if(semantic.verificStructExtends(tokens.peek())) {
-					semantic.verificConstVarTypeValor(Var, tokens.peek().getLexeme(), bloco, nomeBloco);
-				}
+				semantic.verificStructExtends(tokens.peek());
+				semantic.verificConstVarTypeValor(var, tokens.peek().getLexeme(), bloco, nomeBloco);
+				var.setValorId(token.getLexeme());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.NUMBER.equals(token.getType())) {
 				if(token.getLexeme().matches("[+-]?[0-9][0-9]*")) {
-					semantic.verificConstVarTypeValor(Var, "int", bloco, nomeBloco);
+					semantic.verificConstVarTypeValor(var, "int", bloco, nomeBloco);
 				}else {
-					semantic.verificConstVarTypeValor(Var, "real", bloco, nomeBloco);
+					semantic.verificConstVarTypeValor(var, "real", bloco, nomeBloco);
 				}
+				var.setValorId(token.getLexeme());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.STRING.equals(token.getType())) {
-				semantic.verificConstVarTypeValor(Var, "string", bloco, nomeBloco);		
+				semantic.verificConstVarTypeValor(var, "string", bloco, nomeBloco);		
+				var.setValorId(token.getLexeme());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())
 					|| token != null && "false".equals(token.getLexeme())) {
-				semantic.verificConstVarTypeValor(Var, "boolean", bloco, nomeBloco);
+				semantic.verificConstVarTypeValor(var, "boolean", bloco, nomeBloco);
+				var.setValorId(token.getLexeme());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -78,11 +83,12 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
-				semantic.verificStructExtendsType(tokens.peek());
+				//semantic.verificStructExtendsType(tokens.peek());
+				semantic.verificTypeVetor(tokens.peek(), bloco, nomeBloco);
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && !TokenTypes.DELIMITER.equals(token.getType())
-					&& Integer.parseInt(token.getLexeme()) >= 0) {
+					&& token.getLexeme().matches("[+]?[0-9][0-9]*")) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -417,7 +423,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
 					nomeBloco = token.getLexeme();
-					// Verifica��o Semantica de nomes iguais de procedimentos
+					// Verificacao Semantica de nomes iguais de procedimentos
 					semantic.procedureEqualNames(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
@@ -462,6 +468,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
+					tokens.peek().setTipoId(tipoVar);
+					semantic.fuctionsProcedureAddPara(tokens.peek(), bloco, nomeBloco);
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
@@ -594,6 +602,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "const".equals(token.getLexeme())) {
+				bloco = "";
+				tipoBloco = "";
+				nomeBloco = "";
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && "{".equals(token.getLexeme())) {
@@ -646,7 +657,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
-				Var = tokens.peek();
+				var = tokens.peek();
 				tokens.peek().setTipoId(tipoVar);
 				semantic.constVarEqualNames(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
@@ -769,6 +780,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
+					extend = tokens.peek().getLexeme();
 					semantic.verificStructExtends(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
@@ -832,7 +844,12 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
 				tokens.peek().setTipoId(tipoVar);
-				semantic.structVarEqualNames(tokens.peek(), nomeBloco);;
+				if(extend.equals("")) {
+					semantic.structVarEqualNames(tokens.peek(), nomeBloco);
+				}else {
+					semantic.structExtendsOnly(tokens.peek(), extend);
+					semantic.structVarEqualNames(tokens.peek(), nomeBloco);
+				}
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
 				return tokenMap;
@@ -878,6 +895,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (token != null && "}".equals(token.getLexeme())) {
+				extend = "";
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -950,7 +968,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
-				Var = tokens.peek();
+				var = tokens.peek();
 				tokens.peek().setTipoId(tipoVar);
 				// Semantica de variaveis globais
 				if(global) {

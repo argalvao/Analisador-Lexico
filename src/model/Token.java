@@ -11,12 +11,14 @@ public class Token {
 	private final String lexeme;
 	private final int line;
 	private String tipoId;
+	private String valorId;
 	
-	public Token(TokenTypes type, String lexeme, int line, String tipoId) {
+	public Token(TokenTypes type, String lexeme, int line, String tipoId, String valorId) {
 		this.lexeme = lexeme;
 		this.type = type;
 		this.line = line;
 		this.tipoId = tipoId;
+		this.valorId = valorId;
 	}
 
 	public String getTipoId() {
@@ -26,7 +28,13 @@ public class Token {
 	public void setTipoId(String tipoId) {
 		this.tipoId =  tipoId;
 	}
+	public String getValorId() {
+		return valorId;
+	}
 	
+	public void setValorId(String valorId) {
+		this.valorId =  valorId;
+	}
 	public TokenTypes getType() {
 		return type;
 	}
