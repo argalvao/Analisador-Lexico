@@ -7,9 +7,16 @@ typedef struct pessoa {
 	int nome;
 }
 
+typedef struct funcionario extends pessoa {
+	teste abel;
+	string departamento;
+	real salario;
+}
+
 var {
 	int x = 8;
 	pessoa pedro = "teste";
+	int y[pessoa];
 }
 
 
@@ -37,7 +44,7 @@ procedure imprimirPessoas(string vetor) {
 
 	if (vetor == "vetor_pessoas") then {
 		while( i < global.pessoas_cadastradas) {
-			print(vetor_pessoas[i]);
+			print(vetor_pessoas[xx]);
 			i = i + 1;
 		}
 	}

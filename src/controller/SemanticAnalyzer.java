@@ -87,6 +87,26 @@ public class SemanticAnalyzer extends RecursiveCall {
 			}
 		}
 		
+		// Verifica se existe struct a ser usada pelo extends
+		public boolean verificStructExtends(Token tokens) {
+			int line = tokens.getLine() + 1;
+			if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
+				return true;
+			} else {
+				errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
+			}
+			return false;
+		}
+		// Verifica se o tipo ID, existe apenas se a struct foi declarada
+		public boolean verificStructExtendsType(Token tokens) {
+			int line = tokens.getLine() + 1;
+			if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
+				return true;
+			} else {
+				errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
+			}
+			return false;
+		}
 	// OK
 	// Verificacaoo Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
