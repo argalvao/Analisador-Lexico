@@ -66,6 +66,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				semantic.verificStructExtendsType(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && !TokenTypes.DELIMITER.equals(token.getType())
@@ -102,6 +103,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				semantic.verificStructExtendsType(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -755,6 +757,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
+					semantic.verificStructExtends(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					token = tokens.peek();
 					if (token != null && "{".equals(token.getLexeme())) {
