@@ -134,7 +134,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				if (this.predict("Var", tokens.peek())) {
 					if (tokens.peek() != null) {
 						global = true;
-						//escopo = true;
 						tokenMap.add(this.call("<Var>", tokens).getTokenNode());
 						token = tokens.peek();
 					}
@@ -707,6 +706,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					token = tokens.peek();
 					if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 						this.id.add(tokens.peek());
+						nomeBloco = token.getLexeme();
+						semantic.structOnly(tokens.peek());
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 						tokenMap.add(this.call("<Extends>", tokens).getTokenNode());
 						tokenMap.add(this.call("<TipoStruct>", tokens).getTokenNode());
@@ -792,6 +793,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("Tipo", tokens.peek())) {
+				tipoVar = tokens.peek().getLexeme();
 				tokenMap.add(this.call("<Tipo>", tokens).getTokenNode());
 				tokenMap.add(this.call("<IdStruct>", tokens).getTokenNode());
 				return tokenMap;
@@ -814,6 +816,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				tokens.peek().setTipoId(tipoVar);
+				semantic.structVarEqualNames(tokens.peek(), nomeBloco);;
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Struct2>", tokens).getTokenNode());
 				return tokenMap;
