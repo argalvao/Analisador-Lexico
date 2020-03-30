@@ -55,6 +55,7 @@ start () {
 	var {
 		boolean entrada, retorno;
 		pessoa pessoa;
+		string nome;
 	}
 	while (true) {
 		print("Digite 0 para cadastrar uma nova pessoa ou 1 para imprimir a lista de pessoas cadastradas:");
@@ -73,7 +74,7 @@ start () {
 		}
 		else {
 			if (entrada == 1) then {
-				imprimirPessoas();
+				imprimirPessoas(nome);
 			}
 			else {
 				print("Entrada invalida, tente novamente.");
