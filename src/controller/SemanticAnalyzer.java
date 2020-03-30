@@ -192,15 +192,16 @@ public class SemanticAnalyzer extends RecursiveCall {
 			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
 		}
 	}
-	// Verifica se existem funcoes para serem acessada
-	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco) {
+	// Verifica se existem funcoes para serem acessada, comparar tambem o tamanho dos parametros
+	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco, int sizeParam) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null && this.funcoes.containsKey(nomeFuncao)) {
+		
+		if (tokens != null && this.funcoes.containsKey(nomeFuncao) && this.funcoes.get(nomeFuncao).get("parametros").size() == sizeParam) {
 			return true;
-		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao)) {
+		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao) && this.procedimentos.get(nomeFuncao).get("parametros").size() == sizeParam) {
 			return true;
 		} else {
-			errors.add("Linha: " + line +"	|	Essa funcao/procedimento com nome: " + nomeFuncao + ", nao foi declarada.");
+			errors.add("Linha: " + line +"	|	Essa funcao/procedimento com nome: " + nomeFuncao + ", nao foi declarada ou não apresenta numero igual de parametros.");
 		}
 		return false;
 	}
@@ -389,18 +390,14 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// Verifica a existencia da variavel utilizada pelo read
-	public void readVarExists(Token tokens, String bloco, String nomeBloco) {
+	public boolean readVarExists(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
-			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
-			HashMap <String, Token> varLocal = new HashMap<>();
-			HashMap <String, Token> varEscopo = new HashMap<>();
-			this.blocos.put(tokens.getLexeme(), variaveis);
-			this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
-			this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			return true;	
 		} else {
 			errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
-		}	
+		}
+		return false;
 	}
 	
 	public static List<String> getErros() {
