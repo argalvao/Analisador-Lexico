@@ -24,6 +24,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	public HashMap<String, HashMap<String, HashMap<String, Token>>> blocos;
 	public HashMap<String, Token> varGlobal;
 	public HashMap<String, Token> varConst;
+	
 	SemanticAnalyzer() {
 		//super();
 		this.errors = new ArrayList<>();
@@ -53,7 +54,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verificacao Semantica da declaracao do start
+	// Verificacao Semantica de multipla declaracao do start
 	public void startOnly(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
@@ -71,42 +72,44 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// Verificacao Semantica da declaracao do struct com nomes iguais
-		public void structOnly(Token tokens) {
-			int line = tokens.getLine() + 1;
-			if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
-				HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
-				HashMap <String, Token> varLocal = new HashMap<>();
-				HashMap <String, Token> varEscopo = new HashMap<>();
-				this.blocos.put(tokens.getLexeme(), variaveis);
-				this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
-				this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
-				// Verifica se adicionou hashMaps corretamente
-				// System.out.println(this.blocos.get(tokens.getLexeme()).containsKey("varEscopo"));
-			} else {
-				errors.add("Linha: " + line +"	|	Ja houve um declaracao de struct com o nome: " + tokens.getLexeme());
-			}
+	public void structOnly(Token tokens) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
+			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
+			HashMap <String, Token> varLocal = new HashMap<>();
+			HashMap <String, Token> varEscopo = new HashMap<>();
+			this.blocos.put(tokens.getLexeme(), variaveis);
+			this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
+			this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.blocos.get(tokens.getLexeme()).containsKey("varEscopo"));
+		} else {
+			errors.add("Linha: " + line +"	|	Ja houve um declaracao de struct com o nome: " + tokens.getLexeme());
 		}
+	}
+	
+	// Verifica se existe struct a ser usada pelo extends
+	public boolean verificStructExtends(Token tokens) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
+		}
+		return false;
+	}
 		
-		// Verifica se existe struct a ser usada pelo extends
-		public boolean verificStructExtends(Token tokens) {
-			int line = tokens.getLine() + 1;
-			if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
-				return true;
-			} else {
-				errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
-			}
-			return false;
+		
+	// Verifica se o tipo ID, existe apenas se a struct foi declarada
+	public boolean verificStructExtendsType(Token tokens) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
 		}
-		// Verifica se o tipo ID, existe apenas se a struct foi declarada
-		public boolean verificStructExtendsType(Token tokens) {
-			int line = tokens.getLine() + 1;
-			if (tokens != null &&  this.blocos.containsKey(tokens.getLexeme())) {
-				return true;
-			} else {
-				errors.add("Linha: " + line +"	|	Não existe struct com o nome : " + tokens.getLexeme());
-			}
-			return false;
-		}
+		return false;
+	}
 	// OK
 	// Verificacaoo Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
@@ -148,7 +151,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 
-	
+	// Verifica se existe variaveis com nomes iguais no bloco const
 	public void constVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())) {
@@ -160,7 +163,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	
+	// Verifica se variaveis ja foram declaradas em fuction, start, procedure, globais e constantes.
 	public boolean verificVarDeclaration(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
@@ -179,7 +182,65 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	public boolean verificTipoVarConstValor(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoBloco)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo da funcao de nome: "+ nomeBloco);
+			}
+		}else {
+			errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao foi declarada");
+		}
+		return false;
+	}
+	// Verifica se o tipo da variavel corresponde ao tipo do valor atribuido
+	public boolean verificConstVarTypeValor(Token tokens, String tipoValor,String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.procedimentos.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoValor)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
+			}
+		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoValor)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
+			}
+		}else if(tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.blocos.get("start").get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoValor)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
+			}
+		}else if (tokens != null && this.varGlobal.containsKey(tokens.getLexeme())){
+			Token k = this.varGlobal.get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoValor)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
+			}
+		}else if (tokens != null &&  this.varConst.containsKey(tokens.getLexeme())) {
+			Token k = this.varConst.get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoValor)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	A variavel com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo do valor atribuido");
+			}
+		} else {
+			errors.add("Linha: " + line +"	|	Não existe constante ou variavel global com o nome : " + tokens.getLexeme());
+		}
+		return false;
+	}
 	
+	// Verifica se o retorno da funcao tem mesmo tipo que a variavel atribuida.
 	public boolean verificTipoVarReturn(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
@@ -198,7 +259,14 @@ public class SemanticAnalyzer extends RecursiveCall {
 	// Verificando tipo de variaveis com o operador de negacao apenas quando for booleana.
 	public boolean verificTipoVarNegative(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+		if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.procedimentos.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("boolean")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel com nome: " + tokens.getLexeme() + ", nao é booleana.");
+			}
+		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
 			if(k.getTipoId().equals("boolean")) {
 				return true;
@@ -218,6 +286,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	//Verifica se existe variaveis locais ja declaradas
 	public void localVarEqualNames(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {

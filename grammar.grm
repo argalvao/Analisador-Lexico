@@ -124,7 +124,7 @@ Boolean = 'true' + 'false'
 
 !Acesso a Identificadores (variáveis, structs, matrizes e funções)
 
-<Identificador> ::= <Escopo> Id <Identificador2> | Id <Identificador3>                             System.out.println(tokens.peek().getLexeme() + tokens.peek().getLine());
+<Identificador> ::= <Escopo> Id <Identificador2> | Id <Identificador3>                             
 
 <Identificador2> ::= '.' Id <Vetor> | <Vetor> |
 

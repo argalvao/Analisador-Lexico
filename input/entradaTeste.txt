@@ -1,28 +1,26 @@
-const {
-	int C 40;
-}
-
 typedef struct pessoa {
 	string nome, endereco, telefone;
-	int nome;
 }
 
 typedef struct funcionario extends pessoa {
-	teste abel;
+	pessoa abel;
 	string departamento;
 	real salario;
 }
 
+const {
+	int F 4;
+	real C 0.7;
+}
 var {
-	int x = 8;
-	pessoa pedro = "teste";
-	int y[pessoa];
+	pessoa x = pessoa;
+	int y[pessoa][pessoa];
 }
 
 
 function boolean cadastrarPessoas(pessoa pessoa) {
 	var {
-	    boolean retorno = false;
+	    real retorno = false;
 	}
 	return retorno;
 
@@ -39,9 +37,8 @@ function int cadastrar(pessoa pessoa) {
 
 procedure imprimirPessoas(string vetor) {
 	var {
-		int i = 0;
+		int i = 1;
 	}
-
 	if (vetor == "vetor_pessoas") then {
 		while( i < global.pessoas_cadastradas) {
 			print(vetor_pessoas[xx]);
@@ -51,17 +48,13 @@ procedure imprimirPessoas(string vetor) {
 	else {
 		print(vetor_funcionarios);
 	}
-
 }
-
-
 
 start () {
 	var {
 		boolean entrada, retorno;
 		pessoa pessoa;
 	}
-
 	while (true) {
 		print("Digite 0 para cadastrar uma nova pessoa ou 1 para imprimir a lista de pessoas cadastradas:");
 		read(entrada);
