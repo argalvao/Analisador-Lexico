@@ -2117,6 +2117,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("IdentificadorSemFuncao", tokens.peek())) {
+				semantic.readVarExists(tokens.peek(), bloco, nomeBloco);
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
 				return tokenMap;
