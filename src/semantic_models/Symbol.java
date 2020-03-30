@@ -2,11 +2,11 @@ package semantic_models;
 
 import model.Token;
 
-public class Variable {
+public class Symbol {
 	Token token;
 	private String type;
 	
-	public Variable(Token token, String type) {
+	public Symbol(Token token, String type) {
 		super();
 		this.token = token;
 		this.type = type;

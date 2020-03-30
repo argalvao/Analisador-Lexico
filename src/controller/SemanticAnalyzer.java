@@ -13,7 +13,7 @@ import model.Token;
 import model.TokenTypes;
 import util.RecursiveCall;
 import util.FirstFollow;
-
+import semantic_models.Symbol;
 public class SemanticAnalyzer extends RecursiveCall {
 
 	private static SemanticAnalyzer instance;
@@ -128,6 +128,20 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	public boolean verificTipoVarReturn(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals(tipoBloco)) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao tem o mesmo tipo da funcao de nome: "+ nomeBloco);
+			}
+		}else {
+			errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao foi declarada");
+		}
+		return false;
+	}
 	public void localVarEqualNames(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
