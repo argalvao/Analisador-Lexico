@@ -26,9 +26,11 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public String tipoBloco = "";
 	public String bloco = "";
 	public String tipoVar = "";
+	public Token Var;
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
 	SynthaticAnalyzer() {
+		
 		this.errors = new ArrayList<>();
 		this.id = new ArrayList<>();
 		
@@ -38,16 +40,26 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				if(semantic.verificStructExtends(tokens.peek())) {
+					semantic.verificConstVarTypeValor(Var, tokens.peek().getLexeme(), bloco, nomeBloco);
+				}
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.NUMBER.equals(token.getType())) {
+				if(token.getLexeme().matches("[+-]?[0-9][0-9]*")) {
+					semantic.verificConstVarTypeValor(Var, "int", bloco, nomeBloco);
+				}else {
+					semantic.verificConstVarTypeValor(Var, "real", bloco, nomeBloco);
+				}
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (TokenTypes.STRING.equals(token.getType())) {
+				semantic.verificConstVarTypeValor(Var, "string", bloco, nomeBloco);		
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())
 					|| token != null && "false".equals(token.getLexeme())) {
+				semantic.verificConstVarTypeValor(Var, "boolean", bloco, nomeBloco);
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -634,6 +646,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				Var = tokens.peek();
 				tokens.peek().setTipoId(tipoVar);
 				semantic.constVarEqualNames(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
@@ -641,7 +654,6 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Const2>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
-
 				int line = token.getLine() + 1;
 				this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") nao e um identificador de vari�vel no bloco const.");
 				while (tokens.peek() != null && !this.follow.get("IdConst").contains(token.getLexeme())) {
@@ -938,6 +950,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				Var = tokens.peek();
 				tokens.peek().setTipoId(tipoVar);
 				// Semantica de variaveis globais
 				if(global) {
