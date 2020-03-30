@@ -125,7 +125,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		} else if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())){
 			return true;
 		} else {
-			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nï¿½o foi declarada no bloco var.");
+			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nao foi declarada no bloco var.");
 		}
 		return false;
 	}
@@ -146,6 +146,28 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	// Verificando tipo de variaveis com o operador de negacao apenas quando for booleana.
+	public boolean verificTipoVarNegative(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.funcoes.get(nomeBloco).get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("boolean")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel com nome: " + tokens.getLexeme() + ", nao é booleana.");
+			}
+		}else if(tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.blocos.get("start").get("varLocal").get(tokens.getLexeme());
+			if(k.getTipoId().equals("boolean")) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel com nome: " + tokens.getLexeme() + ", nao é booleana.");
+			}
+		}else{
+			errors.add("Linha: " + line +"	|	Esse variavel com nome: " + tokens.getLexeme() + ", nao foi declarada");
+		}
+		return false;
+	}
 	
 	public void localVarEqualNames(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
