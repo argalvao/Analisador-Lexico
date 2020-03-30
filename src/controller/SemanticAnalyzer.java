@@ -192,15 +192,16 @@ public class SemanticAnalyzer extends RecursiveCall {
 			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
 		}
 	}
-	// Verifica se existem funcoes para serem acessada
-	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco) {
+	// Verifica se existem funcoes para serem acessada, comparar tambem o tamanho dos parametros
+	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco, int sizeParam) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null && this.funcoes.containsKey(nomeFuncao)) {
+		
+		if (tokens != null && this.funcoes.containsKey(nomeFuncao) && this.funcoes.get(nomeFuncao).get("parametros").size() == sizeParam) {
 			return true;
-		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao)) {
+		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao) && this.procedimentos.get(nomeFuncao).get("parametros").size() == sizeParam) {
 			return true;
 		} else {
-			errors.add("Linha: " + line +"	|	Essa funcao/procedimento com nome: " + nomeFuncao + ", nao foi declarada.");
+			errors.add("Linha: " + line +"	|	Essa funcao/procedimento com nome: " + nomeFuncao + ", nao foi declarada ou não apresenta numero igual de parametros.");
 		}
 		return false;
 	}
