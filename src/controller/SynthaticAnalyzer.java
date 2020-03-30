@@ -1819,6 +1819,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (token != null && "!".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				semantic.verificTipoVarNegative(tokens.peek(), bloco, tipoBloco, nomeBloco);
 				tokenMap.add(this.call("<ArgumentoLR2_1>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())) {
