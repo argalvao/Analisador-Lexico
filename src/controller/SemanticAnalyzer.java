@@ -54,15 +54,18 @@ public class SemanticAnalyzer extends RecursiveCall {
 	// Verificacao Semantica de nomes iguais de funcoes
 	public void funtionsEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null &&  !this.funcoes.containsKey(tokens.getLexeme())) {
+		if (tokens != null &&  !this.funcoes.containsKey(tokens.getLexeme()) && !this.procedimentos.containsKey(tokens.getLexeme())) {
 			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
 			HashMap <String, Token> varLocal = new HashMap<>();
 			HashMap <String, Token> varEscopo = new HashMap<>();
 			HashMap <String, Token> parametros = new HashMap<>();
+			HashMap <String, Token> tipo = new HashMap<>();
 			this.funcoes.put(tokens.getLexeme(), variaveis);
 			this.funcoes.get(tokens.getLexeme()).put("varLocal", varLocal);
 			this.funcoes.get(tokens.getLexeme()).put("varEscopo", varEscopo);
 			this.funcoes.get(tokens.getLexeme()).put("parametros", parametros);	
+			this.funcoes.get(tokens.getLexeme()).put("tipo", tipo);	
+			this.funcoes.get(tokens.getLexeme()).get("tipo").put(tokens.getTipoId(),tokens);
 			// Verifica se adicionou hashMaps corretamente
 			// System.out.println(this.funcoes.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
@@ -144,7 +147,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	// Verificacaoo Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
-		if (tokens != null &&  !this.procedimentos.containsKey(tokens.getLexeme())) {
+		if (tokens != null &&  !this.procedimentos.containsKey(tokens.getLexeme()) && !this.funcoes.containsKey(tokens.getLexeme())) {
 			HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
 			HashMap <String, Token> varLocal = new HashMap<>();
 			HashMap <String, Token> varEscopo = new HashMap<>();
@@ -194,13 +197,52 @@ public class SemanticAnalyzer extends RecursiveCall {
 			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
 		}
 	}
-	// Verifica se existem funcoes para serem acessada, comparar tambem o tamanho dos parametros
-	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco, int sizeParam) {
+	// Verifica se existem funcoes para serem acessada, comparar tambem o tamanho dos parametros,e compara mesma variavel e tipos no parametro
+	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco, int sizeParam, List<Token> list) {
 		int line = tokens.getLine() + 1;
-		
-		if (tokens != null && this.funcoes.containsKey(nomeFuncao) && this.funcoes.get(nomeFuncao).get("parametros").size() == sizeParam) {
+
+		if (tokens != null && this.funcoes.containsKey(nomeFuncao) 
+			&& this.funcoes.get(nomeFuncao).containsKey("tipo") 
+			&& this.funcoes.get(nomeFuncao).get("parametros").size() == sizeParam) {
+			int i = 0;
+			
+			while(sizeParam != i) {
+				Token k = list.get(i);
+				if(k != null && this.blocos.get("start").get("varLocal").containsKey(k.getLexeme())) {
+					k = this.blocos.get("start").get("varLocal").get(k.getLexeme());
+					// Verifica parametros com mesmo tipo e nome
+					if( this.funcoes.get(nomeFuncao).get("parametros").containsKey(k.getLexeme())
+						&& this.funcoes.get(nomeFuncao).get("parametros").get(k.getLexeme()).getTipoId().equals(k.getTipoId())) {
+						//System.out.println(nomeFuncao);
+					}else {
+						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da funcao"+nomeFuncao);
+					}
+				} else {
+					errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao foi declarada localmente.");
+				}
+				i++;
+			}
 			return true;
-		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao) && this.procedimentos.get(nomeFuncao).get("parametros").size() == sizeParam) {
+		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao) 
+				   && this.procedimentos.get(nomeFuncao).get("parametros").size() == sizeParam) {
+			int i = 0;
+			while(sizeParam != i) {
+				Token k = list.get(i);
+				if(k != null && this.blocos.get("start").get("varLocal").containsKey(k.getLexeme())) {
+					k = this.blocos.get("start").get("varLocal").get(k.getLexeme());
+					// Verifica parametros com mesmo tipo e nome
+					if(this.procedimentos.get(nomeFuncao).get("parametros").containsKey(k.getLexeme()) 
+						&& this.procedimentos.get(nomeFuncao).get("parametros").get(k.getLexeme()).getTipoId().equals(k.getTipoId())) {
+						//System.out.println(nomeFuncao);
+					}else {
+						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da funcao"+nomeFuncao);
+					}
+				} else {
+					errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao foi declarada localmente.");
+				}
+				i++;
+			}
+			
 			return true;
 		} else {
 			errors.add("Linha: " + line +"	|	Essa funcao/procedimento com nome: " + nomeFuncao + ", nao foi declarada ou não apresenta numero igual de parametros.");
