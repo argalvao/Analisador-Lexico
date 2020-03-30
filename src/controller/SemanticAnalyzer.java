@@ -35,7 +35,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		this.varConst = new HashMap<>();
 	}
 	
-	// Verifica��o Semantica de nomes iguais de fun��es
+	// Verificacao Semantica de nomes iguais de funcoes
 	public void funtionsEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.funcoes.containsKey(tokens.getLexeme())) {
@@ -52,7 +52,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verifica��o Semantica da declara��o do start
+	// Verificacao Semantica da declaracao do start
 	public void startOnly(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
@@ -70,7 +70,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// OK
-	// Verifica��o Semantica de nomes iguais de procedimentos
+	// Verificacaoo Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.procedimentos.containsKey(tokens.getLexeme())) {
@@ -87,7 +87,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Verifica��o Semantica da declara��o de vari�veis globais
+	// Verificacaoo Semantica da declaracaoo de variaveis globais
 	public void globalVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
@@ -99,6 +99,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 
+	
 	public void constVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())) {
@@ -109,6 +110,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
 		}
 	}
+	
 	
 	public boolean verificVarDeclaration(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
@@ -128,6 +130,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	
 	public boolean verificTipoVarReturn(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
@@ -142,6 +145,8 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 		return false;
 	}
+	
+	
 	public void localVarEqualNames(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("start") && !this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
