@@ -33,6 +33,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		this.blocos = new HashMap<>();
 		this.varGlobal = new HashMap<>();
 		this.varConst = new HashMap<>();
+		
 	}
 	
 	// Verificacao Semantica de nomes iguais de funcoes
@@ -69,6 +70,23 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
+	// Verificacao Semantica da declaracao do struct com nomes iguais
+		public void structOnly(Token tokens) {
+			int line = tokens.getLine() + 1;
+			if (tokens != null &&  !this.blocos.containsKey(tokens.getLexeme())) {
+				HashMap <String, HashMap<String, Token>> variaveis = new HashMap<>();
+				HashMap <String, Token> varLocal = new HashMap<>();
+				HashMap <String, Token> varEscopo = new HashMap<>();
+				this.blocos.put(tokens.getLexeme(), variaveis);
+				this.blocos.get(tokens.getLexeme()).put("varLocal", varLocal);
+				this.blocos.get(tokens.getLexeme()).put("varEscopo", varEscopo);	
+				// Verifica se adicionou hashMaps corretamente
+				// System.out.println(this.blocos.get(tokens.getLexeme()).containsKey("varEscopo"));
+			} else {
+				errors.add("Linha: " + line +"	|	Ja houve um declaracao de struct com o nome: " + tokens.getLexeme());
+			}
+		}
+		
 	// OK
 	// Verificacaoo Semantica de nomes iguais de procedimentos
 	public void procedureEqualNames(Token tokens) {
@@ -84,6 +102,17 @@ public class SemanticAnalyzer extends RecursiveCall {
 			// System.out.println(this.procedimentos.get(tokens.getLexeme()).containsKey("varEscopo"));
 		} else {
 			errors.add("Linha: " + line +"	|	Ja houve um declaracao de procedimento com o nome: " + tokens.getLexeme());
+		}
+	}
+	// Verificacaoo Semantica da declaracaoo de variaveis iguais no bloco struct
+	public void structVarEqualNames(Token tokens, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && !this.blocos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			this.blocos.get(nomeBloco).get("varLocal").put(tokens.getLexeme(), tokens);
+			// Verifica se adicionou hashMaps corretamente
+			// System.out.println(this.varConst.containsKey(tokens.getLexeme()));
+		} else {
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel na struct com o nome: " + tokens.getLexeme());
 		}
 	}
 	

@@ -2,6 +2,11 @@ const {
 	int C 40;
 }
 
+typedef struct pessoa {
+	string nome, endereco, telefone;
+	int nome;
+}
+
 var {
 	int x = 8;
 	pessoa pedro = "teste";
