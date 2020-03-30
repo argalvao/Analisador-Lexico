@@ -433,28 +433,22 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 	
-	// Funcao auxiliar da verficacao de variavel do read
-		public Token readVarExistsAux(Token tokens) {
-			aux = tokens;
-			System.out.println(aux.getLexeme());
-			return(aux);
-		}
 		
-		// Verifica a existencia da variavel utilizada pelo read
-		public boolean readVarExists(Token tokens, String bloco) {
-			int line = tokens.getLine() + 1;
-			if (tokens != null && bloco.equals("start") && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
-				if(!this.blocos.containsKey(aux.getLexeme()) && !this.blocos.get(bloco).get("varLocal").containsKey(aux.getLexeme())) {
-					errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + aux.getLexeme());	
-				}else {
-					return true;
-				}
-				return true;	
-			} else {
-				errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
+	// Verifica a existencia da variavel utilizada pelo read
+	public boolean readVarExists(Token tokens, String bloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("start") && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
+			if(!this.blocos.containsKey(tokens.getLexeme()) && !this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme())) {
+				errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());	
+			}else {
+				return true;
 			}
-			return false;
+			return true;	
+		} else {
+			errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
 		}
+		return false;
+	}
 	
 	
 	
