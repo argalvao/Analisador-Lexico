@@ -28,8 +28,10 @@ public class SynthaticAnalyzer extends RecursiveCall {
 	public String tipoVar = "";
 	public String extend = "";
 	public String nomeFuncao = "";
+	public String nomeStruct = "";
 	public Token var;
 	public List<Token> auxiliar;
+	public int sizeParam = 0;
 	
 	SemanticAnalyzer semantic = new SemanticAnalyzer();
 	
@@ -385,6 +387,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
+						sizeParam = 0;
 					} else {
 						int line = token.getLine() + 1;
 						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") nao inicia declaracao de parametro do bloco function.");
@@ -432,6 +435,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					if (token != null && "(".equals(token.getLexeme())) {
 						tokenMap.add(new SynthaticNode(tokens.remove()));
 						tokenMap.add(this.call("<Parametro>", tokens).getTokenNode());
+						sizeParam = 0;
 					} else {
 						int line = token.getLine() + 1;
 						this.errors.add("Linha: " + line + " | (" + token.getLexeme() + ") nao inicia declaracao de parametro do bloco procedure.");
@@ -473,7 +477,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					this.id.add(tokens.peek());
 					tokens.peek().setTipoId(tipoVar);
 					//System.out.println(tokens.peek().getTipoId()+"  "+tokens.peek().getLexeme());
-					semantic.fuctionsProcedureAddPara(tokens.peek(), bloco, nomeBloco);
+					semantic.fuctionsProcedureAddPara(tokens.peek(), bloco, nomeBloco, sizeParam);
+					sizeParam++;
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Para2>", tokens).getTokenNode());
 					tokenMap.add(this.call("<Para1>", tokens).getTokenNode());
@@ -1219,6 +1224,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				// pegando variaveis dentro da funcao
 				this.id.add(tokens.peek());
+				var = tokens.peek();
+				//System.out.println(tokens.peek().getLexeme());
+				nomeStruct = tokens.peek().getLexeme();
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador3>", tokens).getTokenNode());
 				return tokenMap;
@@ -1227,6 +1235,11 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 					this.id.add(tokens.peek());
+					if(global) {
+						semantic.verificGlobalVar(tokens.peek(), global);
+					} else {
+						semantic.verificLocalVar(tokens.peek(), bloco, nomeBloco);
+					}
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
@@ -1255,7 +1268,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
-					semantic.readVarExists(tokens.peek(), bloco);
+					semantic.readVarStructExists(tokens.peek(), bloco, nomeStruct);
 					this.id.add(tokens.peek());
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Vetor>", tokens).getTokenNode());
@@ -1438,6 +1451,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "global".equals(token.getLexeme())) {
+				global = true;
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && ".".equals(token.getLexeme())) {
@@ -1451,6 +1465,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 					}
 				}
 			} else if (token != null && "local".equals(token.getLexeme())) {
+				global = false;
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				if (token != null && ".".equals(token.getLexeme())) {
@@ -1481,6 +1496,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				this.id.add(tokens.peek());
 				// Passou acesso de funcao e atribuicao de valor a variavel, retorno = a + i;
 				nomeFuncao = tokens.peek().getLexeme();
+				var = tokens.peek();
+				//System.out.println(tokens.peek().getLexeme());
+				nomeStruct = nomeFuncao;
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 				return tokenMap;
@@ -1488,7 +1506,13 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
 				token = tokens.peek();
 				if (TokenTypes.IDENTIFIER.equals(token.getType())) {
+					var = tokens.peek();
 					this.id.add(tokens.peek());
+					if(global) {
+						semantic.verificGlobalVar(tokens.peek(), global);
+					} else {
+						semantic.verificLocalVar(tokens.peek(), bloco, nomeBloco);
+					}
 					tokenMap.add(new SynthaticNode(tokens.remove()));
 					tokenMap.add(this.call("<Identificador2>", tokens).getTokenNode());
 					return tokenMap;
@@ -1679,9 +1703,13 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				// Inicia acesso a funcao cadastrarPessoas
 				nomeFuncao = tokens.peek().getLexeme();
+				if(semantic.verificFunction(tokens.peek(), nomeFuncao)) {
+					semantic.verificTipoVarAtriFunction(var, bloco, tipoBloco, nomeFuncao);
+				}
 				this.id.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				tokenMap.add(this.call("<IdentificadorAritmetico3>", tokens).getTokenNode());
+				nomeFuncao = "";
 				return tokenMap;
 			} else if (this.predict("Escopo", tokens.peek())) {
 				tokenMap.add(this.call("<Escopo>", tokens).getTokenNode());
@@ -1714,10 +1742,11 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (token != null && "(".equals(token.getLexeme())) {
-				semantic.verificFuncProcDeclaration(tokens.peek(), nomeFuncao, bloco, nomeBloco, auxiliar.size(), auxiliar);
+				//semantic.verificFuncProcDeclaration(tokens.peek(), nomeFuncao, bloco, nomeBloco, auxiliar.size(), auxiliar);
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				token = tokens.peek();
 				tokenMap.add(this.call("<ListaParametros>", tokens).getTokenNode());
+				semantic.verificFuncProcDeclaration(tokens.peek(), nomeFuncao, bloco, nomeBloco, auxiliar.size(), auxiliar);
 				token = tokens.peek();
 				if (token != null && ")".equals(token.getLexeme())) {
 					auxiliar.clear();
@@ -1770,6 +1799,10 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				}
 			} else if (this.predict("ExpressaoLR", tokens.peek())) {
 				tokenMap.add(this.call("<ExpressaoLR>", tokens).getTokenNode());
+				//semantic.
+				System.out.println("Tamanho:   "+auxiliar.size());
+				
+				auxiliar.clear();
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -1851,11 +1884,14 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		this.functions.put("<ArgumentoLR>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
-			if (this.predict("ArgumentoLR3", tokens.peek())) {
+			
+			if (this.predict("ArgumentoLR2", tokens.peek())) {
+				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
+				return tokenMap;
+			} else if (this.predict("ArgumentoLR3", tokens.peek())) {
 				tokenMap.add(this.call("<ArgumentoLR3>", tokens).getTokenNode());
 				return tokenMap;
-			} else if (this.predict("ArgumentoLR2", tokens.peek())) {
-				tokenMap.add(this.call("<ArgumentoLR2>", tokens).getTokenNode());
+			} else if (this.follow.get("ArgumentoLR").contains(token.getLexeme())) {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -1877,10 +1913,16 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<ArgumentoLR2_1>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())) {
+				auxiliar.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && "false".equals(token.getLexeme())) {
+				auxiliar.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else if(this.predict("ArgumentoLR2_1", tokens.peek())) {
+				//semantic.verificTipoVarNegative(tokens.peek(), bloco, tipoBloco, nomeBloco);
+				tokenMap.add(this.call("<ArgumentoLR2_1>", tokens).getTokenNode());
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -1898,6 +1940,7 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			Token token = tokens.peek();
 			if (TokenTypes.IDENTIFIER.equals(token.getType())) {
 				this.id.add(tokens.peek());
+				auxiliar.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else if (token != null && "true".equals(token.getLexeme())) {
@@ -1920,10 +1963,14 @@ public class SynthaticAnalyzer extends RecursiveCall {
 		this.functions.put("<ArgumentoLR3>", tokens -> {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
+			System.out.println(token.getLexeme()+"   "+token.getLine());
 			if (this.predict("ExpressaoAritmetica", tokens.peek())) {
+				auxiliar.add(tokens.peek());
 				tokenMap.add(this.call("<ExpressaoAritmetica>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (TokenTypes.STRING.equals(token.getType())) {
+				// adicionado
+				auxiliar.add(tokens.peek());
 				tokenMap.add(new SynthaticNode(tokens.remove()));
 				return tokenMap;
 			} else {
@@ -1957,6 +2004,8 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				return tokenMap;
 			} else if (token != null && ">=".equals(token.getLexeme())) {
 				tokenMap.add(new SynthaticNode(tokens.remove()));
+				return tokenMap;
+			} else if (this.follow.get("OperadorRelacional").contains(token.getLexeme())) {
 				return tokenMap;
 			} else {
 				int line = token.getLine() + 1;
@@ -2025,6 +2074,10 @@ public class SynthaticAnalyzer extends RecursiveCall {
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
 			} else if (this.predict("Identificador", tokens.peek())) {
+				//System.out.println(tokens.peek().getLexeme());
+				if(!tokens.peek().getLexeme().equals("global") && !tokens.peek().getLexeme().equals("local")) {
+					semantic.verificVarDeclaration(tokens.peek(), bloco, nomeBloco);
+				}
 				tokenMap.add(this.call("<Identificador>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxPrint>", tokens).getTokenNode());
 				return tokenMap;
@@ -2123,7 +2176,9 @@ public class SynthaticAnalyzer extends RecursiveCall {
 			SynthaticNode tokenMap = new SynthaticNode();
 			Token token = tokens.peek();
 			if (this.predict("IdentificadorSemFuncao", tokens.peek())) {
-				semantic.readVarExists(tokens.peek(), bloco);
+				if(!tokens.peek().getLexeme().equals("global") && !tokens.peek().getLexeme().equals("local")) {
+					semantic.verificLocalVar(tokens.peek(), bloco, nomeBloco);
+				}
 				tokenMap.add(this.call("<IdentificadorSemFuncao>", tokens).getTokenNode());
 				tokenMap.add(this.call("<AuxRead>", tokens).getTokenNode());
 				return tokenMap;

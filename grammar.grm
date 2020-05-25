@@ -174,7 +174,7 @@ Boolean = 'true' + 'false'
 
 <ArgumentoLR> ::= <ArgumentoLR2> | <ArgumentoLR3>
 
-<ArgumentoLR2> ::= '!' <ArgumentoLR2_1> | 'true' | 'false'
+<ArgumentoLR2> ::= '!' <ArgumentoLR2_1> | 'true' | 'false' | <ArgumentoLR2_1>
 
 <ArgumentoLR2_1> ::= Id | 'true' | 'false'
 

@@ -40,12 +40,14 @@ public class SemanticAnalyzer extends RecursiveCall {
 	}
 	
 	// Adiciona parametros e verifica replica de variaveis, em funcoes e procedimentos
-	public void fuctionsProcedureAddPara(Token tokens, String bloco, String nomeBloco) {
+	public void fuctionsProcedureAddPara(Token tokens, String bloco, String nomeBloco, int size) {
 		int line = tokens.getLine() + 1;
-		if(tokens != null && bloco.equals("function") && !this.funcoes.get(nomeBloco).get("parametros").containsKey(tokens.getLexeme())){
-			this.funcoes.get(nomeBloco).get("parametros").put(tokens.getLexeme(), tokens);
-		} else if(tokens != null && bloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("parametros").containsKey(tokens.getLexeme())){
-			this.procedimentos.get(nomeBloco).get("parametros").put(tokens.getLexeme(), tokens);
+		String i = Integer.toString(size);
+		//System.out.println(i+"    "+nomeBloco);
+		if(tokens != null && bloco.equals("function") && !this.funcoes.get(nomeBloco).get("parametros").containsKey(i)){
+			this.funcoes.get(nomeBloco).get("parametros").put(i, tokens);
+		} else if(tokens != null && bloco.equals("procedure") && !this.procedimentos.get(nomeBloco).get("parametros").containsKey(i)){
+			this.procedimentos.get(nomeBloco).get("parametros").put(i, tokens);
 		} else {
 			errors.add("Linha: " + line +"	|	Ja houve parametro em "+bloco+" com o nome: " + tokens.getLexeme());
 		}
@@ -186,6 +188,17 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 	}
 
+	// Verificacaoo Semantica da declaracaoo de variaveis globais
+	public boolean verificGlobalVar(Token tokens, boolean global) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null &&  global && this.varGlobal.containsKey(tokens.getLexeme())) {
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Ja houve declaracao de variavel global com o nome: " + tokens.getLexeme());
+		}
+		return false;
+	}
+		
 	// Verifica se existe variaveis com nomes iguais no bloco const
 	public void constVarEqualNames(Token tokens) {
 		int line = tokens.getLine() + 1;
@@ -197,10 +210,13 @@ public class SemanticAnalyzer extends RecursiveCall {
 			errors.add("Linha: " + line +"	|	Ja houve declaracao de constante com o nome: " + tokens.getLexeme());
 		}
 	}
+	
+	// olhar, usar de 0 a size como keys dos parametros das funcoes
 	// Verifica se existem funcoes para serem acessada, comparar tambem o tamanho dos parametros,e compara mesma variavel e tipos no parametro
 	public boolean verificFuncProcDeclaration(Token tokens, String nomeFuncao, String bloco, String nomeBloco, int sizeParam, List<Token> list) {
 		int line = tokens.getLine() + 1;
 
+		//System.out.println(this.funcoes.get(nomeFuncao).get("parametros").size() +"  "+ sizeParam +"  "+nomeFuncao);
 		if (tokens != null && this.funcoes.containsKey(nomeFuncao) 
 			&& this.funcoes.get(nomeFuncao).containsKey("tipo") 
 			&& this.funcoes.get(nomeFuncao).get("parametros").size() == sizeParam) {
@@ -208,14 +224,15 @@ public class SemanticAnalyzer extends RecursiveCall {
 			
 			while(sizeParam != i) {
 				Token k = list.get(i);
+				String x = Integer.toString(i);
 				if(k != null && this.blocos.get("start").get("varLocal").containsKey(k.getLexeme())) {
 					k = this.blocos.get("start").get("varLocal").get(k.getLexeme());
 					// Verifica parametros com mesmo tipo e nome
-					if( this.funcoes.get(nomeFuncao).get("parametros").containsKey(k.getLexeme())
-						&& this.funcoes.get(nomeFuncao).get("parametros").get(k.getLexeme()).getTipoId().equals(k.getTipoId())) {
+					if( this.funcoes.get(nomeFuncao).get("parametros").containsKey(x)
+						&& this.funcoes.get(nomeFuncao).get("parametros").get(x).getTipoId().equals(k.getTipoId())) {
 						//System.out.println(nomeFuncao);
 					}else {
-						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da funcao"+nomeFuncao);
+						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da funcao: "+nomeFuncao);
 					}
 				} else {
 					errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao foi declarada localmente.");
@@ -226,16 +243,18 @@ public class SemanticAnalyzer extends RecursiveCall {
 		} else if (tokens != null && this.procedimentos.containsKey(nomeFuncao) 
 				   && this.procedimentos.get(nomeFuncao).get("parametros").size() == sizeParam) {
 			int i = 0;
+			
 			while(sizeParam != i) {
 				Token k = list.get(i);
+				String x = Integer.toString(i);
 				if(k != null && this.blocos.get("start").get("varLocal").containsKey(k.getLexeme())) {
 					k = this.blocos.get("start").get("varLocal").get(k.getLexeme());
 					// Verifica parametros com mesmo tipo e nome
-					if(this.procedimentos.get(nomeFuncao).get("parametros").containsKey(k.getLexeme()) 
-						&& this.procedimentos.get(nomeFuncao).get("parametros").get(k.getLexeme()).getTipoId().equals(k.getTipoId())) {
+					if(this.procedimentos.get(nomeFuncao).get("parametros").containsKey(x) 
+						&& this.procedimentos.get(nomeFuncao).get("parametros").get(x).getTipoId().equals(k.getTipoId())) {
 						//System.out.println(nomeFuncao);
 					}else {
-						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da funcao"+nomeFuncao);
+						errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao tem o mesmo tipo da variavel do parametro da procedimento: "+nomeFuncao);
 					}
 				} else {
 					errors.add("Linha: " + line +"	|	A variavel : " + k.getLexeme() + ", nao foi declarada localmente.");
@@ -254,14 +273,15 @@ public class SemanticAnalyzer extends RecursiveCall {
 	public boolean verificVarDeclaration(Token tokens, String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
 		if (tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			//System.out.println(tokens.getLexeme());
 			return true;
 		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			return true;
 		} else if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
 			return true;
-		} else if(tokens != null &&  !this.varGlobal.containsKey(tokens.getLexeme())) {
+		} else if(tokens != null &&  this.varGlobal.containsKey(tokens.getLexeme())) {
 			return true;
-		} else if (tokens != null &&  !this.varConst.containsKey(tokens.getLexeme())){
+		} else if (tokens != null &&  this.varConst.containsKey(tokens.getLexeme())){
 			return true;
 		} else {
 			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nao foi declarada no bloco var.");
@@ -283,6 +303,7 @@ public class SemanticAnalyzer extends RecursiveCall {
 		}
 		return false;
 	}
+	
 	// Verifica se o tipo da variavel corresponde ao tipo do valor atribuido
 	public boolean verificConstVarTypeValor(Token tokens, String tipoValor,String bloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
@@ -387,6 +408,41 @@ public class SemanticAnalyzer extends RecursiveCall {
 		return false;
 	}
 	
+	// Verifica se o retorno da funcao tem mesmo tipo que a variavel atribuida no corpo;
+	public boolean verificTipoVarAtriFunction(Token tokens, String bloco, String tipoBloco, String nomeFuncao) {
+		int line = tokens.getLine() + 1;
+		
+		if (tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			Token k = this.blocos.get("start").get("varLocal").get(tokens.getLexeme());		
+			//System.out.println(k.getTipoId());
+		
+			if (k != null && this.funcoes.get(nomeFuncao).get("tipo").containsKey(k.getTipoId())) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao tem mesmo tipo que o retorno da funcao: "+ nomeFuncao);
+			}
+			return true;
+		} else if (tokens != null && this.varGlobal.containsKey(tokens.getLexeme())){
+			Token k = this.varGlobal.get(tokens.getLexeme());
+			//System.out.println(nomeFuncao);
+			if (tokens != null && this.funcoes.get(nomeFuncao).get("tipo").containsKey(k.getTipoId())) {
+				return true;
+			}else {
+				errors.add("Linha: " + line +"	|	Essa variavel global de retorno com nome: " + tokens.getLexeme() + ", nao tem mesmo tipo que o retorno da funcao: "+ nomeFuncao);
+			}
+		} else {
+			errors.add("Linha: " + line +"	|	Esse variavel de retorno com nome: " + tokens.getLexeme() + ", nao foi declarada, ou não eh funcao");
+		}
+		return false;
+	}
+	// Verifica se o retorno da funcao tem mesmo tipo que a variavel atribuida no corpo;
+	public boolean verificFunction(Token tokens, String nomeFuncao) {
+		int line = tokens.getLine() + 1;
+		if(tokens != null && this.funcoes.containsKey(nomeFuncao)) {
+			return true;
+		}
+		return false;
+	}
 	// Verificando tipo de variaveis com o operador de negacao apenas quando for booleana.
 	public boolean verificTipoVarNegative(Token tokens, String bloco, String tipoBloco, String nomeBloco) {
 		int line = tokens.getLine() + 1;
@@ -435,21 +491,48 @@ public class SemanticAnalyzer extends RecursiveCall {
 	
 		
 	// Verifica a existencia da variavel utilizada pelo read
-	public boolean readVarExists(Token tokens, String bloco) {
+	public boolean readVarExists(Token tokens, String bloco, String nomeStruct) {
 		int line = tokens.getLine() + 1;
+		// Pode ser dentro de funcao/procedimento
 		if (tokens != null && bloco.equals("start") && (this.blocos.containsKey(tokens.getLexeme()) || this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme()))) {
 			if(!this.blocos.containsKey(tokens.getLexeme()) && !this.blocos.get(bloco).get("varLocal").containsKey(tokens.getLexeme())) {
 				errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());	
 			}else {
 				return true;
 			}
-			return true;	
+			return false;	
 		} else {
-			errors.add("Linha: " + line +"	|	Variavel nao declarada com o nome: " + tokens.getLexeme());
+			errors.add("Linha: " + line +"	|	Variavel/Struct nao declarada com o nome: " + tokens.getLexeme());
 		}
 		return false;
 	}
 	
+	public boolean readVarStructExists(Token tokens, String bloco, String nomeStruct) {
+		int line = tokens.getLine() + 1;
+		// Pode ser dentro de funcao/procedimento
+		
+		if (tokens != null && this.blocos.get(bloco).get("varLocal").containsKey(nomeStruct) && this.blocos.containsKey(nomeStruct) 
+				&& this.blocos.get(nomeStruct).get("varLocal").containsKey(tokens.getLexeme())){
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Variavel/Struct nao declarada com o nome: " + tokens.getLexeme());
+		}
+		return false;
+	}
+	
+	public boolean verificLocalVar(Token tokens, String bloco, String nomeBloco) {
+		int line = tokens.getLine() + 1;
+		if (tokens != null && bloco.equals("start") && this.blocos.get("start").get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		}else if (tokens != null && bloco.equals("function") && this.funcoes.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		} else if (tokens != null && bloco.equals("procedure") && this.procedimentos.get(nomeBloco).get("varLocal").containsKey(tokens.getLexeme())) {
+			return true;
+		} else {
+			errors.add("Linha: " + line +"	|	Essa variavel com nome: " + tokens.getLexeme() + ", nao foi declarada no bloco var.");
+		}
+		return false;
+	}
 	
 	
 	public static List<String> getErros() {

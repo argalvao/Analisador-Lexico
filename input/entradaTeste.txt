@@ -1,10 +1,9 @@
-typedef struct numero {
-	int nome, endereco, telefone;
+var{
+	int x;
 }
 
-start(){
+start (){
 	var{
-		int a;
+		boolean r;
 	}
 }
-// teste de comentário
